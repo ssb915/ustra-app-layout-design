@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra Login</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100dvh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  background: linear-gradient(to bottom, #1a1a1a, #2c2c2c);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.container {
+  width: 90%;
+  max-width: 350px;
+  text-align: center;
+}
+
+/* 🔥 FINAL LOGO BOX */
+.logo-box {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 20px;
+
+  background: #fff;
+  border-radius: 28px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+/* 🔥 FINAL LOGO */
+.logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  transform: scale(1.35) translateY(5px);
+}
+
+/* TEXT */
+h2 {
+  margin: 10px 0 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.sub {
+  font-size: 14px;
+  color: #aaa;
+  margin: 10px 0 30px;
+}
+
+/* INPUT */
+.input-box input {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+
+  box-sizing: border-box;
+}
+
+.input-box input::placeholder {
+  color: #bbb;
+}
+
+/* BUTTON */
+.btn {
+  width: 100%;
+  padding: 15px;
+  margin-top: 20px;
+
+  border-radius: 12px;
+  border: none;
+
+  background: #ffffff;
+  color: #000;
+  font-weight: 600;
+  font-size: 16px;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn:hover {
+  transform: scale(1.02);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* SWITCH */
+.switch {
+  margin-top: 25px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.switch span {
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- 🔥 FINAL LOGO -->
+  <div class="logo-box">
+    <img src="image/bg-eress-logo.png" class="logo">
+  </div>
+
+  <h2>Welcome</h2>
+  <div class="sub">Login or Register with Gmail</div>
+
+  <div class="input-box">
+    <input type="email" placeholder="Enter your Gmail">
+  </div>
+
+  <button class="btn">Continue</button>
+
+  <div class="switch">
+    New user? <span>Register</span>
+  </div>
+
+</div>
+
+</body>
+</html>
