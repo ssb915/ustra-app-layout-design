@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Select Category</title>
+
+<!-- 🔥 Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body {
+  margin: 0;
+  height: 100dvh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: linear-gradient(to bottom, #1a1a1a, #2c2c2c);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.container {
+  width: 90%;
+  max-width: 350px;
+  text-align: center;
+}
+
+/* LOGO */
+.logo-box {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 20px;
+  background: #fff;
+  border-radius: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(1.5) translateY(6px);
+}
+
+/* TEXT */
+h2 { margin: 10px 0; }
+.sub { color: #aaa; margin-bottom: 25px; }
+
+/* 🔥 ICON GRID */
+.gender-box {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.gender {
+  flex: 1;
+  padding: 18px 10px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.08);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.gender i {
+  font-size: 26px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.gender span {
+  font-size: 13px;
+}
+
+/* ACTIVE */
+.gender.active {
+  background: #fff;
+  color: #000;
+}
+
+/* BUTTON */
+.btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 25px;
+  border-radius: 12px;
+  border: none;
+  background: #fff;
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="logo-box">
+    <img src="image/bg-eress-logo.png" class="logo">
+  </div>
+
+  <h2>Select Category</h2>
+  <div class="sub">Choose your service type</div>
+
+  <!-- 🔥 ICON OPTIONS -->
+  <div class="gender-box">
+
+    <div class="gender" onclick="selectGender(this, 'Female')">
+      <i class="fa-solid fa-user"></i>
+      <span>Female</span>
+    </div>
+
+    <div class="gender" onclick="selectGender(this, 'Male')">
+      <i class="fa-solid fa-user-tie"></i>
+      <span>Male</span>
+    </div>
+
+    <div class="gender" onclick="selectGender(this, 'Both')">
+      <i class="fa-solid fa-users"></i>
+      <span>Both</span>
+    </div>
+
+  </div>
+
+  <button class="btn" onclick="submit()">Continue</button>
+
+</div>
+
+<script>
+let selected = "";
+
+function selectGender(el, value) {
+  document.querySelectorAll(".gender").forEach(g => g.classList.remove("active"));
+  el.classList.add("active");
+  selected = value;
+}
+
+function submit() {
+  if (!selected) {
+    alert("Please select category");
+    return;
+  }
+
+  alert("Selected: " + selected);
+}
+</script>
+
+</body>
+</html>
