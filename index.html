@@ -8,50 +8,40 @@
   <style>
     body {
       margin: 0;
-      height: 100vh;
-      position: relative; /* 🔥 IMPORTANT FIX */
+      height: 100dvh; /* 🔥 mobile safe */
+      overflow: hidden; /* 🔥 no scroll */
+      position: relative;
 
-      /* 🔥 FULL BACKGROUND IMAGE */
       background: url("image/background-img.png") no-repeat center center;
       background-size: cover;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
-    /* 🔥 DARK OVERLAY (premium feel) */
+    /* 🔥 Overlay */
     body::before {
       content: "";
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: rgba(0,0,0,0.45);
-      top: 0;
-      left: 0;
       z-index: 1;
     }
 
-    /* 🔄 LOADER */
+    /* 🔄 Spinner */
     .spinner {
-      position: absolute;
-      bottom: 230px; /* 🔥 PERFECT POSITION */
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
+	  position: absolute;
+	  left: 50%;
+	  bottom: 40%; /* 🔥 adjusted */
+	  transform: translateX(-50%);
+	  z-index: 2;
 
-      width: 55px;
-      height: 55px;
-      border: 4px solid rgba(255,255,255,0.25);
-      border-top: 4px solid #ffffff;
-      border-radius: 50%;
+	  width: 50px;
+	  height: 50px;
+	  border: 4px solid rgba(255,255,255,0.25);
+	  border-top: 4px solid #fff;
+	  border-radius: 50%;
 
-      animation: spin 1s linear infinite;
-
-      /* 💎 subtle glow */
-      box-shadow: 0 0 10px rgba(255,255,255,0.2);
-    }
-
+	  animation: spin 1s linear infinite;
+	  box-shadow: 0 0 10px rgba(255,255,255,0.2);
+	}
     @keyframes spin {
       0% { transform: translateX(-50%) rotate(0deg); }
       100% { transform: translateX(-50%) rotate(360deg); }
@@ -62,7 +52,6 @@
 
 <body>
 
-  <!-- 🔥 Loader -->
   <div class="spinner"></div>
 
 </body>
