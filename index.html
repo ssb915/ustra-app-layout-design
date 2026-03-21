@@ -3,73 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ustra</title>
+  <title>Ustra - Splash Screen</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-
-      background: linear-gradient(
-        to bottom,
-        #f2f2f2 0%,
-        #dcdcdc 40%,
-        #cfcfcf 60%,
-        #e6e6e6 100%
-      );
-
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      /* Smoother, premium background gradient */
+      background: linear-gradient(135deg, #fdfdfd 0%, #e0e0e0 100%);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
+      color: #222;
     }
 
-    .container {
-      text-align: center;
-      transform: translateY(-25px);
+    /* Centers the main content vertically */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding-top: 40px; /* Balances the visual center */
     }
 
     .logo {
-      width: 190px;
-      height: 190px;
+      width: 160px;
+      height: 160px;
       border-radius: 35px;
-      box-shadow:
-        0 20px 50px rgba(0,0,0,0.2),
-        inset 0 2px 4px rgba(255,255,255,0.6);
-      margin-bottom: 30px;
+      box-shadow: 
+        0 20px 40px rgba(0,0,0,0.15),
+        inset 0 2px 4px rgba(255,255,255,0.8);
+      margin-bottom: 20px;
+      background-color: #fff; /* Helps if your logo has a transparent background */
     }
 
     .tagline {
-      font-size: 15px;
-      color: #1a1a1a;
+      font-size: 16px;
+      font-weight: 500;
+      color: #444;
       letter-spacing: 0.5px;
       margin-bottom: 15px;
     }
 
     .line {
-      width: 45px;
-      height: 2px;
-      margin: 12px auto 25px;
-      background: linear-gradient(to right, #999, #333, #999);
-      border-radius: 10px;
+      width: 40px;
+      height: 3px;
+      background: #333;
+      border-radius: 5px;
+      margin-bottom: 35px;
+      opacity: 0.8;
     }
 
-    .india-logo {
-      width: 180px;
-      opacity: 0.85;
-      filter: grayscale(100%);
-      margin-bottom: 25px;
-    }
-
-    /* 🔥 ROUND LOADER */
+    /* 🔥 IMPROVED LOADER */
     .spinner {
-      width: 35px;
-      height: 35px;
-      border: 4px solid #ccc;
-      border-top: 4px solid #222;
+      width: 36px;
+      height: 36px;
+      border: 3px solid rgba(0, 0, 0, 0.1);
+      border-top: 3px solid #222;
       border-radius: 50%;
-      margin: 0 auto;
-      animation: spin 1s linear infinite;
+      /* Smooth easing makes it look like a high-end app */
+      animation: spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; 
     }
 
     @keyframes spin {
@@ -77,30 +78,35 @@
       100% { transform: rotate(360deg); }
     }
 
+    /* Pushes the Make in India logo to the absolute bottom */
+    .footer {
+      padding-bottom: 30px;
+      text-align: center;
+    }
+
+    .india-logo {
+      width: 90px; /* Reduced size so it doesn't fight the main logo */
+      opacity: 0.5;
+      filter: grayscale(100%);
+    }
+
   </style>
 </head>
 
 <body>
 
-  <div class="container">
+  <div class="main-content">
+    <img src="image/bg-eress-logo.png" alt="Ustra Logo" class="logo">
 
-    <!-- Logo -->
-    <img src="image/bg-eress-logo.png" class="logo">
+    <div class="tagline">Nayi ki dukan ab apke jeb me</div>
 
-    <!-- Tagline -->
-    <div class="tagline">
-      Nayi ki dukan ab apke jeb me
-    </div>
-
-    <!-- Line -->
     <div class="line"></div>
 
-    <!-- Make in India -->
-    <img src="image/Make-in-India.png" class="india-logo">
-
-    <!-- 🔥 Spinner Loader -->
     <div class="spinner"></div>
+  </div>
 
+  <div class="footer">
+    <img src="image/Make-in-India.png" alt="Make in India" class="india-logo">
   </div>
 
 </body>
