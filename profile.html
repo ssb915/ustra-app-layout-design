@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Profile</title>
+
+<style>
+  /* 🔥 RESET & BASE STYLES */
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { background-color: #f4f4f4; display: flex; justify-content: center; }
+
+  /* 🔥 APP CONTAINER */
+  .app-container {
+    width: 100%; max-width: 480px; background-color: #ffffff; min-height: 100dvh;
+    position: relative; padding-bottom: 80px; box-shadow: 0 0 20px rgba(0,0,0,0.1); overflow-x: hidden;
+  }
+
+  /* 🔥 HEADER */
+  header {
+    padding: 20px; background: #fff; position: sticky; top: 0; z-index: 10;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  header h1 { font-size: 22px; font-weight: 700; color: #000; }
+
+  /* 🔥 PROFILE HEADER */
+  .profile-header { text-align: center; padding: 10px 20px 30px 20px; border-bottom: 1px solid #f0f0f0; }
+  .profile-avatar { 
+    width: 100px; height: 100px; background: #000; color: #fff; border-radius: 50%; 
+    display: flex; justify-content: center; align-items: center; font-size: 36px; font-weight: bold; 
+    margin: 0 auto 15px auto; position: relative;
+  }
+  
+  /* Edit Icon on Avatar */
+  .edit-avatar {
+    position: absolute; bottom: 0; right: 0; background: #fff; border: 2px solid #000;
+    width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+    cursor: pointer;
+  }
+  .edit-avatar img { width: 14px; }
+
+  .profile-header h2 { font-size: 24px; margin-bottom: 5px; color: #000; }
+  .profile-header p { color: #666; font-size: 14px; margin-bottom: 3px; }
+  .location-badge { 
+    display: inline-flex; align-items: center; gap: 5px; background: #f5f5f5; 
+    padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; margin-top: 10px;
+  }
+
+  /* 🔥 PROFILE ACTIONS (BUTTONS) */
+  .profile-actions { display: flex; flex-direction: column; gap: 12px; padding: 25px 20px; }
+  
+  .btn { 
+    display: flex; align-items: center; justify-content: space-between;
+    background: #fff; border: 1px solid #e0e0e0; padding: 18px 20px; 
+    border-radius: 16px; font-size: 15px; font-weight: 600; color: #000;
+    cursor: pointer; transition: 0.2s;
+  }
+  .btn-left { display: flex; align-items: center; gap: 15px; }
+  .btn-left img { width: 22px; opacity: 0.7; }
+  
+  .btn:hover { border-color: #000; box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+  
+  .btn-logout { background: #fff1f0; color: #d32f2f; border-color: #ffcdd2; margin-top: 10px; justify-content: center; }
+  .btn-logout:hover { border-color: #ef9a9a; background: #ffebee; }
+
+  /* 🔥 UPDATED: BOTTOM STICKY NAVBAR (White Background, Modern UX) */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px; /* App Container Width */
+    background: black; /* White Background */
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    
+    /* Perfect spacing for thumb reach and safe areas */
+    padding: 12px 10px; 
+    /* Padding bottom handle for newer phones via JS (optional) or use standard height */
+    height: 75px; 
+
+    z-index: 100;
+    /* Clean line to separate from content */
+    border-top: 1px solid #e4e4e7; 
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: grey; /* Dark Gray for inactive state */
+    transition: all 0.2s ease;
+    width: 30%; /* Balanced clickable area */
+    height: 100%;
+    border-radius: 12px;
+  }
+
+  /* Interaction feedback */
+  .nav-item:active {
+    background-color: #f4f4f5;
+  }
+
+  /* 🔥 Active State: Black Icon & Text */
+  .nav-item.active {
+    color: white;
+  }
+  
+  .nav-item:hover {
+    color: white;
+  }
+
+  /* Icon sizing and weight */
+  .nav-item .lucide {
+    width: 24px;
+    height: 24px;
+    stroke-width: 1.5px; /* Thin, modern stroke */
+    margin-bottom: 5px;
+    transition: stroke-width 0.2s ease;
+  }
+
+  /* Subtle visual pop for active icon */
+  .nav-item.active .lucide {
+    stroke-width: 2.5px; /* Thicker stroke for active */
+  }
+
+  .nav-item span {
+    font-size: 11px;
+    font-weight: 500;
+  }
+  
+  .nav-item.active span {
+    font-weight: 600; /* Slightly bolder text for active tab */
+  }
+</style>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+  <header>
+    <h1>Profile</h1>
+    <img src="https://img.icons8.com/ios-filled/100/000000/settings.png" style="width: 24px; cursor: pointer;">
+  </header>
+
+  <div class="profile-header">
+    <div class="profile-avatar">
+      S
+      <div class="edit-avatar">
+        <img src="https://img.icons8.com/ios-filled/100/000000/edit--v1.png" alt="Edit">
+      </div>
+    </div>
+    <h2>Samir</h2>
+    <p>samir@example.com</p>
+    <p>+91 9876543210</p>
+    <div class="location-badge">
+      <img src="https://img.icons8.com/ios-filled/100/000000/marker.png" style="width: 12px;">
+      Visnagar, Gujarat
+    </div>
+  </div>
+
+  <div class="profile-actions">
+    <div class="btn">
+      <div class="btn-left">
+        <img src="https://img.icons8.com/ios-filled/100/000000/user-male-circle.png">
+        <span>Personal Details</span>
+      </div>
+      <img src="https://img.icons8.com/ios-filled/100/aaaaaa/forward.png" style="width: 16px;">
+    </div>
+    
+    <div class="btn">
+      <div class="btn-left">
+        <img src="https://img.icons8.com/ios-filled/100/000000/bank-cards.png">
+        <span>Payment Methods</span>
+      </div>
+      <img src="https://img.icons8.com/ios-filled/100/aaaaaa/forward.png" style="width: 16px;">
+    </div>
+
+    <div class="btn">
+      <div class="btn-left">
+        <img src="https://img.icons8.com/ios-filled/100/000000/like--v1.png">
+        <span>Favorite Salons</span>
+      </div>
+      <img src="https://img.icons8.com/ios-filled/100/aaaaaa/forward.png" style="width: 16px;">
+    </div>
+
+    <div class="btn btn-logout">
+      Log Out
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-item">
+      <i data-lucide="home"></i>
+      <span>Home</span>
+    </a>
+    <a href="bookings.html" class="nav-item"> 
+      <i data-lucide="calendar-days"></i>
+      <span>Bookings</span>
+    </a>
+    <a href="profile.html" class="nav-item active">
+      <i data-lucide="user"></i>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+</div>
+
+<script>
+  // Initialize Lucide Icons
+  lucide.createIcons();
+</script>
+
+</body>
+</html>

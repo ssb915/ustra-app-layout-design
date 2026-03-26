@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Home</title>
+
+<style>
+  /* 🔥 RESET & BASE STYLES */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  body {
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* 🔥 APP CONTAINER */
+  .app-container {
+    width: 100%;
+    max-width: 480px;
+    background-color: #ffffff;
+    min-height: 100dvh;
+    position: relative;
+    padding-bottom: 80px; 
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    overflow-x: hidden;
+  }
+
+  /* 🔥 HEADER */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .logo-container {
+    width: 50px;
+    height: 50px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid #eee;
+  }
+
+  .logo-container img {
+    width: 80%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .burger-menu {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: #f8f8f8;
+    border-radius: 12px;
+    transition: 0.2s;
+  }
+  
+  .burger-menu:hover { background: #eaeaea; }
+  .burger-menu img { width: 24px; height: 24px; }
+
+  /* 🔥 OVERLAY for background dimming */
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+    background: rgba(0,0,0,0.2);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+  }
+  .overlay.active { opacity: 1; visibility: visible; }
+
+  /* 🔥 SIDEBAR (DROPDOWN MENU from Burger) */
+  .sidebar {
+    position: absolute; /* Positioned relative to app-container */
+    top: 75px; /* Spacing below header */
+    right: 20px; /* Align with burger menu */
+    width: 260px;
+    height: auto;
+    background: #fff;
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    
+    /* Animation Properties */
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: scale(0.9);
+    transform-origin: top right; /* Originates from burger icon */
+    transition: all 0.3s ease-out;
+  }
+
+  .sidebar.active { 
+    max-height: 500px; /* Expands to show content */
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .sidebar-header {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .close-btn {
+    cursor: pointer;
+    font-size: 24px;
+    color: #999;
+  }
+
+  /* User Info in Sidebar Header */
+  .user-info-sidebar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .user-avatar-sidebar {
+    width: 45px;
+    height: 45px;
+    background: #000;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .user-text-sidebar {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .user-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+  }
+  .user-email {
+    font-size: 12px;
+    color: #666;
+  }
+
+  .sidebar-item {
+    padding: 15px 0;
+    font-size: 15px;
+    color: #333;
+    font-weight: 500;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+  }
+
+  .sidebar-item img { width: 18px; opacity: 0.7; }
+  .sidebar-item:hover { color: #000; }
+
+  /* 🔥 TABS CONTENT */
+  .tab-content { display: none; animation: fadeIn 0.3s; }
+  .tab-content.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* 🔥 HOME TAB STYLES */
+  .search-section { padding: 0 20px 20px 20px; }
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    border-radius: 16px;
+    padding: 12px 20px;
+    border: 1px solid #e0e0e0;
+  }
+  .search-box img { width: 20px; margin-right: 12px; opacity: 0.5; }
+  .search-box input { border: none; background: transparent; outline: none; width: 100%; font-size: 16px; }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    padding: 0 20px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .section-title a { font-size: 12px; color: #666; text-decoration: none; font-weight: 500; }
+
+  .horizontal-scroll {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 0 20px 20px 20px;
+    scrollbar-width: none;
+  }
+  .horizontal-scroll::-webkit-scrollbar { display: none; }
+
+  .card {
+    min-width: 150px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .card-img { width: 100%; height: 110px; background-size: cover; background-position: center; }
+  .card-info { padding: 12px; text-align: center; }
+  .card-info h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .card-info p { font-size: 11px; color: #777; }
+
+  /* 🔥 DUMMY PAGES (BOOKINGS & PROFILE) STYLES */
+  .page-header { padding: 10px 20px 20px 20px; font-size: 24px; font-weight: bold; }
+  
+  .booking-card {
+    background: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    margin: 0 20px 15px 20px;
+    padding: 15px;
+    display: flex;
+    gap: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .booking-date { background: #000; color: #fff; border-radius: 12px; padding: 10px; text-align: center; min-width: 60px; }
+  .booking-date span { display: block; font-size: 12px; }
+  .booking-date strong { font-size: 18px; }
+  .booking-details h4 { margin-bottom: 5px; font-size: 16px; }
+  .booking-details p { font-size: 12px; color: #666; margin-bottom: 5px; }
+  .status { font-size: 10px; font-weight: bold; background: #e0f2f1; color: #00897b; padding: 3px 8px; border-radius: 8px; display: inline-block; }
+
+  .profile-header { text-align: center; padding: 20px; }
+  .profile-avatar { width: 90px; height: 90px; background: #000; color: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 32px; font-weight: bold; margin: 0 auto 15px auto; }
+  .profile-header h2 { font-size: 22px; margin-bottom: 5px; }
+  .profile-header p { color: #666; font-size: 14px; }
+  .profile-actions { display: flex; flex-direction: column; gap: 10px; padding: 20px; }
+  .btn { background: #f5f5f5; border: 1px solid #e0e0e0; padding: 15px; border-radius: 12px; font-size: 15px; font-weight: 600; text-align: left; cursor: pointer; transition: 0.2s; }
+  .btn:hover { background: #eaeaea; }
+  .btn-logout { background: #fff1f0; color: #d32f2f; border-color: #ffcdd2; text-align: center; }
+
+  /* 🔥 BOTTOM STICKY NAVBAR */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px;
+    background: #000;
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 10px 25px 10px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+    z-index: 100;
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    color: #fff;
+    opacity: 0.4;
+    transition: 0.3s;
+  }
+  .nav-item.active { opacity: 1; transform: translateY(-3px); }
+  .nav-item img { width: 24px; height: 24px; margin-bottom: 5px; }
+  .nav-item span { font-size: 11px; font-weight: 500; }
+</style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="user-info-sidebar">
+        <div class="user-avatar-sidebar">S</div>
+        <div class="user-text-sidebar">
+          <span class="user-name">Samir</span>
+          <span class="user-email">samir@example.com</span>
+        </div>
+      </div>
+      <div class="close-btn" onclick="toggleSidebar()">&times;</div>
+    </div>
+    
+    <div class="sidebar-item" onclick="toggleSidebar(); switchTab('profile')">
+      <img src="https://img.icons8.com/ios-filled/100/000000/user-male-circle.png"> Edit Profile
+    </div>
+    <div class="sidebar-item">
+      <img src="https://img.icons8.com/ios-filled/100/000000/settings.png"> Settings
+    </div>
+    <div class="sidebar-item">
+      <img src="https://img.icons8.com/ios-filled/100/000000/help.png"> Help & Support
+    </div>
+    <div class="sidebar-item" style="margin-top: auto; color: #d32f2f;">
+      <img src="https://img.icons8.com/ios-filled/100/d32f2f/exit.png"> Logout
+    </div>
+  </div>
+  
+  <header>
+    <div class="logo-container">
+      <img src="image/bg-eress-logo.png" alt="Ustra">
+    </div>
+    <div class="burger-menu" onclick="toggleSidebar()">
+      <img src="https://img.icons8.com/ios-filled/100/000000/menu--v1.png" alt="Menu">
+    </div>
+  </header>
+
+  <div id="tab-home" class="tab-content active">
+    <div class="search-section">
+      <div class="search-box">
+        <img src="https://img.icons8.com/ios-filled/100/888888/search--v1.png" alt="Search">
+        <input type="text" placeholder="Search for salons, styles...">
+      </div>
+    </div>
+
+    <div class="section-title"><span>Top Salons</span><a href="#">See All</a></div>
+    <div class="horizontal-scroll">
+      <div class="card">
+        <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=300&q=80');"></div>
+        <div class="card-info"><h3>Urban Trim</h3><p>⭐ 4.8</p></div>
+      </div>
+      <div class="card">
+        <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=300&q=80');"></div>
+        <div class="card-info"><h3>The Classic Cut</h3><p>⭐ 4.5</p></div>
+      </div>
+    </div>
+
+    <div class="section-title"><span>Beauty Parlors</span><a href="#">See All</a></div>
+    <div class="horizontal-scroll">
+      <div class="card">
+        <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=300&q=80');"></div>
+        <div class="card-info"><h3>Glow Studio</h3><p>⭐ 4.7</p></div>
+      </div>
+      <div class="card">
+        <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=300&q=80');"></div>
+        <div class="card-info"><h3>Elegance Spa</h3><p>⭐ 4.6</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-bookings" class="tab-content">
+    <div class="page-header">My Bookings</div>
+    
+    <div class="booking-card">
+      <div class="booking-date"><span>Mar</span><strong>28</strong></div>
+      <div class="booking-details">
+        <h4>Haircut & Beard Trim</h4>
+        <p>Urban Trim Salon • 10:30 AM</p>
+        <span class="status">Upcoming</span>
+      </div>
+    </div>
+
+    <div class="booking-card">
+      <div class="booking-date" style="background: #e0e0e0; color: #333;"><span>Mar</span><strong>15</strong></div>
+      <div class="booking-details">
+        <h4>Facial & Spa</h4>
+        <p>Elegance Spa • 4:00 PM</p>
+        <span class="status" style="background: #f5f5f5; color: #666;">Completed</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-profile" class="tab-content">
+    <div class="page-header">Profile</div>
+    
+    <div class="profile-header">
+      <div class="profile-avatar">S</div>
+      <h2>Samir</h2>
+      <p>samir@example.com • +91 9876543210</p>
+      <p style="margin-top: 5px; font-size: 12px; color: #888;">📍 Visnagar, Gujarat</p>
+    </div>
+
+    <div class="profile-actions">
+      <button class="btn">Edit Personal Details</button>
+      <button class="btn">Payment Methods</button>
+      <button class="btn">Favorite Salons</button>
+      <button class="btn btn-logout">Log Out</button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
+      <img src="https://img.icons8.com/ios-filled/100/ffffff/home.png">
+      <span>Home</span>
+    </div>
+    <div class="nav-item" id="nav-bookings" onclick="switchTab('bookings')">
+      <img src="https://img.icons8.com/ios-filled/100/ffffff/calendar--v1.png">
+      <span>Bookings</span>
+    </div>
+    <div class="nav-item" id="nav-profile" onclick="switchTab('profile')">
+      <img src="https://img.icons8.com/ios-filled/100/ffffff/user.png">
+      <span>Profile</span>
+    </div>
+  </nav>
+
+</div>
+
+<script>
+  // Sidebar Toggle Logic
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+  }
+
+  // Bottom Navigation SPA Tab Logic
+  function switchTab(tabName) {
+    // 1. Hide all tab contents
+    document.querySelectorAll('.tab-content').forEach(tab => {
+      tab.classList.remove('active');
+    });
+
+    // 2. Remove active class from all nav items
+    document.querySelectorAll('.nav-item').forEach(nav => {
+      nav.classList.remove('active');
+    });
+
+    // 3. Show selected tab content
+    document.getElementById('tab-' + tabName).classList.add('active');
+
+    // 4. Highlight selected nav item
+    document.getElementById('nav-' + tabName).classList.add('active');
+    
+    // (Optional) Scroll to top when switching tabs
+    window.scrollTo(0, 0);
+  }
+</script>
+
+</body>
+</html>
