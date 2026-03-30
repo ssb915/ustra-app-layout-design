@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Salon Details</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .app-container { padding-bottom: 90px; } /* Space for float btn */
+  
+  /* Hero */
+  .hero-image { width: 100%; height: 280px; background-image: url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=800&q=80'); background-size: cover; background-position: center; position: relative; }
+  .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, var(--bg-dark) 100%); }
+  
+  /* Top Actions */
+  .top-actions { position: absolute; top: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; z-index: 10; }
+  .icon-btn { background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; text-decoration: none; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+  .icon-btn:hover { background: rgba(212,175,55,0.4); border-color: var(--accent-gold); color: var(--accent-gold); }
+
+  /* Info Container */
+  .salon-info-container { padding: 0 20px; margin-top: -60px; position: relative; z-index: 5; margin-bottom: 25px; }
+  .salon-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; color: #fff; letter-spacing: 0.5px; }
+  .salon-tags { display: flex; gap: 8px; margin-bottom: 15px; }
+  .s-tag { font-size: 11px; padding: 4px 10px; border-radius: 20px; background: rgba(212,175,55,0.15); color: var(--accent-gold); border: 1px solid rgba(212,175,55,0.3); font-weight: 600; text-transform: uppercase;}
+  
+  .salon-meta { display: flex; flex-wrap: wrap; gap: 12px 20px; color: var(--text-secondary); font-size: 13px; margin-bottom: 20px; }
+  .meta-item { display: flex; align-items: center; gap: 6px; }
+  .meta-item i { width: 14px; color: var(--accent-gold); }
+
+  /* Tabs */
+  .tabs-nav { display: flex; border-bottom: 1px solid var(--glass-border); padding: 0 20px; gap: 20px; overflow-x: auto; scrollbar-width: none; }
+  .tabs-nav::-webkit-scrollbar { display: none; }
+  .tab-link { color: var(--text-secondary); font-size: 15px; font-weight: 600; padding: 15px 0; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: 0.3s; }
+  .tab-link.active { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
+
+  /* Tab Content Area */
+  .tab-content { padding: 25px 20px; display: none; animation: fadeIn 0.3s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Services Tab */
+  .service-cat { font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
+  .service-cat span { font-size: 12px; font-weight: 500; color: var(--text-secondary); background: var(--glass-bg); padding: 3px 8px; border-radius: 12px; }
+  
+  .service-item { display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; margin-bottom: 12px; transition: 0.2s; cursor: pointer; }
+  .service-item:hover { border-color: rgba(212,175,55,0.4); background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+  .s-left h4 { font-size: 16px; margin-bottom: 5px; color: var(--text-primary); }
+  .s-left p { font-size: 12px; color: var(--text-secondary); line-height: 1.4; display: flex; align-items: center; gap: 4px; }
+  .s-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .service-price { font-weight: 800; color: var(--accent-gold); font-size: 18px; }
+  
+  .add-s-btn { background: rgba(212,175,55,0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+  .service-item:hover .add-s-btn { background: var(--accent-gold); color: #000; }
+
+  /* Floating Button */
+  .floating-book-btn { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; z-index: 100; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border-radius: 12px; }
+
+  /* Stylists Tab */
+  .stylist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+  .stylist-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; padding: 15px; text-align: center; }
+  .st-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; margin: 0 auto 10px; border: 2px solid var(--accent-gold); }
+  .stylist-card h4 { font-size: 15px; color: #fff; margin-bottom: 2px; }
+  .stylist-card p { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; }
+  .st-rate { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 10px; color: #fff; font-weight: 600; }
+  .st-rate i { color: var(--accent-gold); width: 10px; fill: var(--accent-gold); }
+
+  /* Reviews Tab */
+  .review-summary { display: flex; align-items: center; gap: 20px; background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 20px; border-radius: 16px; margin-bottom: 25px; }
+  .rs-big { font-size: 42px; font-weight: 800; color: var(--accent-gold); }
+  .rs-stars i { color: var(--accent-gold); fill: var(--accent-gold); width: 16px; }
+  .rs-count { font-size: 13px; color: var(--text-secondary); margin-top: 5px; }
+  
+  .review-card { padding: 15px 0; border-bottom: 1px solid var(--glass-border); }
+  .review-card:last-child { border-bottom: none; }
+  .r-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .r-user { display: flex; align-items: center; gap: 10px; }
+  .r-user img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+  .r-user h5 { font-size: 14px; font-weight: 600; color: #fff; }
+  .r-user span { font-size: 11px; color: var(--text-secondary); }
+  .r-rating i { width: 12px; color: var(--accent-gold); fill: var(--accent-gold); }
+  .r-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- Hero Cover -->
+  <div class="hero-image">
+    <div class="hero-overlay"></div>
+    <div class="top-actions">
+      <a href="home.html" class="icon-btn"><i data-lucide="arrow-left"></i></a>
+      <div style="display:flex; gap:10px;">
+        <a href="#" class="icon-btn"><i data-lucide="share-2" style="width: 18px;"></i></a>
+        <a href="#" class="icon-btn"><i data-lucide="heart" style="width: 18px;"></i></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header Info -->
+  <div class="salon-info-container">
+    <div class="salon-tags">
+      <span class="s-tag">Premium</span>
+      <span class="s-tag">Luxury</span>
+    </div>
+    <h1 class="salon-title">Truefitt & Hill</h1>
+    
+    <div class="salon-meta">
+      <span class="meta-item"><i data-lucide="star" style="fill: var(--accent-gold);"></i> <strong style="color:#fff;">4.9</strong> (124 reviews)</span>
+      <span class="meta-item"><i data-lucide="map-pin"></i> 1.2 km • Bodakdev</span>
+      <span class="meta-item"><i data-lucide="clock"></i> Open • Closes 9:00 PM</span>
+    </div>
+  </div>
+
+  <!-- Custom Tab Bar -->
+  <div class="tabs-nav">
+    <div class="tab-link active" onclick="switchTab('services')">Services</div>
+    <div class="tab-link" onclick="switchTab('stylists')">Stylists</div>
+    <div class="tab-link" onclick="switchTab('reviews')">Reviews</div>
+    <div class="tab-link" onclick="switchTab('about')">About</div>
+  </div>
+
+  <!-- TAB: Services -->
+  <div id="tab-services" class="tab-content active">
+    
+    <div class="service-cat">Haircuts <span>3 items</span></div>
+    
+    <div class="service-item">
+      <div class="s-left">
+        <h4>Signature Cut</h4>
+        <p>Consultation, precise cut, wash & styling.</p>
+        <p style="margin-top: 6px; color: var(--accent-gold);"><i data-lucide="clock" style="width:12px;"></i> 45 mins</p>
+      </div>
+      <div class="s-right">
+        <div class="service-price">₹1200</div>
+        <div class="add-s-btn"><i data-lucide="plus" style="width:14px;"></i></div>
+      </div>
+    </div>
+
+    <div class="service-item">
+      <div class="s-left">
+        <h4>Skin Fade</h4>
+        <p>Zero fade blended perfectly.</p>
+        <p style="margin-top: 6px; color: var(--accent-gold);"><i data-lucide="clock" style="width:12px;"></i> 35 mins</p>
+      </div>
+      <div class="s-right">
+        <div class="service-price">₹800</div>
+        <div class="add-s-btn"><i data-lucide="plus" style="width:14px;"></i></div>
+      </div>
+    </div>
+
+    <div class="service-cat" style="margin-top: 25px;">Shaving & Beard <span>2 items</span></div>
+    
+    <div class="service-item">
+      <div class="s-left">
+        <h4>Hot Towel Shave</h4>
+        <p>Traditional straight razor shave with essential oils.</p>
+        <p style="margin-top: 6px; color: var(--accent-gold);"><i data-lucide="clock" style="width:12px;"></i> 30 mins</p>
+      </div>
+      <div class="s-right">
+        <div class="service-price">₹650</div>
+        <div class="add-s-btn"><i data-lucide="plus" style="width:14px;"></i></div>
+      </div>
+    </div>
+    
+    <div class="service-item">
+      <div class="s-left">
+        <h4>Beard Sculpting</h4>
+        <p>Trimming, fading, and line-up.</p>
+        <p style="margin-top: 6px; color: var(--accent-gold);"><i data-lucide="clock" style="width:12px;"></i> 20 mins</p>
+      </div>
+      <div class="s-right">
+        <div class="service-price">₹450</div>
+        <div class="add-s-btn"><i data-lucide="plus" style="width:14px;"></i></div>
+      </div>
+    </div>
+    
+    <br><br> <!-- Space for floating btn inside tab -->
+  </div>
+
+  <!-- TAB: Stylists -->
+  <div id="tab-stylists" class="tab-content">
+    <div class="stylist-grid">
+      <div class="stylist-card">
+        <img src="https://images.unsplash.com/photo-1544723795-3ca315cadc88?auto=format&fit=crop&w=150&q=80" class="st-img">
+        <h4>Rajesh Kumar</h4>
+        <p>Master Barber</p>
+        <div class="st-rate"><i data-lucide="star"></i> 5.0</div>
+      </div>
+      <div class="stylist-card">
+        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80" class="st-img">
+        <h4>Amit Sharma</h4>
+        <p>Senior Stylist</p>
+        <div class="st-rate"><i data-lucide="star"></i> 4.8</div>
+      </div>
+      <div class="stylist-card">
+        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&w=150&q=80" class="st-img">
+        <img src="" alt="" style="display:none;">
+        <h4>Karan Singh</h4>
+        <p>Fade Specialist</p>
+        <div class="st-rate"><i data-lucide="star"></i> 4.9</div>
+      </div>
+      <div class="stylist-card">
+        <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=150&q=80" class="st-img">
+        <h4>Vikram Desai</h4>
+        <p>Shave Expert</p>
+        <div class="st-rate"><i data-lucide="star"></i> 4.7</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Reviews -->
+  <div id="tab-reviews" class="tab-content">
+    <div class="review-summary">
+      <div class="rs-big">4.9</div>
+      <div>
+        <div class="rs-stars">
+          <i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i><i data-lucide="star"></i>
+        </div>
+        <div class="rs-count">Based on 124 Reviews</div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="r-head">
+        <div class="r-user">
+          <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=100&q=80">
+          <div>
+            <h5>Karan Verma</h5>
+            <span>2 days ago</span>
+          </div>
+        </div>
+        <div class="r-rating"><i data-lucide="star"></i> 5.0</div>
+      </div>
+      <div class="r-text">Absolutely incredible experience. Rajesh took his time with the signature cut and the hot towel shave was extremely relaxing. Highly recommended.</div>
+    </div>
+
+    <div class="review-card">
+      <div class="r-head">
+        <div class="r-user">
+          <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80">
+          <div>
+            <h5>Rohan Patel</h5>
+            <span>1 week ago</span>
+          </div>
+        </div>
+        <div class="r-rating"><i data-lucide="star"></i> 4.5</div>
+      </div>
+      <div class="r-text">Great atmosphere and good music. Karan gave me a perfect skin fade. The pricing is a bit premium but totally worth it for the service quality.</div>
+    </div>
+  </div>
+
+  <!-- TAB: About -->
+  <div id="tab-about" class="tab-content" style="color: var(--text-secondary); line-height: 1.6; font-size: 14px;">
+    <p style="margin-bottom: 20px;">Truefitt & Hill is your sanctuary for world-class grooming. Combining royal traditional barbering techniques with modern Indian trends in a high-end luxury environment.</p>
+    
+    <h4 style="color: #fff; margin-bottom: 10px; font-size: 16px;">Contact & Location</h4>
+    <div style="display:flex; align-items:flex-start; gap:10px; margin-bottom:15px; background:var(--glass-bg); padding:15px; border-radius:12px; border:1px solid var(--glass-border);">
+      <i data-lucide="map" style="color:var(--accent-gold); flex-shrink:0;"></i>
+      <div>
+        <strong style="color:#fff; display:block; margin-bottom:5px;">Bodakdev Branch</strong>
+        Level 2, Mondeal Heights, Bodakdev, Ahmedabad, Gujarat 380054
+      </div>
+    </div>
+
+    <h4 style="color: #fff; margin-bottom: 10px; margin-top: 25px; font-size: 16px;">Operating Hours</h4>
+    <div style="background:var(--glass-bg); padding:15px; border-radius:12px; border:1px solid var(--glass-border);">
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Mon - Fri</span><strong style="color:white;">09:00 AM - 09:00 PM</strong></div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:8px;"><span>Saturday</span><strong style="color:white;">09:00 AM - 10:00 PM</strong></div>
+      <div style="display:flex; justify-content:space-between;"><span>Sunday</span><strong style="color:var(--accent-gold);">10:00 AM - 08:00 PM</strong></div>
+    </div>
+  </div>
+
+  <div class="floating-book-btn">
+    <a href="booking-flow.html" class="btn-primary">Book Now • Selected 1 Service</a>
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-link').forEach(l => l.classList.remove('active'));
+    
+    document.getElementById('tab-' + tabId).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+</body>
+</html>
