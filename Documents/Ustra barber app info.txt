@@ -1,0 +1,64 @@
+App Name: Ustra
+Tagline: "Nayi ki dukan ab apke jeb me"
+Aligned with Make in India & Digital India vision.
+
+🔐 Login & User Setup
+
+Login via Gmail (Google Authentication)
+
+Select Category:
+
+Ladies Parlor
+
+Gents Salon
+
+🏪 Shop Profile Setup
+
+Owner Name
+
+Shop Photo Upload
+
+Location Access (Auto location detection)
+
+Working Hours:
+
+Start Time
+
+Close Time (Calendar & Time Picker)
+
+💼 Services Management
+
+Add Service List
+
+Each Service Includes:
+
+Service Name
+
+Time Duration
+
+Price (Rate)
+
+Features:
+
+Add / Edit / Delete services anytime after login
+
+👨‍🔧 Staff Management
+
+Total Workers Count
+
+Add Staff Members
+
+Assign availability status:
+
+Busy / Available (Live tracking based on UI)
+
+📊 Live Status System
+
+Real-time UI to show:
+
+Which staff is busy
+
+Which staff is available
+
+Helps in managing customers efficiently
+

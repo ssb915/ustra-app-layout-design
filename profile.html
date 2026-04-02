@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Profile</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .profile-header { text-align: center; padding: 20px 20px 10px 20px; }
+  .profile-avatar {
+    width: 90px; height: 90px;
+    border-radius: 50%; display: flex; justify-content: center; align-items: center;
+    margin: 0 auto 15px auto;
+    border: 3px solid var(--bg-dark); box-shadow: 0 0 0 2px var(--accent-gold);
+    background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80');
+    background-size: cover; background-position: center;
+  }
+  .profile-header h2 { font-size: 22px; margin-bottom: 5px; color: var(--text-primary); }
+  .profile-header p { color: var(--text-secondary); font-size: 14px; margin-bottom: 5px; }
+  
+  .profile-stats {
+    display: flex; justify-content: center; gap: 30px; margin-bottom: 30px;
+  }
+  .stat-item { text-align: center; }
+  .stat-value { font-size: 18px; font-weight: 700; color: var(--accent-gold); }
+  .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+
+  .profile-actions { display: flex; flex-direction: column; gap: 12px; padding: 0 20px 20px 20px; }
+  
+  .action-btn {
+    background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 16px 20px;
+    border-radius: 12px; font-size: 15px; font-weight: 500; text-align: left;
+    cursor: pointer; transition: 0.2s; color: var(--text-primary);
+    display: flex; align-items: center; text-decoration: none;
+  }
+  .action-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-gold); }
+  .action-btn .icon { margin-right: 15px; color: var(--accent-gold); }
+  .action-btn .chevron { margin-left: auto; color: var(--text-secondary); }
+
+  .action-btn-logout {
+    margin-top: 10px; background: rgba(255,77,77,0.1); color: var(--error-color);
+    border-color: rgba(255,77,77,0.3); justify-content: center;
+  }
+  .action-btn-logout:hover { background: rgba(255,77,77,0.2); border-color: var(--error-color); }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <header>
+    <h1><img src="image/bg-eress-logo.png" alt="Logo" class="top-logo" style="margin-right: 10px; vertical-align: middle;"> Profile</h1>
+    <i data-lucide="settings"></i>
+  </header>
+
+  <div class="profile-header">
+    <div class="profile-avatar"></div>
+    <h2>Rohan Sharma</h2>
+    <p>rohan.sharma@example.com</p>
+    <p>+91 98765 43210</p>
+  </div>
+  
+  <div class="profile-stats">
+    <div class="stat-item">
+      <div class="stat-value">12</div>
+      <div class="stat-label">Bookings</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">3</div>
+      <div class="stat-label">Reviews</div>
+    </div>
+  </div>
+
+  <div class="profile-actions">
+    <a href="#" class="action-btn">
+      <i data-lucide="user" class="icon"></i> Personal Details
+      <i data-lucide="chevron-right" class="chevron"></i>
+    </a>
+    <a href="#" class="action-btn">
+      <i data-lucide="heart" class="icon"></i> Favorite Salons
+      <i data-lucide="chevron-right" class="chevron"></i>
+    </a>
+    <a href="#" class="action-btn">
+      <i data-lucide="bell" class="icon"></i> Notifications
+      <i data-lucide="chevron-right" class="chevron"></i>
+    </a>
+    
+    <a href="index.html" class="action-btn action-btn-logout">
+      Log Out
+    </a>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-item">
+      <i data-lucide="home"></i>
+      <span>Home</span>
+    </a>
+    <a href="bookings.html" class="nav-item">
+      <i data-lucide="calendar"></i>
+      <span>Bookings</span>
+    </a>
+    <a href="profile.html" class="nav-item active">
+      <i data-lucide="user"></i>
+      <span>Profile</span>
+    </a>
+  </nav>
+
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>

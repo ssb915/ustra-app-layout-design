@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Book Appointment</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .booking-container { padding: 20px; padding-bottom: 100px; }
+  .section-label { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 15px; margin-top: 20px; }
+  
+  /* Select Date */
+  .date-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+  .date-scroll::-webkit-scrollbar { display: none; }
+  .date-card {
+    min-width: 60px; height: 75px;
+    background: var(--glass-bg); border: 1px solid var(--glass-border);
+    border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    cursor: pointer; transition: 0.3s;
+  }
+  .date-card.active { background: var(--accent-gold); border-color: var(--accent-gold); color: #000; }
+  .date-card span { font-size: 12px; margin-bottom: 5px; opacity: 0.8; }
+  .date-card strong { font-size: 18px; }
+  
+  /* Select Time */
+  .time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .time-slot {
+    padding: 12px 0; text-align: center;
+    background: var(--glass-bg); border: 1px solid var(--glass-border);
+    border-radius: 10px; font-size: 14px; cursor: pointer; transition: 0.3s ease;
+  }
+  .time-slot.active { background: var(--accent-gold); border-color: var(--accent-gold); color: #000; font-weight: bold; }
+  .time-slot.disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* Stylist Select */
+  .stylist-grid { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+  .stylist-card {
+    min-width: 100px; text-align: center; cursor: pointer;
+  }
+  .stylist-img {
+    width: 60px; height: 60px; border-radius: 50%; background: #ccc; margin: 0 auto 10px auto;
+    background-size: cover; background-position: center; border: 2px solid transparent; transition: 0.3s;
+  }
+  .stylist-card.active .stylist-img { border-color: var(--accent-gold); box-shadow: 0 0 10px rgba(212,175,55,0.5); }
+  .stylist-name { font-size: 13px; font-weight: 500; }
+
+  /* Summary Section */
+  .summary-card { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border); margin-top: 30px; }
+  .summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+  .summary-row.total { font-weight: 700; font-size: 18px; color: var(--accent-gold); margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--glass-border); }
+  
+  .bottom-action { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; padding: 20px; background: var(--bg-darker); border-top: 1px solid var(--glass-border); z-index: 100; }
+
+  /* Success Modal */
+  .modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+    z-index: 999; display: none; align-items: center; justify-content: center;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal-content {
+    background: var(--bg-dark); width: 85%; max-width: 320px;
+    padding: 30px 20px; border-radius: 20px; text-align: center; border: 1px solid var(--glass-border);
+  }
+  .modal-icon { width: 70px; height: 70px; background: rgba(0,204,102,0.1); color: var(--success-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px auto; }
+</style>
+</head>
+<body>
+
+<div class="app-container" style="padding-bottom: 0;">
+
+  <header>
+    <a href="salon-details.html" style="text-decoration: none;"><i data-lucide="arrow-left"></i></a>
+    <h1 style="font-size: 18px;"><img src="image/bg-eress-logo.png" alt="Logo" class="top-logo" style="margin-right: 10px; vertical-align: middle;"> Book Appointment</h1>
+    <div style="width: 24px;"></div>
+  </header>
+
+  <div class="booking-container">
+    
+    <div class="section-label">Select Date</div>
+    <div class="date-scroll">
+      <div class="date-card active">
+        <span>Wed</span><strong>28</strong>
+      </div>
+      <div class="date-card">
+        <span>Thu</span><strong>29</strong>
+      </div>
+      <div class="date-card">
+        <span>Fri</span><strong>30</strong>
+      </div>
+      <div class="date-card">
+        <span>Sat</span><strong>31</strong>
+      </div>
+      <div class="date-card">
+        <span>Sun</span><strong>01</strong>
+      </div>
+    </div>
+
+    <div class="section-label">Select Time</div>
+    <div class="time-grid">
+      <div class="time-slot disabled">09:00 AM</div>
+      <div class="time-slot disabled">09:30 AM</div>
+      <div class="time-slot active">10:00 AM</div>
+      <div class="time-slot">10:30 AM</div>
+      <div class="time-slot">11:00 AM</div>
+      <div class="time-slot">11:30 AM</div>
+      <div class="time-slot">01:00 PM</div>
+      <div class="time-slot disabled">01:30 PM</div>
+      <div class="time-slot">02:00 PM</div>
+    </div>
+
+    <div class="section-label">Select Stylist (Optional)</div>
+    <div class="stylist-grid">
+      <div class="stylist-card active">
+        <div class="stylist-img" style="background-image: url('https://images.unsplash.com/photo-1544723795-3ca315cadc88?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="stylist-name">Any</div>
+      </div>
+      <div class="stylist-card">
+        <div class="stylist-img" style="background-image: url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="stylist-name">Rajesh</div>
+      </div>
+      <div class="stylist-card">
+        <div class="stylist-img" style="background-image: url('https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="stylist-name">Amit</div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-row">
+        <span>Classic Haircut</span>
+        <span>₹800</span>
+      </div>
+      <div class="summary-row">
+        <span>Tax & Fees</span>
+        <span>₹64</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total</span>
+        <span>₹864</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-action">
+    <button class="btn-primary" onclick="showModal()">Confirm Booking</button>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i data-lucide="check" style="width: 40px; height: 40px; stroke-width: 3px;"></i>
+      </div>
+      <h2 style="margin-bottom: 10px; font-size: 22px;">Booking Confirmed!</h2>
+      <p class="text-muted" style="font-size: 14px; margin-bottom: 30px;">Your appointment with Truefitt & Hill is booked for Wed 28 at 10:00 AM.</p>
+      <a href="bookings.html" class="btn-primary">View My Bookings</a>
+      <button class="btn-secondary mt-10" onclick="hideModal()">Go Home</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+
+  // Simple date/time selector logic for dummy interaction
+  document.querySelectorAll('.date-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.date-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.time-slot:not(.disabled)').forEach(slot => {
+    slot.addEventListener('click', () => {
+      document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('active'));
+      slot.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.stylist-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.stylist-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+    });
+  });
+
+  function showModal() {
+    // 1. Capture Data
+    const shopName = "Truefitt & Hill";
+    const shopLocation = "Hazratganj, Lucknow";
+    const serviceName = document.querySelector('.summary-row span').innerText; // First item in summary
+    const price = document.querySelector('.summary-row.total span:last-child').innerText;
+    
+    const activeDate = document.querySelector('.date-card.active');
+    const dateText = activeDate.querySelector('span').innerText + " " + activeDate.querySelector('strong').innerText;
+    
+    const activeTime = document.querySelector('.time-slot.active').innerText;
+
+    // 2. Create Booking Object
+    const newBooking = {
+      id: Date.now(),
+      shopName: shopName,
+      location: shopLocation,
+      serviceName: serviceName,
+      dateTime: dateText + ", " + activeTime,
+      price: price,
+      status: "Upcoming",
+      thumb: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=150&q=80"
+    };
+
+    // 3. Save to LocalStorage
+    let bookings = JSON.parse(localStorage.getItem('myBookings')) || [];
+    bookings.unshift(newBooking); // Add to top
+    localStorage.setItem('myBookings', JSON.stringify(bookings));
+
+    // 4. Show Modal & Update Text
+    const modalText = document.querySelector('#successModal .text-muted');
+    modalText.innerText = `Your appointment with ${shopName} is booked for ${dateText} at ${activeTime}.`;
+    
+    document.getElementById('successModal').classList.add('active');
+  }
+
+  function hideModal() {
+    window.location.href = 'home.html';
+  }
+</script>
+</body>
+</html>
