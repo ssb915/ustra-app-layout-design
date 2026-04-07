@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Login</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .auth-container {
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+  }
+
+  .auth-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .auth-header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .forgot-password {
+    text-align: right;
+    font-size: 14px;
+    color: var(--accent-gold);
+    text-decoration: none;
+    margin-top: -10px;
+    display: block;
+  }
+  .auth-footer {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .auth-footer a {
+    color: var(--accent-gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .auth-tagline {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="app-container">
+  <header style="border-bottom: none;">
+    <a href="index.html" style="text-decoration: none;">
+      <i data-lucide="arrow-left"></i>
+    </a>
+  </header>
+
+  <div class="auth-container">
+    <div class="auth-header">
+      <img src="image/bg-eress-logo.png" alt="Logo" class="top-logo">
+      <p class="auth-tagline">Ustra — India’s First All-in-One Unisex Salon App</p>
+      <h1>Welcome Back</h1>
+      <p class="text-muted">Sign in to continue to Ustra</p>
+    </div>
+
+
+    <form class="auth-form" onsubmit="event.preventDefault(); window.location.href='home.html';">
+      <div>
+        <input type="email" class="glass-input" placeholder="Email or Phone Number">
+      </div>
+      <div>
+        <input type="password" class="glass-input" placeholder="Password">
+      </div>
+      
+      <a href="#" class="forgot-password">Forgot Password?</a>
+      
+      <button class="btn-primary mt-10">Login</button>
+    </form>
+
+    <div class="auth-footer">
+      Don't have an account? <a href="customer-register.html">Sign Up</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
+<script>
+  window.ustraHeaderConfig = { addTopOffset: false };
+</script>
+<script src="shared-home-header.js"></script>
+</body>
+</html>
