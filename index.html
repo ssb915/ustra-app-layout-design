@@ -1,202 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ustra</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ustra</title>
+  <link rel="stylesheet" href="customer-style.css">
+  <style>
+    body {
+      background: var(--bg-darker);
+      color: var(--text-primary);
+      margin: 0;
+      min-height: 100dvh;
+      padding: 20px 16px 32px;
+      display: flex;
+      justify-content: center;
+    }
 
-<style>
-:root {
-  --bg-dark: #0f0f0f;
-  --bg-darker: #080808;
-  --text-primary: #ffffff;
-  --accent-gold: #e2c275;
-  --glass-bg: rgba(255,255,255,0.05);
-  --glass-border: rgba(255,255,255,0.08);
-}
+    .wrap {
+      width: min(520px, 100%);
+      padding: 26px 16px 32px;
+      display: grid;
+      align-content: start;
+      gap: 18px;
+    }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
+    .logo {
+      width: 110px;
+      height: 110px;
+      border-radius: 22px;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+      margin: 5px auto 14px;
+    }
 
-body {
-  background: linear-gradient(180deg, #0b0b0b, #121212);
-  display: flex;
-  justify-content: center;
-  min-height: 100dvh;
-}
+    .logo img {
+      width: 75%;
+      height: 100%;
+      object-fit: contain;
+      filter: none;
+    }
 
-/* 🔥 MAIN WRAPPER */
-.landing-screen {
-  width: 100%;
-  max-width: 480px;
-  min-height: 100dvh;
-  padding: 28px 18px 50px;
+    h1 {
+      font-size: 22px;
+      text-align: center;
+      margin-top: 4px;
+    }
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    .subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: -6px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+    }
 
-/* 🔥 CARD */
-.landing {
-  width: 100%;
-  display: grid;
-  gap: 24px;
-  text-align: center;
+    .subtitle strong {
+      display: block;
+      font-size: 18px;
+      letter-spacing: 0.8px;
+      color: var(--accent-gold);
+      margin-bottom: 4px;
+    }
 
-  backdrop-filter: blur(16px);
-  background: rgba(255,255,255,0.03);
-  border-radius: 26px;
-  padding: 26px 20px;
+    .subtitle .tagline-note {
+      font-size: 12px;
+      letter-spacing: 0.3px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 4px;
+      font-weight: 400;
+    }
 
-  border: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-}
+    .label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 10px;
+    }
 
-/* 🔥 LOGO */
-.logo-block {
-  display: grid;
-  justify-items: center;
-  gap: 12px;
-}
+    .role-group {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
 
-.logo-block img {
-  width: 90px;
-  height: 90px;
-  border-radius: 22px;
-  background: #fff;
-  padding: 14px;
+    .role {
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 14px 10px;
+      display: grid;
+      place-items: center;
+      gap: 10px;
+      cursor: pointer;
+      background: var(--glass-bg);
+    }
 
-  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
-}
+    .role svg {
+      width: 24px;
+      height: 24px;
+      color: var(--accent-gold);
+    }
 
-/* TAGLINE */
-.tagline {
-  color: var(--accent-gold);
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1.5;
-}
+    .role-text {
+      text-align: center;
+    }
 
-/* 🔥 OPTIONS */
-.options {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-}
+    .role-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: 0.2px;
+    }
 
-/* 🔥 CARD BUTTON */
-.login-option {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: 18px;
-  padding: 20px 12px;
+    .role-text small {
+      display: block;
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+    }
 
-  display: grid;
-  place-items: center;
-  gap: 12px;
+    .role.active {
+      border-color: var(--accent-gold);
+    }
 
-  text-decoration: none;
-  color: var(--text-primary);
+    .role.active svg {
+      color: var(--accent-gold);
+    }
 
-  transition: all 0.25s ease;
-  position: relative;
-  overflow: hidden;
-}
+    .cta {
+      margin-top: 8px;
+      background: linear-gradient(135deg, var(--accent-gold), #b58c16);
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
 
-/* 🔥 GLOW EFFECT */
-.login-option::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, transparent, rgba(226,194,117,0.2), transparent);
-  opacity: 0;
-  transition: 0.3s;
-}
+    .partner-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-top: 10px;
+    }
 
-.login-option:hover::before {
-  opacity: 1;
-}
+    .partner-logos img {
+      height: 100px;
+      object-fit: contain;
+      transition: transform 0.2s ease;
+    }
 
-/* HOVER */
-.login-option:hover {
-  transform: translateY(-6px) scale(1.03);
-  border-color: var(--accent-gold);
-  box-shadow: 0 18px 30px rgba(0,0,0,0.5);
-}
+    @media (max-width: 520px) {
+      body {
+        padding: 0 10px;
+      }
 
-/* ICON BOX */
-.icon-wrap {
-  width: 58px;
-  height: 58px;
-  border-radius: 16px;
+      .wrap {
+        padding: 28px 16px 32px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.35);
+      }
 
-  background: rgba(226,194,117,0.12);
-  display: grid;
-  place-items: center;
-}
+      .role {
+        padding: 14px;
+      }
 
-/* ICON */
-.login-option img {
-  width: 30px;
-  height: 30px;
+      .cta {
+        font-size: 15px;
+      }
 
-  filter: brightness(0) saturate(100%) invert(78%) sepia(32%) saturate(430%) hue-rotate(12deg) brightness(92%) contrast(92%);
-}
+      .partner-logos img {
+        height: 90px;
+      }
+    }
 
-/* TEXT */
-.login-option p {
-  font-weight: 600;
-  font-size: 14px;
-}
+    @media (max-width: 360px) {
+      body {
+        padding: 0 8px;
+      }
 
-/* 🔥 MOBILE FIX */
-@media (max-width: 420px) {
-  .options {
-    grid-template-columns: 1fr;
-  }
-}
-</style>
+      h1 {
+        font-size: 20px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+      }
+
+      .role {
+        padding: 12px;
+      }
+
+      .partner-logos img {
+        height: 80px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="wrap">
+    <div class="logo">
+      <img src="image/bg-eress-logo.png" alt="Ustra Logo">
+    </div>
 
-<div class="landing-screen">
+    <h1 style="text-align:center;">Welcome to Ustra</h1>
+    <p class="subtitle" style="color:#e2c275; text-align:left; text-transform:uppercase;">
+      Nayi Ki Dukan Ab Apke Jeb Me India’s first salon experience in your pocket
+    </p>
 
-  <div class="landing">
-
-    <div class="logo-block">
-      <img src="image/bg-eress-logo.png">
-      <div class="tagline">
-        Nayi ki dukan<br>ab apke jeb me
+    <div class="label">How will you use the app?</div>
+    <div class="role-group" id="roleGroup">
+      <div class="role active" data-role="customer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
+          <path d="M4 20c0-2.67 5.33-4 8-4s8 1.33 8 4"/>
+        </svg>
+        <div class="role-text">
+          <strong>Customer Login</strong>
+          <small>Book your haircut easily</small>
+        </div>
+      </div>
+      <div class="role" data-role="partner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M3 9h18"/>
+          <path d="M6 9V5h12v4"/>
+          <path d="M4 9v10h16V9"/>
+        </svg>
+        <div class="role-text">
+          <strong>Salon Partner</strong>
+          <small>Run your salon smartly</small>
+        </div>
       </div>
     </div>
 
-    <div class="options">
-
-      <a class="login-option" href="customer-login.html">
-        <div class="icon-wrap">
-          <img src="https://img.icons8.com/ios-filled/100/user.png">
-        </div>
-        <p>Customer Login</p>
-      </a>
-
-      <a class="login-option" href="partner-login.html">
-        <div class="icon-wrap">
-          <img src="https://img.icons8.com/ios-filled/100/shop.png">
-        </div>
-        <p>Business / Salon</p>
-      </a>
-
+    <button class="cta" id="continueBtn">Continue -></button>
+    <div class="partner-logos">
+      <img src="image/Make-in-India.png" alt="Make in India">
+      <img src="image/Digital-india.png" alt="Digital India">
     </div>
-
   </div>
 
-</div>
+  <script>
+    const roles = document.querySelectorAll('.role');
+    const continueBtn = document.getElementById('continueBtn');
+    let selectedRole = 'customer';
 
+    roles.forEach((role) => {
+      role.addEventListener('click', () => {
+        roles.forEach((r) => r.classList.remove('active'));
+        role.classList.add('active');
+        selectedRole = role.dataset.role;
+      });
+    });
+
+    continueBtn.addEventListener('click', () => {
+      if (selectedRole === 'partner') {
+        window.location.href = 'partner-login.html';
+      } else {
+        window.location.href = 'customer-login.html';
+      }
+    });
+  </script>
 </body>
 </html>
