@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Sign Up</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .auth-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+  }
+  .auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .auth-header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .auth-footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .auth-footer a {
+    color: var(--accent-gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <header style="border-bottom: none;">
+    <a href="customer-login.html" style="text-decoration: none;">
+      <i data-lucide="arrow-left"></i>
+    </a>
+  </header>
+
+  <div class="auth-container">
+    <div class="auth-header">
+      <h1><img src="image/bg-eress-logo.png" alt="Logo" class="top-logo" style="margin-right: 10px; vertical-align: middle;"> Create Account</h1>
+      <p class="text-muted">Join Ustra for a premium experience</p>
+    </div>
+
+    <form class="auth-form" onsubmit="event.preventDefault(); window.location.href='home.html';">
+      <div>
+        <input type="text" class="glass-input" placeholder="Full Name">
+      </div>
+      <div>
+        <input type="email" class="glass-input" placeholder="Email Address">
+      </div>
+      <div>
+        <input type="tel" class="glass-input" placeholder="Phone Number">
+      </div>
+      <div>
+        <input type="password" class="glass-input" placeholder="Password">
+      </div>
+       <div>
+        <input type="password" class="glass-input" placeholder="Confirm Password">
+      </div>
+      
+      <button class="btn-primary mt-20">Sign Up</button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="customer-login.html">Log In</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
+<script>
+  window.ustraHeaderConfig = { addTopOffset: false };
+</script>
+<script src="shared-home-header.js"></script>
+</body>
+</html>
