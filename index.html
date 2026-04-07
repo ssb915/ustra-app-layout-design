@@ -6,113 +6,158 @@
 <title>Ustra</title>
 
 <style>
-body {
+:root {
+  --bg-dark: #0f0f0f;
+  --bg-darker: #080808;
+  --text-primary: #ffffff;
+  --accent-gold: #e2c275;
+  --glass-bg: rgba(255,255,255,0.05);
+  --glass-border: rgba(255,255,255,0.08);
+}
+
+* {
   margin: 0;
-  height: 100dvh;
-  font-family: Arial, sans-serif;
-  background: url("image/salon-bg.png") no-repeat center center;
-  background-size: cover;
-  position: relative;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
-/* 🔥 RESPONSIVE CONTAINER */
-.container {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 20vh; /* 👆 responsive positioning */
-  width: 90%;
-  max-width: 400px;
-  padding: 20px;
-  border-radius: 25px;
+body {
+  background: linear-gradient(180deg, #0b0b0b, #121212);
+  display: flex;
+  justify-content: center;
+  min-height: 100dvh;
+}
+
+/* 🔥 MAIN WRAPPER */
+.landing-screen {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100dvh;
+  padding: 28px 18px 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 🔥 CARD */
+.landing {
+  width: 100%;
+  display: grid;
+  gap: 24px;
   text-align: center;
-  background: transparent;
-  border: none;
-  box-shadow: none;
+
+  backdrop-filter: blur(16px);
+  background: rgba(255,255,255,0.03);
+  border-radius: 26px;
+  padding: 26px 20px;
+
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
 }
 
+/* 🔥 LOGO */
 .logo-block {
   display: grid;
   justify-items: center;
-  gap: 8px;
-  margin-bottom: 14px;
+  gap: 12px;
 }
 
 .logo-block img {
-  width: 72px;
-  height: 72px;
-  border-radius: 18px;
+  width: 90px;
+  height: 90px;
+  border-radius: 22px;
   background: #fff;
-  padding: 10px;
-  box-shadow: 0 10px 22px rgba(0,0,0,0.3);
+  padding: 14px;
+
+  box-shadow: 0 12px 30px rgba(0,0,0,0.5);
 }
 
-/* Options Row */
+/* TAGLINE */
+.tagline {
+  color: var(--accent-gold);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* 🔥 OPTIONS */
 .options {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
 }
 
-/* Option Box */
+/* 🔥 CARD BUTTON */
 .login-option {
-  flex: 1;
-  padding: 15px 10px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: 18px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(226,194,117,0.35);
-  cursor: pointer;
+  padding: 20px 12px;
+
+  display: grid;
+  place-items: center;
+  gap: 12px;
+
+  text-decoration: none;
+  color: var(--text-primary);
+
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 🔥 GLOW EFFECT */
+.login-option::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent, rgba(226,194,117,0.2), transparent);
+  opacity: 0;
   transition: 0.3s;
 }
 
+.login-option:hover::before {
+  opacity: 1;
+}
+
+/* HOVER */
 .login-option:hover {
-  transform: scale(1.05);
+  transform: translateY(-6px) scale(1.03);
+  border-color: var(--accent-gold);
+  box-shadow: 0 18px 30px rgba(0,0,0,0.5);
+}
+
+/* ICON BOX */
+.icon-wrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+
   background: rgba(226,194,117,0.12);
+  display: grid;
+  place-items: center;
 }
 
 /* ICON */
 .login-option img {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  filter: brightness(0) saturate(100%) invert(80%) sepia(35%) saturate(420%) hue-rotate(12deg) brightness(90%) contrast(92%);
+  width: 30px;
+  height: 30px;
+
+  filter: brightness(0) saturate(100%) invert(78%) sepia(32%) saturate(430%) hue-rotate(12deg) brightness(92%) contrast(92%);
 }
 
 /* TEXT */
 .login-option p {
-  margin-top: 8px;
-  color: #fff;
+  font-weight: 600;
   font-size: 14px;
-  font-weight: 700;
 }
 
-/* 🔥 TABLET / BIG SCREEN */
-@media (min-width: 600px) {
-  .container {
-    bottom: 16vh;
-    max-width: 500px;
-    padding: 25px;
-  }
-
-  .login-option img {
-    width: 60px;
-    height: 60px;
-  }
-
-  .login-option p {
-    font-size: 16px;
-  }
-}
-
-/* 🔥 VERY SMALL DEVICES (iPhone SE etc) */
-@media (max-width: 350px) {
-  .login-option img {
-    width: 40px;
-    height: 40px;
-  }
-
-  .login-option p {
-    font-size: 12px;
+/* 🔥 MOBILE FIX */
+@media (max-width: 420px) {
+  .options {
+    grid-template-columns: 1fr;
   }
 }
 </style>
@@ -120,33 +165,38 @@ body {
 
 <body>
 
-<div class="container">
-  <div class="logo-block">
-    <img src="image/bg-eress-logo.png" alt="Ustra Logo">
-  </div>
-  <div class="options">
+<div class="landing-screen">
 
-    <div class="login-option" onclick="goToCustomer()">
-      <img src="https://img.icons8.com/ios-filled/100/user.png" alt="Customer">
-      <p>Customer Login</p>
+  <div class="landing">
+
+    <div class="logo-block">
+      <img src="image/bg-eress-logo.png">
+      <div class="tagline">
+        Nayi ki dukan<br>ab apke jeb me
+      </div>
     </div>
 
-    <div class="login-option" onclick="goToPartner()">
-      <img src="https://img.icons8.com/ios-filled/100/shop.png" alt="Partner">
-      <p>Business / Salon</p>
+    <div class="options">
+
+      <a class="login-option" href="customer-login.html">
+        <div class="icon-wrap">
+          <img src="https://img.icons8.com/ios-filled/100/user.png">
+        </div>
+        <p>Customer Login</p>
+      </a>
+
+      <a class="login-option" href="partner-login.html">
+        <div class="icon-wrap">
+          <img src="https://img.icons8.com/ios-filled/100/shop.png">
+        </div>
+        <p>Business / Salon</p>
+      </a>
+
     </div>
 
   </div>
+
 </div>
-
-<script>
-function goToCustomer() {
-  window.location.href = "customer-login.html";
-}
-function goToPartner() {
-  window.location.href = "partner-login.html";
-}
-</script>
 
 </body>
 </html>
