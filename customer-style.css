@@ -29,6 +29,20 @@ body {
   min-height: 100dvh;
 }
 
+.app-logo {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.app-logo:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+}
+
 /* 🔥 APP CONTAINER */
 .app-container {
   width: 100%;
@@ -229,5 +243,147 @@ header .lucide {
 .text-muted { color: var(--text-secondary); }
 
 /* Remove default scrollbar for specific elements */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+/* ─── NOTIFICATION STYLES ─── */
+.notification-trigger {
+  position: relative;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.notification-trigger:hover {
+  background: rgba(226, 194, 117, 0.1);
+  border-color: var(--accent-gold);
+  transform: scale(1.1);
+}
+.notification-trigger i {
+  color: var(--text-primary);
+  width: 22px; height: 22px;
+}
+.notification-badge {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 8px; height: 8px;
+  background: var(--error-color);
+  border-radius: 50%;
+  border: 2px solid var(--bg-dark);
+  box-shadow: 0 0 10px var(--error-color);
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 70px; right: 20px;
+  width: calc(100% - 40px); max-width: 340px;
+  background: rgba(15, 15, 20, 0.98);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: none;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  opacity: 0; visibility: hidden; transform: translateY(-15px);
+  transition: 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: 5000;
+  padding: 20px;
+}
+.notification-dropdown.active {
+  opacity: 1; visibility: visible; transform: translateY(0);
+}
+
+.notif-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 18px;
+}
+.notif-title { font-size: 16px; font-weight: 800; color: #fff; }
+.notif-clear { font-size: 11px; color: var(--accent-gold); cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.notif-list {
+  display: flex; flex-direction: column; gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.notif-list::-webkit-scrollbar { display: none; }
+
+.notif-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: none;
+  border-radius: 20px;
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.notif-item-top { display: flex; align-items: flex-start; gap: 14px; }
+.notif-shop-img { 
+  width: 44px; height: 44px; border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.notif-icon { 
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(226, 194, 117, 0.1);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent-gold);
+}
+.notif-shop-name { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+.notif-icon i { width: 16px; height: 16px; }
+.notif-content { flex: 1; }
+.notif-msg { font-size: 11px; color: var(--text-secondary); font-weight: 500; margin-bottom: 4px; }
+.notif-time { font-size: 10px; color: rgba(255, 255, 255, 0.3); }
+
+.review-box {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-top: 4px; padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.review-prompt { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+.star-rating { 
+  display: flex; gap: 4px; padding: 4px 0;
+}
+.star-rating i, .star-rating svg {
+  width: 24px; height: 24px; color: rgba(255, 255, 255, 0.1);
+  cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  fill: none;
+}
+.star-rating i:hover, .star-rating svg:hover,
+.star-rating i.active, .star-rating svg.active {
+  color: var(--accent-gold);
+  transform: scale(1.2);
+  filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.4));
+}
+.star-rating i.active, .star-rating svg.active {
+  fill: var(--accent-gold);
+}
+.review-btn {
+  background: rgba(226, 194, 117, 0.1);
+  color: var(--accent-gold);
+  border: 1px solid rgba(226, 194, 117, 0.2);
+  padding: 6px 12px; border-radius: 10px;
+  font-size: 11px; font-weight: 700;
+  align-self: flex-start;
+  margin-top: 4px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.review-btn:hover { background: var(--accent-gold); color: #000; }
+
+.review-textarea {
+  width: 100%; height: 60px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: #fff;
+  font-size: 11px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  margin-top: 5px;
+  transition: 0.3s;
+}
+.review-textarea:focus {
+  border-color: var(--accent-gold);
+  background: rgba(0,0,0,0.5);
+}
+.review-textarea::placeholder { color: rgba(255,255,255,0.3); }

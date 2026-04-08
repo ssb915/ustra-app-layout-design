@@ -1,115 +1,1268 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ustra - Profile</title>
-<link rel="stylesheet" href="customer-style.css">
-<style>
-  .profile-header { text-align: center; padding: 20px 20px 10px 20px; }
-  .profile-avatar {
-    width: 90px; height: 90px;
-    border-radius: 50%; display: flex; justify-content: center; align-items: center;
-    margin: 0 auto 15px auto;
-    border: 3px solid var(--bg-dark); box-shadow: 0 0 0 2px var(--accent-gold);
-    background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80');
-    background-size: cover; background-position: center;
-  }
-  .profile-header h2 { font-size: 22px; margin-bottom: 5px; color: var(--text-primary); }
-  .profile-header p { color: var(--text-secondary); font-size: 14px; margin-bottom: 5px; }
-  
-  .profile-stats {
-    display: flex; justify-content: center; gap: 30px; margin-bottom: 30px;
-  }
-  .stat-item { text-align: center; }
-  .stat-value { font-size: 18px; font-weight: 700; color: var(--accent-gold); }
-  .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ustra - Profile</title>
+  <link rel="stylesheet" href="customer-style.css">
+  <style>
+    /* Header Global Styles (from home) */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2000;
+      background: rgba(13, 15, 20, 0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    }
 
-  .profile-actions { display: flex; flex-direction: column; gap: 12px; padding: 0 20px 20px 20px; }
-  
-  .action-btn {
-    background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 16px 20px;
-    border-radius: 12px; font-size: 15px; font-weight: 500; text-align: left;
-    cursor: pointer; transition: 0.2s; color: var(--text-primary);
-    display: flex; align-items: center; text-decoration: none;
-  }
-  .action-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-gold); }
-  .action-btn .icon { margin-right: 15px; color: var(--accent-gold); }
-  .action-btn .chevron { margin-left: auto; color: var(--text-secondary); }
+    .app-logo {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+      transition: 0.3s;
+      cursor: pointer;
+    }
 
-  .action-btn-logout {
-    margin-top: 10px; background: rgba(255,77,77,0.1); color: var(--error-color);
-    border-color: rgba(255,77,77,0.3); justify-content: center;
-  }
-  .action-btn-logout:hover { background: rgba(255,77,77,0.2); border-color: var(--error-color); }
-</style>
-</head>
-<body>
+    .app-logo:hover {
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.6));
+    }
 
-<div class="app-container">
-
-  <header>
-    <h1><img src="image/bg-eress-logo.png" alt="Logo" class="top-logo" style="margin-right: 10px; vertical-align: middle;"> Profile</h1>
-    <i data-lucide="settings"></i>
-  </header>
-
-  <div class="profile-header">
-    <div class="profile-avatar"></div>
-    <h2>Rohan Sharma</h2>
-    <p>rohan.sharma@example.com</p>
-    <p>+91 98765 43210</p>
-  </div>
-  
-  <div class="profile-stats">
-    <div class="stat-item">
-      <div class="stat-value">12</div>
-      <div class="stat-label">Bookings</div>
-    </div>
-    <div class="stat-item">
-      <div class="stat-value">3</div>
-      <div class="stat-label">Reviews</div>
-    </div>
-  </div>
-
-  <div class="profile-actions">
-    <a href="#" class="action-btn">
-      <i data-lucide="user" class="icon"></i> Personal Details
-      <i data-lucide="chevron-right" class="chevron"></i>
-    </a>
-    <a href="#" class="action-btn">
-      <i data-lucide="heart" class="icon"></i> Favorite Salons
-      <i data-lucide="chevron-right" class="chevron"></i>
-    </a>
-    <a href="#" class="action-btn">
-      <i data-lucide="bell" class="icon"></i> Notifications
-      <i data-lucide="chevron-right" class="chevron"></i>
-    </a>
+    .app-logo:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    }
     
-    <a href="index.html" class="action-btn action-btn-logout">
-      Log Out
-    </a>
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .location-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--glass-bg);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      color: var(--text-primary);
+      border: 1px solid var(--glass-border);
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .location-pill:active {
+      transform: scale(0.96);
+    }
+    
+    .location-pill i[data-lucide="map-pin"] {
+      color: var(--accent-gold);
+      width: 14px;
+    }
+
+    /* Location Dropdown Styles (Synchronized) */
+    .location-dropdown {
+      position: absolute; top: 70px; left: 20px; width: calc(100% - 40px); max-width: 320px;
+      background: rgba(15, 15, 20, 0.95); backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border); border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      opacity: 0; visibility: hidden; transform: translateY(-10px);
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 2001;
+    }
+    .location-dropdown.active { opacity: 1; visibility: visible; transform: translateY(0); }
+    .dropdown-header { padding: 16px 20px 8px; font-size: 11px; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.7; }
+    .location-list { max-height: 350px; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 4px; scrollbar-width: none; }
+    .loc-item { padding: 12px 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; font-size: 14px; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between; }
+    .loc-item:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+    .loc-item.active { background: rgba(226, 194, 117, 0.1); color: var(--accent-gold); font-weight: 600; }
+
+    .profile-page {
+      padding: 96px 18px 188px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 100%;
+    }
+
+    .profile-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 0 6px;
+    }
+
+    .profile-card {
+      position: relative;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(24, 25, 30, 0.96) 0%, rgba(16, 17, 21, 0.98) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow:
+        0 14px 30px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      overflow: hidden;
+    }
+
+    .profile-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 18px;
+      right: 18px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+      pointer-events: none;
+    }
+
+    .profile-head-top {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .profile-avatar-wrap {
+      position: relative;
+      width: fit-content;
+      padding: 0;
+      border-radius: 999px;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .profile-avatar {
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      display: block;
+      object-fit: cover;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+    }
+
+    .profile-avatar-action {
+      width: 100%;
+      min-height: 50px;
+      padding: 0 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(226, 194, 117, 0.18);
+      background: linear-gradient(180deg, rgba(226, 194, 117, 0.14) 0%, rgba(226, 194, 117, 0.07) 100%);
+      color: var(--accent-gold);
+      font-size: 13px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .profile-avatar-action:hover {
+      transform: translateY(-1px);
+      background: linear-gradient(180deg, rgba(226, 194, 117, 0.18) 0%, rgba(226, 194, 117, 0.09) 100%);
+      border-color: rgba(226, 194, 117, 0.28);
+    }
+
+    .profile-avatar-action i {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* Plain image preview (no card/decoration) */
+    .profile-image-preview-row {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .profile-image-preview-row.active {
+      display: flex;
+    }
+
+    .profile-image-preview {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .profile-image-preview-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.82);
+      letter-spacing: 0.2px;
+    }
+
+    .profile-identity {
+      width: 100%;
+      min-width: 0;
+      text-align: center;
+    }
+
+    .profile-identity h2 {
+      font-size: 31px;
+      font-weight: 800;
+      margin-bottom: 0;
+      color: #fff;
+      letter-spacing: -0.7px;
+      line-height: 1.05;
+      text-shadow: 0 4px 14px rgba(0, 0, 0, 0.24);
+    }
+
+    .profile-subline {
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.5;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .profile-accordion {
+      overflow: hidden;
+    }
+
+    .profile-accordion-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 78px;
+      padding: 18px;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .profile-accordion-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, rgba(226, 194, 117, 0.13) 0%, rgba(226, 194, 117, 0.07) 100%);
+      border: 1px solid rgba(226, 194, 117, 0.1);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      flex-shrink: 0;
+    }
+
+    .profile-accordion-icon i {
+      width: 18px;
+      height: 18px;
+      color: var(--accent-gold);
+    }
+
+    .profile-accordion-title {
+      flex: 1;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.1px;
+    }
+
+    .profile-accordion-chevron {
+      width: 18px;
+      height: 18px;
+      color: rgba(255, 255, 255, 0.38);
+      transition: transform 0.28s ease, color 0.28s ease;
+      flex-shrink: 0;
+    }
+
+    .profile-accordion.open .profile-accordion-chevron {
+      transform: rotate(90deg);
+      color: var(--accent-gold);
+    }
+
+    .profile-accordion-body {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      padding: 0 18px;
+      transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.25s ease;
+    }
+
+    .profile-accordion.open .profile-accordion-body {
+      max-height: 860px;
+      opacity: 1;
+      padding: 2px 18px 18px;
+    }
+
+    .profile-contact {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
+    .profile-contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-width: 0;
+      padding: 14px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.036) 0%, rgba(255, 255, 255, 0.022) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .profile-contact-row i {
+      width: 16px;
+      height: 16px;
+      color: var(--accent-gold);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .profile-contact-copy {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .profile-contact-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.46);
+    }
+
+    .profile-contact-value {
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 13px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .profile-form {
+      display: grid;
+      gap: 14px;
+      padding-top: 4px;
+    }
+
+    .profile-field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .profile-input-wrap {
+      position: relative;
+    }
+
+    .profile-field input,
+    .profile-field select {
+      width: 100%;
+      min-height: 52px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--glass-border);
+      padding: 15px 20px;
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 16px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .profile-input-wrap input {
+      padding-right: 56px;
+    }
+
+    .profile-field input:focus,
+    .profile-field select:focus {
+      border-color: var(--accent-gold);
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    }
+
+    .profile-field input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .profile-field input[readonly] {
+      color: rgba(255, 255, 255, 0.6);
+      background: rgba(0, 0, 0, 0.22);
+      cursor: not-allowed;
+    }
+
+    .profile-location-btn {
+      position: absolute;
+      top: 50%;
+      right: 8px;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, rgba(226, 194, 117, 0.16) 0%, rgba(226, 194, 117, 0.1) 100%);
+      color: var(--accent-gold);
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .profile-location-btn:hover {
+      background: rgba(226, 194, 117, 0.18);
+    }
+
+    .profile-location-btn:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .profile-location-btn i,
+    .profile-location-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .profile-choice-group {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .profile-choice {
+      min-height: 48px;
+      padding: 0 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 15px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0.025) 100%);
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .profile-choice.is-active {
+      background: linear-gradient(135deg, #e2c275 0%, #caa14b 100%);
+      border-color: rgba(226, 194, 117, 0.65);
+      color: #111;
+      box-shadow: 0 10px 20px rgba(226, 194, 117, 0.16);
+    }
+
+    .profile-form-note {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.52);
+      line-height: 1.5;
+      padding: 0 2px 2px;
+    }
+
+    .profile-form-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      gap: 8px;
+      padding-top: 4px;
+    }
+
+    .profile-save-btn {
+      width: 100%;
+      min-height: 52px;
+      padding: 16px;
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent-gold), #b58c16);
+      color: #000;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .profile-save-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .profile-save-status {
+      min-height: 16px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.62);
+      text-align: center;
+    }
+
+    .profile-logout {
+      margin-top: 18px;
+      gap: 10px;
+      font-weight: 700;
+    }
+
+    .profile-logout i,
+    .profile-logout svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Sidebar & Overlay (from home) */
+    .overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100dvh;
+      background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
+      z-index: 2999; opacity: 0; visibility: hidden; transition: 0.3s;
+    }
+    .overlay.active { opacity: 1; visibility: visible; }
+    .sidebar {
+      position: fixed; top: 0; right: -320px; width: 300px; height: 100dvh;
+      background: linear-gradient(180deg, #111 0%, #050505 100%);
+      border-left: 1px solid var(--glass-border); z-index: 3000;
+      padding: 40px 20px; display: flex; flex-direction: column;
+      transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
+    }
+    .sidebar.active { right: 0; }
+    .sidebar-header { margin-bottom: 35px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 25px; }
+    .user-badge { display: flex; align-items: center; gap: 15px; }
+    .user-badge img { width: 60px; height: 60px; border-radius: 50%; border: 2.5px solid var(--accent-gold); object-fit: cover; box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); }
+    .user-badge-info h3 { font-size: 18px; color: #fff; font-weight: 700; margin-bottom: 4px; }
+    .user-badge-info .badge-tag { font-size: 10px; color: #000; background: var(--accent-gold); padding: 2px 8px; border-radius: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+    .sb-menu { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+    .sb-item { display: flex; align-items: center; gap: 15px; padding: 14px 18px; color: #fff; text-decoration: none; border-radius: 15px; transition: 0.3s; font-size: 15px; font-weight: 500; }
+    .sb-item:hover { background: rgba(255, 255, 255, 0.05); color: var(--accent-gold); }
+    .sb-item i { color: var(--text-secondary); width: 20px; transition: 0.3s; }
+    .sb-item:hover i { color: var(--accent-gold); transform: scale(1.1); }
+    .sb-divider { height: 1px; background: var(--glass-border); margin: 15px 10px; }
+    .sb-logout { margin-top: auto; color: #ff4d4d !important; background: rgba(255, 77, 77, 0.05); }
+    .sb-logout:hover { background: rgba(255, 77, 77, 0.15); color: #ff4d4d; }
+    .sb-logout i { color: #ff4d4d !important; }
+
+    .menu-avatar-trigger {
+      width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--accent-gold);
+      cursor: pointer; overflow: hidden; transition: 0.3s;
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); position: relative;
+    }
+
+    @media (max-width: 390px) {
+      .profile-page {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .profile-avatar {
+        width: 88px;
+        height: 88px;
+      }
+
+      .profile-identity h2 {
+        font-size: 28px;
+      }
+
+      .profile-accordion-title {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="user-badge">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" data-profile-avatar-image
+          alt="Arjun">
+        <div class="user-badge-info">
+          <h3 data-profile-name>Rohan Sharma</h3>
+          <span class="badge-tag">Platinum Member</span>
+        </div>
+      </div>
+    </div>
+    <div class="sb-menu">
+      <a href="profile.html" class="sb-item"><i data-lucide="user-cog"></i> Edit Profile</a>
+      <a href="bookings.html" class="sb-item"><i data-lucide="calendar-check"></i> Booking History</a>
+      <div class="sb-divider"></div>
+      <a href="#" class="sb-item"><i data-lucide="help-circle"></i> Support Center</a>
+      <div class="sb-divider"></div>
+      <a href="index.html" class="sb-item sb-logout"><i data-lucide="log-out"></i> Log Out</a>
+    </div>
   </div>
 
-  <nav class="bottom-nav">
-    <a href="home.html" class="nav-item">
-      <i data-lucide="home"></i>
-      <span>Home</span>
-    </a>
-    <a href="bookings.html" class="nav-item">
-      <i data-lucide="calendar"></i>
-      <span>Bookings</span>
-    </a>
-    <a href="profile.html" class="nav-item active">
-      <i data-lucide="user"></i>
-      <span>Profile</span>
-    </a>
-  </nav>
+  <div class="app-container">
 
-</div>
+    <div class="app-header">
+      <div class="header-left">
+        <a href="home.html">
+          <img src="image/High%20Qulity/Final-logo.png" alt="Ustra Logo" class="app-logo">
+        </a>
+        <div class="location-pill" id="location-trigger" onclick="toggleLocationDropdown()">
+          <i data-lucide="map-pin"></i>
+          <span id="current-location">Hazratganj, Lucknow</span>
+          <i data-lucide="chevron-down" style="width:14px; margin-left:2px; opacity:0.6;"></i>
+        </div>
+      </div>
 
-<script src="https://unpkg.com/lucide@latest"></script>
-<script>
-  lucide.createIcons();
-</script>
+      <!-- Location Dropdown -->
+      <div class="location-dropdown" id="locationDropdown">
+        <div class="dropdown-header">Select Your City</div>
+        <div class="location-list" id="location-list-container">
+          <!-- Locations injected via JS -->
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="notification-trigger" onclick="toggleNotifications()">
+          <i data-lucide="bell"></i>
+          <div class="notification-badge"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Dropdown -->
+    <div class="notification-dropdown" id="notifDropdown" onclick="event.stopPropagation()">
+      <div class="notif-header">
+        <span class="notif-title">Notifications</span>
+      </div>
+      <div class="notif-list">
+        <!-- Review Request 1 -->
+        <div class="notif-item">
+          <div class="notif-item-top">
+            <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=150&q=80" class="notif-shop-img">
+            <div class="notif-content">
+              <div class="notif-shop-name">Truefitt & Hill</div>
+              <div class="notif-msg">Rate your experience!</div>
+              <div class="notif-time">2 hours ago</div>
+            </div>
+          </div>
+          <div class="review-box">
+            <div class="review-prompt">How was your haircut at <b>Truefitt & Hill</b>?</div>
+            <div class="star-rating">
+              <i data-lucide="star" onclick="event.stopPropagation(); rate(this, 1)"></i>
+              <i data-lucide="star" onclick="event.stopPropagation(); rate(this, 2)"></i>
+              <i data-lucide="star" onclick="event.stopPropagation(); rate(this, 3)"></i>
+              <i data-lucide="star" onclick="event.stopPropagation(); rate(this, 4)"></i>
+              <i data-lucide="star" onclick="event.stopPropagation(); rate(this, 5)"></i>
+            </div>
+            <textarea class="review-textarea" placeholder="Tell us about your experience..." onclick="event.stopPropagation()"></textarea>
+            <button class="review-btn" onclick="event.stopPropagation(); submitReview(this)">Submit Review</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-page">
+      <div class="profile-hero">
+        <div class="profile-avatar-wrap">
+          <img class="profile-avatar" data-profile-avatar alt="Profile photo"
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=180&q=80">
+          <input type="file" id="profileAvatarInput" accept="image/*" hidden onchange="handleProfileImageChange(event)">
+        </div>
+        <div class="profile-identity">
+          <h2 data-profile-name>Rohan Sharma</h2>
+        </div>
+      </div>
+
+      <div class="profile-card profile-accordion" id="profile-personal">
+        <button class="profile-accordion-toggle" type="button" onclick="toggleProfileSection('profile-personal')" aria-expanded="false">
+          <span class="profile-accordion-icon">
+            <i data-lucide="user-round"></i>
+          </span>
+          <span class="profile-accordion-title">Personal Details</span>
+          <i data-lucide="chevron-right" class="profile-accordion-chevron"></i>
+        </button>
+        <div class="profile-accordion-body">
+          <form class="profile-form" id="profileDetailsForm" onsubmit="saveProfileDetails(event)">
+            <label class="profile-field">
+              <span class="profile-contact-label">Profile Image</span>
+              <button class="profile-avatar-action" type="button" onclick="openProfileImagePicker()">
+                <i data-lucide="image-plus"></i>
+                <span>Add / Change Photo</span>
+              </button>
+              <div class="profile-image-preview-row" id="profileImagePreviewRow" aria-live="polite">
+                <img class="profile-image-preview" id="profileImagePreviewImg" alt="Selected profile preview">
+                <span class="profile-image-preview-label">Selected Image</span>
+              </div>
+            </label>
+
+            <label class="profile-field">
+              <span class="profile-contact-label">Full Name</span>
+              <input type="text" id="profileNameInput" name="profileName" value="Rohan Sharma" required>
+            </label>
+
+            <label class="profile-field">
+              <span class="profile-contact-label">Email</span>
+              <input type="email" id="profileEmailInput" name="profileEmail" value="rohan.sharma@example.com" readonly>
+            </label>
+
+            <label class="profile-field">
+              <span class="profile-contact-label">Phone</span>
+              <input type="tel" id="profilePhoneInput" name="profilePhone" value="+91 98765 43210" required>
+            </label>
+
+            <label class="profile-field">
+              <span class="profile-contact-label">Location</span>
+              <div class="profile-input-wrap">
+                <input type="text" id="profileLocationInput" name="profileLocation" value="Hazratganj, Lucknow" required>
+                <button type="button" class="profile-location-btn" id="profileLocationBtn" onclick="detectLiveLocation()" aria-label="Detect live location">
+                  <i data-lucide="locate-fixed"></i>
+                </button>
+              </div>
+            </label>
+
+            <label class="profile-field">
+              <span class="profile-contact-label">Gender</span>
+              <input type="hidden" id="profileGenderInput" name="profileGender" value="Male">
+              <div class="profile-choice-group" id="profileGenderChoices">
+                <button type="button" class="profile-choice is-active" data-gender-choice data-value="Male" aria-pressed="true" onclick="selectProfileGender('Male')">Male</button>
+                <button type="button" class="profile-choice" data-gender-choice data-value="Female" aria-pressed="false" onclick="selectProfileGender('Female')">Female</button>
+                <button type="button" class="profile-choice" data-gender-choice data-value="Other" aria-pressed="false" onclick="selectProfileGender('Other')">Other</button>
+              </div>
+            </label>
+
+            <div class="profile-form-actions">
+              <button type="submit" class="profile-save-btn" id="profileSaveBtn">Save Details</button>
+              <span class="profile-save-status" id="profileSaveStatus"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="profile-card profile-accordion" id="profile-contact-section">
+        <button class="profile-accordion-toggle" type="button" onclick="toggleProfileSection('profile-contact-section')" aria-expanded="false">
+          <span class="profile-accordion-icon">
+            <i data-lucide="headphones"></i>
+          </span>
+          <span class="profile-accordion-title">Contact Us</span>
+          <i data-lucide="chevron-right" class="profile-accordion-chevron"></i>
+        </button>
+        <div class="profile-accordion-body">
+          <div class="profile-contact">
+            <div class="profile-contact-row">
+              <i data-lucide="phone"></i>
+              <div class="profile-contact-copy">
+                <span class="profile-contact-label">Support Number</span>
+                <span class="profile-contact-value">65942158945 (9AM - 6PM)</span>
+              </div>
+            </div>
+            <div class="profile-contact-row">
+              <i data-lucide="message-circle"></i>
+              <div class="profile-contact-copy">
+                <span class="profile-contact-label">Support Email</span>
+                <span class="profile-contact-value">help@ustra.app</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="index.html" class="btn-secondary profile-logout">
+        <i data-lucide="log-out"></i>
+        <span>Log Out</span>
+      </a>
+    </div>
+
+    <nav class="bottom-nav">
+      <a href="home.html" class="nav-item">
+        <i data-lucide="home"></i>
+        <span>Home</span>
+      </a>
+      <a href="bookings.html" class="nav-item">
+        <i data-lucide="calendar"></i>
+        <span>Bookings</span>
+      </a>
+      <a href="home.html#saved" class="nav-item">
+        <i data-lucide="heart"></i>
+        <span>Saved</span>
+      </a>
+      <a href="profile.html" class="nav-item active">
+        <i data-lucide="user"></i>
+        <span>Profile</span>
+      </a>
+    </nav>
+
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+
+    const PROFILE_STORAGE_KEY = 'ustra_profile_data';
+    const defaultProfileData = {
+      name: 'Rohan Sharma',
+      email: 'rohan.sharma@example.com',
+      phone: '+91 98765 43210',
+      location: 'Hazratganj, Lucknow',
+      gender: 'Male',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=180&q=80'
+    };
+    let pendingProfileAvatar = null;
+
+    // Location Dropdown Logic (Synchronized with Home)
+    const locations = [
+      { name: 'Hazratganj, Lucknow', area: 'Central Lucknow' },
+      { name: 'Gomti Nagar, Lucknow', area: 'East Lucknow' },
+      { name: 'Aliganj, Lucknow', area: 'North Lucknow' },
+      { name: 'Indira Nagar, Lucknow', area: 'North East Lucknow' },
+      { name: 'Jankipuram, Lucknow', area: 'Outer North Lucknow' }
+    ];
+
+    function toggleLocationDropdown() {
+      document.getElementById('locationDropdown').classList.toggle('active');
+    }
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('active');
+      document.getElementById('overlay').classList.toggle('active');
+    }
+
+    function getProfileData() {
+      try {
+        const savedProfile = localStorage.getItem(PROFILE_STORAGE_KEY);
+        return savedProfile ? { ...defaultProfileData, ...JSON.parse(savedProfile) } : { ...defaultProfileData };
+      } catch (error) {
+        return { ...defaultProfileData };
+      }
+    }
+
+    function renderProfileAvatar(avatarSrc) {
+      const url = String(avatarSrc || '').trim();
+      if (!url) return;
+
+      document.querySelectorAll('[data-profile-avatar]').forEach(node => {
+        if (node.tagName === 'IMG') {
+          node.src = url;
+          return;
+        }
+        node.style.backgroundImage = `url("${url}")`;
+      });
+
+      document.querySelectorAll('[data-profile-avatar-image]').forEach(node => {
+        node.src = url;
+      });
+    }
+
+    function renderPendingProfilePreview(imageSrc) {
+      const previewRow = document.getElementById('profileImagePreviewRow');
+      const previewImage = document.getElementById('profileImagePreviewImg');
+      if (!previewRow || !previewImage) return;
+
+      const src = String(imageSrc || '').trim();
+      if (!src) {
+        previewRow.classList.remove('active');
+        previewImage.removeAttribute('src');
+        return;
+      }
+
+      previewImage.src = src;
+      previewRow.classList.add('active');
+    }
+
+    function selectProfileGender(value) {
+      const genderInput = document.getElementById('profileGenderInput');
+      if (genderInput) {
+        genderInput.value = value;
+      }
+
+      document.querySelectorAll('[data-gender-choice]').forEach(button => {
+        const isActive = button.dataset.value === value;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      });
+    }
+
+    function renderProfileData(profile) {
+      document.querySelectorAll('[data-profile-name]').forEach(node => {
+        node.textContent = profile.name;
+      });
+
+      renderProfileAvatar(profile.avatar || defaultProfileData.avatar);
+      renderPendingProfilePreview(null);
+
+      const form = document.getElementById('profileDetailsForm');
+      if (!form) return;
+
+      form.profileName.value = profile.name;
+      form.profileEmail.value = profile.email;
+      form.profilePhone.value = profile.phone;
+      form.profileLocation.value = profile.location;
+      selectProfileGender(profile.gender || defaultProfileData.gender);
+    }
+
+    function openProfileImagePicker() {
+      document.getElementById('profileAvatarInput')?.click();
+    }
+
+    function handleProfileImageChange(event) {
+      const [file] = event.target.files || [];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = ({ target }) => {
+        const dataUrl = target?.result || null;
+        if (!dataUrl) return;
+
+        // Show preview under the button; apply to profile only after Save Details.
+        pendingProfileAvatar = dataUrl;
+        renderPendingProfilePreview(dataUrl);
+
+        if (event?.target) {
+          event.target.value = '';
+        }
+        setProfileStatus('');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function setProfileStatus(message) {
+      const saveStatus = document.getElementById('profileSaveStatus');
+      if (saveStatus) {
+        saveStatus.textContent = message;
+      }
+    }
+
+    function setLocationDetectState(isLoading) {
+      const locationButton = document.getElementById('profileLocationBtn');
+      if (!locationButton) return;
+
+      locationButton.disabled = isLoading;
+      locationButton.style.transform = isLoading ? 'translateY(-50%) scale(0.96)' : 'translateY(-50%)';
+    }
+
+    function dedupeParts(parts) {
+      const out = [];
+      parts.forEach((part) => {
+        const value = String(part || '').trim();
+        if (!value) return;
+        if (out.includes(value)) return;
+        out.push(value);
+      });
+      return out;
+    }
+
+    function formatNominatimAddress(address) {
+      const a = address || {};
+
+      const area =
+        a.suburb ||
+        a.neighbourhood ||
+        a.quarter ||
+        a.city_district ||
+        a.hamlet ||
+        a.village ||
+        a.town ||
+        a.city ||
+        '';
+
+      // Nominatim (India) often provides taluka under "county".
+      const taluka = a.county || '';
+
+      const city =
+        a.city ||
+        a.town ||
+        a.village ||
+        a.state_district ||
+        a.district ||
+        '';
+
+      const state = a.state || a.region || '';
+
+      return dedupeParts([area, taluka, city, state]).join(', ');
+    }
+
+    function nominatimReverseGeocodeJsonp(lat, lng) {
+      return new Promise((resolve, reject) => {
+        const callbackName = '__nominatim_cb_' + Math.random().toString(36).slice(2);
+        const script = document.createElement('script');
+        const timeout = setTimeout(() => cleanup(new Error('timeout')), 12000);
+
+        function cleanup(error) {
+          clearTimeout(timeout);
+          delete window[callbackName];
+          script.remove();
+          if (error) reject(error);
+        }
+
+        window[callbackName] = (payload) => {
+          try {
+            const formatted = formatNominatimAddress(payload && payload.address);
+            resolve(formatted);
+          } catch (err) {
+            reject(err);
+          } finally {
+            cleanup();
+          }
+        };
+
+        script.onerror = () => cleanup(new Error('load-error'));
+        script.src =
+          'https://nominatim.openstreetmap.org/reverse' +
+          '?format=json' +
+          '&lat=' + encodeURIComponent(lat) +
+          '&lon=' + encodeURIComponent(lng) +
+          '&zoom=18' +
+          '&addressdetails=1' +
+          '&json_callback=' + encodeURIComponent(callbackName);
+
+        document.head.appendChild(script);
+      });
+    }
+
+    async function reverseGeocodeLocation(latitude, longitude) {
+      // Prefer Nominatim JSONP (avoids CORS). Fallback to BigDataCloud if blocked.
+      try {
+        return await nominatimReverseGeocodeJsonp(latitude, longitude);
+      } catch (_) {
+        // ignore
+      }
+
+      const url =
+        'https://api.bigdatacloud.net/data/reverse-geocode-client' +
+        '?latitude=' + encodeURIComponent(latitude) +
+        '&longitude=' + encodeURIComponent(longitude) +
+        '&localityLanguage=en';
+
+      const response = await fetch(url, { headers: { Accept: 'application/json' } });
+      if (!response.ok) {
+        throw new Error('reverse-geocode-failed');
+      }
+
+      const data = await response.json();
+      const locality = (data.locality || data.city || '').trim();
+      const city = (data.city || '').trim();
+      const state = (data.principalSubdivision || '').trim();
+      return dedupeParts([locality, city, state]).join(', ');
+    }
+
+    async function detectLiveLocation() {
+      const locationInput = document.getElementById('profileLocationInput');
+      if (!locationInput) return;
+
+      if (!navigator.geolocation) {
+        setProfileStatus('Location not supported');
+        return;
+      }
+
+      setLocationDetectState(true);
+      setProfileStatus('Detecting location...');
+
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 12000,
+            maximumAge: 0
+          });
+        });
+
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        try {
+          const liveLocation = await reverseGeocodeLocation(latitude, longitude);
+          const nextValue = String(liveLocation || '').trim();
+          if (nextValue) {
+            locationInput.value = nextValue;
+            const headerLocation = document.getElementById('current-location');
+            if (headerLocation) {
+              headerLocation.textContent = nextValue;
+            }
+            setProfileStatus('Location detected');
+          } else {
+            setProfileStatus('Unable to detect location');
+          }
+        } catch (error) {
+          setProfileStatus('Unable to detect location');
+        }
+      } catch (error) {
+        setProfileStatus(error?.code === 1 ? 'Location permission denied' : 'Unable to detect location');
+      } finally {
+        setLocationDetectState(false);
+
+        clearTimeout(window.profileLocationStatusTimer);
+        window.profileLocationStatusTimer = setTimeout(() => {
+          const saveButton = document.getElementById('profileSaveBtn');
+          if (saveButton?.textContent !== 'Saved') {
+            setProfileStatus('');
+          }
+        }, 1800);
+      }
+    }
+
+    function saveProfileDetails(event) {
+      event.preventDefault();
+
+      const form = event.currentTarget;
+      const existingProfile = getProfileData();
+      const updatedProfile = {
+        name: form.profileName.value.trim() || defaultProfileData.name,
+        email: defaultProfileData.email,
+        phone: form.profilePhone.value.trim() || defaultProfileData.phone,
+        location: form.profileLocation.value.trim() || defaultProfileData.location,
+        gender: form.profileGender.value || defaultProfileData.gender,
+        avatar: pendingProfileAvatar || existingProfile.avatar || defaultProfileData.avatar
+      };
+
+      localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(updatedProfile));
+      renderProfileData(updatedProfile);
+      pendingProfileAvatar = null;
+
+      const avatarInput = document.getElementById('profileAvatarInput');
+      if (avatarInput) {
+        avatarInput.value = '';
+      }
+
+      const saveButton = document.getElementById('profileSaveBtn');
+
+      setProfileStatus('Saved successfully');
+
+      if (saveButton) {
+        saveButton.textContent = 'Saved';
+      }
+
+      clearTimeout(window.profileSaveTimer);
+      window.profileSaveTimer = setTimeout(() => {
+        setProfileStatus('');
+        if (saveButton) saveButton.textContent = 'Save Details';
+      }, 1800);
+
+      // Auto-close the Personal Details accordion after saving.
+      setTimeout(() => {
+        const section = document.getElementById('profile-personal');
+        if (section && section.classList.contains('open')) {
+          toggleProfileSection('profile-personal');
+        }
+      }, 350);
+    }
+
+    function selectLocation(name) {
+      document.getElementById('current-location').innerText = name;
+      toggleLocationDropdown();
+    }
+
+    function initLocationDropdown() {
+      const container = document.getElementById('location-list-container');
+      if (!container) return;
+      container.innerHTML = locations.map(loc => `
+        <div class="loc-item ${loc.name.includes('Hazratganj') ? 'active' : ''}" onclick="selectLocation('${loc.name}')">
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <span>${loc.name}</span>
+            <span style="font-size:10px; opacity:0.5;">${loc.area}</span>
+          </div>
+          ${loc.name.includes('Hazratganj') ? '<i data-lucide="check" style="width:14px;"></i>' : ''}
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+    
+    initLocationDropdown();
+    renderProfileData(getProfileData());
+
+    document.addEventListener('click', function (e) {
+      const locDropdown = document.getElementById('locationDropdown');
+      const locTrigger = document.getElementById('location-trigger');
+      if (locDropdown && locDropdown.classList.contains('active') && !locDropdown.contains(e.target) && !locTrigger.contains(e.target)) {
+        toggleLocationDropdown();
+      }
+      const notifDropdown = document.getElementById('notifDropdown');
+      const notifTrigger = document.querySelector('.notification-trigger');
+      if (notifDropdown && notifDropdown.classList.contains('active') && !notifDropdown.contains(e.target) && !notifTrigger.contains(e.target)) {
+        toggleNotifications();
+      }
+    });
+
+    function toggleNotifications() {
+      const dropdown = document.getElementById('notifDropdown');
+      dropdown.classList.toggle('active');
+      if (dropdown.classList.contains('active')) {
+        document.querySelector('.notification-badge')?.remove();
+      }
+    }
+
+    function toggleProfileSection(id) {
+      const targetSection = document.getElementById(id);
+      if (!targetSection) return;
+
+      const shouldOpen = !targetSection.classList.contains('open');
+
+      document.querySelectorAll('.profile-accordion').forEach(section => {
+        section.classList.remove('open');
+        section.querySelector('.profile-accordion-toggle')?.setAttribute('aria-expanded', 'false');
+      });
+
+      if (shouldOpen) {
+        targetSection.classList.add('open');
+        targetSection.querySelector('.profile-accordion-toggle')?.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    function rate(star, val) {
+      const container = star.parentElement;
+      const stars = container.querySelectorAll('i, svg');
+      stars.forEach((s, i) => {
+        if (i < val) {
+          s.classList.add('active');
+        } else {
+          s.classList.remove('active');
+        }
+      });
+      container.setAttribute('data-rating', val);
+    }
+
+    function submitReview(btn) {
+      const item = btn.closest('.notif-item');
+      const rating = item.querySelector('.star-rating').getAttribute('data-rating') || 0;
+      const feedback = item.querySelector('.review-textarea').value;
+      
+      if (rating === 0) {
+        alert('Please select a star rating!');
+        return;
+      }
+
+      item.style.opacity = '0.5';
+      item.style.pointerEvents = 'none';
+      btn.innerText = 'Submitted!';
+      
+      console.log('Review for store:', { rating, feedback });
+
+      setTimeout(() => {
+        item.style.transform = 'translateX(50px)';
+        item.style.opacity = '0';
+        setTimeout(() => {
+          item.remove();
+          if (document.querySelectorAll('.notif-item').length === 0) {
+            document.querySelector('.notif-list').innerHTML = '<p style="text-align:center; padding:20px; font-size:12px; color:var(--text-secondary);">All caught up!</p>';
+          }
+        }, 300);
+        toggleNotifications(); // Automatically close the dropdown after submission
+      }, 800);
+    }
+  </script>
+  <script>
+    window.ustraHeaderConfig = { addTopOffset: false };
+  </script>
+  <script src="shared-home-header.js"></script>
 </body>
+
 </html>
