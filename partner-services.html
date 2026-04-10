@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra Partner - Services</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .services-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px 10px;
+    border-radius: 20px;
+    margin: 12px 20px 0;
+  }
+
+  .back-link {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    text-decoration: none;
+    color: var(--accent-gold);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    flex-shrink: 0;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .back-link:hover {
+    border-color: rgba(226, 194, 117, 0.6);
+    background: rgba(226, 194, 117, 0.08);
+  }
+
+  .back-link:active {
+    transform: scale(0.96);
+  }
+
+  .back-link svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .services-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  .header-add-btn {
+    height: 42px;
+    padding: 0 14px;
+    border-radius: 999px;
+    background: rgba(212,175,55,0.1);
+    border: 1px dashed var(--accent-gold);
+    color: var(--accent-gold);
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .header-add-btn i {
+    width: 17px;
+    height: 17px;
+  }
+
+  .header-add-btn:hover {
+    background: rgba(226, 194, 117, 0.14);
+    border-color: rgba(226, 194, 117, 0.55);
+    transform: translateY(-1px);
+  }
+
+  .header-add-btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .services-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 10px 20px 120px;
+  }
+
+  .service-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+  }
+
+  .service-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .service-info h4 {
+    font-size: 16px;
+    color: var(--text-primary);
+    margin: 0 0 3px;
+    line-height: 1.2;
+  }
+
+  .service-info p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .service-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .service-price {
+    font-weight: 800;
+    color: var(--accent-gold);
+    font-size: 14px;
+    padding-right: 4px;
+  }
+
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+
+  .icon-btn:hover {
+    color: var(--accent-gold);
+    border-color: rgba(226, 194, 117, 0.4);
+    background: rgba(226, 194, 117, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .icon-btn.delete:hover {
+    color: var(--error-color);
+    border-color: rgba(255, 77, 77, 0.35);
+    background: rgba(255, 77, 77, 0.08);
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.62);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 3000;
+  }
+
+  .modal-backdrop.open {
+    display: flex;
+  }
+
+  .services-modal {
+    width: min(100%, 420px);
+    background: linear-gradient(180deg, rgba(18, 19, 24, 0.98), rgba(11, 12, 16, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+    padding: 20px;
+  }
+
+  .services-modal h3 {
+    font-size: 22px;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+
+  .services-modal p {
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  .modal-fields {
+    display: grid;
+    gap: 14px;
+  }
+
+  .modal-field label {
+    display: block;
+    font-size: 12px;
+    color: var(--accent-gold);
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .modal-field input {
+    width: 100%;
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    background: rgba(0, 0, 0, 0.28);
+    color: var(--text-primary);
+    outline: none;
+    font-size: 15px;
+  }
+
+  .modal-field input:focus {
+    border-color: rgba(226, 194, 117, 0.55);
+    box-shadow: 0 0 0 3px rgba(226, 194, 117, 0.08);
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .modal-btn {
+    flex: 1;
+    border: none;
+    border-radius: 14px;
+    padding: 13px 14px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .modal-btn.secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+  }
+
+  .modal-btn.primary {
+    background: linear-gradient(135deg, var(--accent-gold), #b58c16);
+    color: #000;
+  }
+
+  .services-list {
+    display: grid;
+    gap: 12px;
+  }
+
+  @media (max-width: 420px) {
+    .services-header {
+      margin: 8px 14px 0;
+      padding: 14px 0 8px;
+      border-radius: 18px;
+    }
+
+    .services-container {
+      padding: 8px 14px 120px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app-container">
+  <div class="services-header">
+    <a class="back-link" href="partner-dashboard.html" aria-label="Back to dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M19 12H5"></path>
+        <path d="M12 19l-7-7 7-7"></path>
+      </svg>
+    </a>
+    <div class="services-title">Our Services</div>
+    <button type="button" class="header-add-btn" id="openServiceModal">
+      <i data-lucide="plus"></i>
+      Add
+    </button>
+  </div>
+
+  <div class="services-container">
+    <div class="services-list" id="servicesList">
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="partner-dashboard.html" class="nav-item">
+      <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
+    </a>
+    <a href="partner-services.html" class="nav-item active">
+      <i data-lucide="scissors"></i><span>Services</span>
+    </a>
+    <a href="partner-bookings.html" class="nav-item bookings-badge">
+      <i data-lucide="calendar"></i><span>Bookings</span>
+      <span class="bookings-dot" aria-hidden="true"></span>
+    </a>
+    <a href="partner-staff.html" class="nav-item">
+      <i data-lucide="users-round"></i><span>Staff</span>
+    </a>
+    <a href="partner-profile.html" class="nav-item">
+      <i data-lucide="store"></i><span>Profile</span>
+    </a>
+  </nav>
+</div>
+
+<div class="modal-backdrop" id="serviceModal" aria-hidden="true">
+  <div class="services-modal" role="dialog" aria-modal="true" aria-labelledby="serviceModalTitle">
+    <h3 id="serviceModalTitle">Add Service</h3>
+    <p>Enter service name, duration and price.</p>
+    <form id="serviceForm" class="modal-fields">
+      <div class="modal-field">
+        <label for="serviceName">Service Name</label>
+        <input id="serviceName" name="serviceName" type="text" placeholder="Enter service name" required>
+      </div>
+      <div class="modal-field">
+        <label for="serviceTime">Duration</label>
+        <input id="serviceTime" name="serviceTime" type="text" placeholder="e.g. 30 mins" required>
+      </div>
+      <div class="modal-field">
+        <label for="servicePrice">Price</label>
+        <input id="servicePrice" name="servicePrice" type="text" placeholder="e.g. Rs.20" required>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modal-btn secondary" id="closeServiceModal">Cancel</button>
+        <button type="submit" class="modal-btn primary" id="saveServiceBtn">Save Service</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="deleteServiceModal" aria-hidden="true">
+  <div class="services-modal" role="dialog" aria-modal="true" aria-labelledby="deleteServiceTitle">
+    <h3 id="deleteServiceTitle">Delete Service?</h3>
+    <p id="deleteServiceText">Are you sure you want to delete this service?</p>
+    <div class="modal-actions">
+      <button type="button" class="modal-btn secondary" id="cancelDeleteService">Cancel</button>
+      <button type="button" class="modal-btn primary" id="confirmDeleteService">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
+<script>
+  (function () {
+    const dotKey = "partner-bookings-pending-count";
+    const dotVisible = (() => {
+      try {
+        return Number(localStorage.getItem(dotKey) || "0") > 0;
+      } catch (error) {
+        return false;
+      }
+    })();
+
+    document.querySelectorAll(".bookings-dot").forEach((dot) => {
+      dot.hidden = !dotVisible;
+    });
+  })();
+</script>
+<script>
+  (function () {
+    const modal = document.getElementById("serviceModal");
+    const deleteModal = document.getElementById("deleteServiceModal");
+    const openBtn = document.getElementById("openServiceModal");
+    const closeBtn = document.getElementById("closeServiceModal");
+    const cancelDeleteBtn = document.getElementById("cancelDeleteService");
+    const confirmDeleteBtn = document.getElementById("confirmDeleteService");
+    const deleteServiceText = document.getElementById("deleteServiceText");
+    const form = document.getElementById("serviceForm");
+    const nameInput = document.getElementById("serviceName");
+    const timeInput = document.getElementById("serviceTime");
+    const priceInput = document.getElementById("servicePrice");
+    const servicesList = document.getElementById("servicesList");
+    const modalTitle = document.getElementById("serviceModalTitle");
+    const saveBtn = document.getElementById("saveServiceBtn");
+    const modalDescription = modal ? modal.querySelector(".services-modal p") : null;
+    let editingCard = null;
+    let pendingDeleteCard = null;
+    const initialServices = [
+      { name: "Classic Haircut", time: "45 mins", price: "Rs.25" },
+      { name: "Hair Styling & Wash", time: "30 mins", price: "Rs.15" },
+      { name: "Beard Trim", time: "20 mins", price: "Rs.12" },
+      { name: "Classic Wet Shave", time: "30 mins", price: "Rs.20" },
+      { name: "Skin Fade", time: "40 mins", price: "Rs.28" },
+      { name: "Taper Cut", time: "35 mins", price: "Rs.22" },
+      { name: "Layer Cut", time: "50 mins", price: "Rs.30" },
+      { name: "Kids Haircut", time: "25 mins", price: "Rs.14" },
+      { name: "Premium Haircut", time: "55 mins", price: "Rs.35" },
+      { name: "Hair Spa", time: "60 mins", price: "Rs.40" },
+      { name: "Hair Color", time: "70 mins", price: "Rs.55" },
+      { name: "Hair Smoothening", time: "90 mins", price: "Rs.85" },
+      { name: "Head Massage", time: "20 mins", price: "Rs.18" },
+      { name: "Scalp Treatment", time: "45 mins", price: "Rs.32" },
+      { name: "Beard Shape Up", time: "25 mins", price: "Rs.16" },
+      { name: "Mustache Trim", time: "15 mins", price: "Rs.8" },
+      { name: "Threading", time: "15 mins", price: "Rs.10" },
+      { name: "Face Cleanup", time: "35 mins", price: "Rs.24" },
+      { name: "Detan", time: "40 mins", price: "Rs.28" },
+      { name: "Facial Cleanup", time: "50 mins", price: "Rs.34" },
+      { name: "Keratin Treatment", time: "120 mins", price: "Rs.120" },
+      { name: "Anti Dandruff Treatment", time: "45 mins", price: "Rs.38" },
+      { name: "Oiling Therapy", time: "25 mins", price: "Rs.14" },
+      { name: "Shampoo Blow Dry", time: "30 mins", price: "Rs.20" },
+      { name: "Bridal Grooming", time: "150 mins", price: "Rs.180" },
+      { name: "Party Styling", time: "60 mins", price: "Rs.45" },
+      { name: "Luxury Beard Trim", time: "35 mins", price: "Rs.30" },
+      { name: "Hot Towel Shave", time: "30 mins", price: "Rs.26" },
+      { name: "Scissor Cut", time: "40 mins", price: "Rs.24" },
+      { name: "Razor Fade", time: "50 mins", price: "Rs.33" }
+    ];
+
+    if (!modal || !deleteModal || !openBtn || !closeBtn || !cancelDeleteBtn || !confirmDeleteBtn || !deleteServiceText || !form || !nameInput || !timeInput || !priceInput || !servicesList || !modalTitle || !saveBtn || !modalDescription) {
+      return;
+    }
+
+    function openAddModal() {
+      editingCard = null;
+      modalTitle.textContent = "Add Service";
+      modalDescription.textContent = "Enter service name, duration and price.";
+      saveBtn.textContent = "Save Service";
+      form.reset();
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      window.setTimeout(() => nameInput.focus(), 0);
+    }
+
+    function openEditModal(card) {
+      editingCard = card;
+      const nameEl = card.querySelector(".service-info h4");
+      const timeEl = card.querySelector(".service-info p");
+      const priceEl = card.querySelector(".service-price");
+
+      modalTitle.textContent = "Edit Service";
+      modalDescription.textContent = "Update service details and save changes.";
+      saveBtn.textContent = "Update Service";
+      nameInput.value = nameEl ? nameEl.textContent.trim() : "";
+      timeInput.value = timeEl ? timeEl.textContent.trim() : "";
+      priceInput.value = priceEl ? priceEl.textContent.trim() : "";
+
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      window.setTimeout(() => nameInput.focus(), 0);
+    }
+
+    function closeAddModal() {
+      editingCard = null;
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      form.reset();
+      modalTitle.textContent = "Add Service";
+      modalDescription.textContent = "Enter service name, duration and price.";
+      saveBtn.textContent = "Save Service";
+      openBtn.focus();
+    }
+
+    function openDeleteModal(card) {
+      pendingDeleteCard = card;
+      const serviceName = card.querySelector(".service-info h4");
+      deleteServiceText.textContent = serviceName
+        ? `Are you sure you want to delete ${serviceName.textContent}?`
+        : "Are you sure you want to delete this service?";
+      deleteModal.classList.add("open");
+      deleteModal.setAttribute("aria-hidden", "false");
+      window.setTimeout(() => cancelDeleteBtn.focus(), 0);
+    }
+
+    function closeDeleteModal() {
+      pendingDeleteCard = null;
+      deleteModal.classList.remove("open");
+      deleteModal.setAttribute("aria-hidden", "true");
+    }
+
+    function createServiceCard(name, time, price) {
+      const formattedPrice = price.startsWith("Rs.") ? price : `Rs.${price.replace(/^\$/, "")}`;
+      return `
+        <div class="service-card">
+          <div class="service-main">
+            <div class="service-info">
+              <h4>${name}</h4>
+              <p>${time}</p>
+            </div>
+          </div>
+          <div class="service-actions">
+            <div class="service-price">${formattedPrice}</div>
+            <button type="button" class="icon-btn edit-service" aria-label="Edit service"><i data-lucide="pencil"></i></button>
+            <button type="button" class="icon-btn delete-service delete" aria-label="Delete service"><i data-lucide="trash-2"></i></button>
+          </div>
+        </div>
+      `;
+    }
+
+    servicesList.innerHTML = initialServices
+      .map((service) => createServiceCard(service.name, service.time, service.price))
+      .join("");
+
+    lucide.createIcons();
+
+    openBtn.addEventListener("click", openAddModal);
+    closeBtn.addEventListener("click", closeAddModal);
+    cancelDeleteBtn.addEventListener("click", closeDeleteModal);
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        closeAddModal();
+      }
+    });
+
+    deleteModal.addEventListener("click", (event) => {
+      if (event.target === deleteModal) {
+        closeDeleteModal();
+      }
+    });
+
+    servicesList.addEventListener("click", (event) => {
+      const editButton = event.target.closest(".edit-service");
+      if (editButton) {
+        const card = editButton.closest(".service-card");
+        if (card) {
+          openEditModal(card);
+        }
+        return;
+      }
+
+      const deleteButton = event.target.closest(".delete-service");
+      if (deleteButton) {
+        const card = deleteButton.closest(".service-card");
+        if (card) {
+          openDeleteModal(card);
+        }
+      }
+    });
+
+    confirmDeleteBtn.addEventListener("click", () => {
+      if (pendingDeleteCard) {
+        pendingDeleteCard.remove();
+      }
+      closeDeleteModal();
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = nameInput.value.trim();
+      const time = timeInput.value.trim();
+      const price = priceInput.value.trim();
+
+      if (!name || !time || !price) {
+        return;
+      }
+
+      const formattedPrice = price.startsWith("Rs.") ? price : `Rs.${price.replace(/^\$/, "")}`;
+
+      if (editingCard) {
+        const titleEl = editingCard.querySelector(".service-info h4");
+        const timeEl = editingCard.querySelector(".service-info p");
+        const priceEl = editingCard.querySelector(".service-price");
+
+        if (titleEl) titleEl.textContent = name;
+        if (timeEl) timeEl.textContent = time;
+        if (priceEl) priceEl.textContent = formattedPrice;
+      } else {
+        servicesList.insertAdjacentHTML("afterbegin", createServiceCard(name, time, formattedPrice));
+      }
+
+      lucide.createIcons();
+      closeAddModal();
+    });
+  })();
+</script>
+</body>
+</html>

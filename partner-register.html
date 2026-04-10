@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Register Salon</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .app-container { padding-bottom: 0; }
+  .auth-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    justify-content: center;
+    position: relative;
+  }
+  .register-top {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+  .back-link {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--accent-gold);
+    text-decoration: none;
+  }
+  .back-link svg { width: 24px; height: 24px; }
+  .auth-header { text-align: center; margin-bottom: 30px; }
+  .logo {
+    width: 110px;
+    height: 110px;
+    border-radius: 22px;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+    margin: 20px auto 14px;
+  }
+  .logo img { width: 75%; height: 100%; object-fit: contain; filter: none; }
+  .auth-header h1 { font-size: 32px; margin-bottom: 10px; }
+  .auth-form { display: flex; flex-direction: column; gap: 15px; }
+  .category-label {
+    font-size: 12px;
+    color: var(--accent-gold);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .category-option { position: relative; }
+  .category-option input { position: absolute; opacity: 0; pointer-events: none; }
+  .category-card {
+    min-height: 92px;
+    border-radius: 18px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    display: grid;
+    place-items: center;
+    gap: 8px;
+    padding: 14px 10px;
+    cursor: pointer;
+  }
+  .category-option input:checked + .category-card {
+    border-color: var(--accent-gold);
+    background: rgba(226, 194, 117, 0.12);
+  }
+  .category-icon { width: 34px; height: 34px; color: var(--accent-gold); }
+  .category-icon-img {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    display: block;
+    filter: brightness(0) saturate(100%) invert(76%) sepia(31%) saturate(706%) hue-rotate(355deg) brightness(97%) contrast(90%);
+  }
+  .category-name {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .location-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .location-pill-input {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--glass-bg);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+    transition: 0.3s;
+  }
+
+  .location-pill-input:focus-within {
+    border-color: rgba(226, 194, 117, 0.6);
+    background: rgba(226, 194, 117, 0.08);
+  }
+
+  .location-pill-input input {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 13px;
+    outline: none;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .location-pill-input input::placeholder {
+    color: var(--text-secondary);
+  }
+
+  .location-pill-btn {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--accent-gold);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+  }
+
+  .location-pill-btn i {
+    width: 14px;
+    height: 14px;
+  }
+  .auth-footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .auth-footer a { color: var(--accent-gold); text-decoration: none; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="app-container">
+  <div class="auth-container">
+    <div class="register-top">
+      <a class="back-link" href="partner-login.html" aria-label="Back to login">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div class="auth-header">
+      <div class="logo">
+        <img src="image/bg-eress-logo.png" alt="Ustra Logo">
+      </div>
+      <h1>Create Salon Account</h1>
+      <p class="text-muted">Enter your shop details to continue</p>
+    </div>
+
+    <form class="auth-form" id="partnerRegisterForm">
+      <div>
+        <input type="text" class="glass-input" placeholder="Shop Name" autocomplete="organization" id="partnerShopName">
+      </div>
+
+      <div>
+        <div class="category-label">Category</div>
+        <div class="category-grid" role="radiogroup" aria-label="Select category">
+          <label class="category-option">
+            <input type="radio" name="partnerCategory" value="male" checked>
+            <div class="category-card">
+              <img class="category-icon category-icon-img" src="Svg/male-icon.svg" alt="" aria-hidden="true">
+              <div class="category-name">Male</div>
+            </div>
+          </label>
+          <label class="category-option">
+            <input type="radio" name="partnerCategory" value="female">
+            <div class="category-card">
+              <img class="category-icon category-icon-img" src="Svg/woman-female-icon.svg" alt="" aria-hidden="true">
+              <div class="category-name">Female</div>
+            </div>
+          </label>
+          <label class="category-option">
+            <input type="radio" name="partnerCategory" value="both">
+            <div class="category-card">
+              <img class="category-icon category-icon-img" src="Svg/silhouette-users-icon.svg" alt="" aria-hidden="true">
+              <div class="category-name">Both</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <div class="location-row">
+          <div class="location-pill-input">
+            <input type="text" placeholder="Location" autocomplete="street-address" id="partnerLocation">
+            <button type="button" class="location-pill-btn" id="detectPartnerLocation" aria-label="Detect current location" title="Detect current location">
+              <i data-lucide="map-pin"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary mt-20" type="submit">Continue</button>
+    </form>
+
+    <div class="auth-footer">
+      Already a member? <a href="partner-login.html">Log In</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const partnerRegisterForm = document.getElementById('partnerRegisterForm');
+  const partnerShopName = document.getElementById('partnerShopName');
+  const partnerLocation = document.getElementById('partnerLocation');
+  const locationRow = document.querySelector('.location-pill-input');
+  const detectPartnerLocationBtn = document.getElementById('detectPartnerLocation');
+  const savedPartnerDraft = JSON.parse(localStorage.getItem('partnerSignupDraft') || '{}');
+
+  if (savedPartnerDraft.shopName) partnerShopName.value = savedPartnerDraft.shopName;
+  if (savedPartnerDraft.location) partnerLocation.value = savedPartnerDraft.location;
+  if (savedPartnerDraft.category) {
+    const radio = document.querySelector(`input[name="partnerCategory"][value="${savedPartnerDraft.category}"]`);
+    if (radio) radio.checked = true;
+  }
+
+  if (locationRow) {
+    locationRow.addEventListener('click', () => partnerLocation.focus());
+  }
+
+  async function detectPartnerLocation() {
+    if (!navigator.geolocation) {
+      partnerLocation.placeholder = 'Location not supported';
+      return;
+    }
+
+    const originalText = partnerLocation.value.trim();
+    partnerLocation.value = originalText;
+    partnerLocation.placeholder = 'Detecting...';
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(latitude)}&lon=${encodeURIComponent(longitude)}`,
+            { headers: { Accept: 'application/json' } }
+          );
+          const data = await response.json();
+          const address = data.address || {};
+          const localityParts = [
+            address.suburb,
+            address.neighbourhood,
+            address.quarter,
+            address.residential,
+            address.city_district,
+            address.city,
+            address.town,
+            address.village,
+            address.county,
+            address.state_district,
+            address.state,
+          ].filter(Boolean);
+
+          const dedupedParts = [];
+          localityParts.forEach((part) => {
+            if (!dedupedParts.includes(part)) dedupedParts.push(part);
+          });
+
+          const bestLocation = dedupedParts.slice(0, 3).join(', ') || data.display_name || '';
+
+          partnerLocation.value = bestLocation;
+          partnerLocation.placeholder = 'Location';
+        } catch (error) {
+          partnerLocation.value = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+          partnerLocation.placeholder = 'Location';
+        }
+      },
+      () => {
+        partnerLocation.placeholder = 'Location';
+      },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 300000 }
+    );
+  }
+
+  detectPartnerLocationBtn?.addEventListener('click', (event) => {
+    event.preventDefault();
+    detectPartnerLocation();
+  });
+
+  let locationAutoDetectStarted = false;
+  partnerLocation.addEventListener('focus', () => {
+    if (!locationAutoDetectStarted) {
+      locationAutoDetectStarted = true;
+      detectPartnerLocation();
+    }
+  });
+
+  partnerRegisterForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const selectedCategory = document.querySelector('input[name="partnerCategory"]:checked')?.value || 'male';
+    const draft = {
+      shopName: partnerShopName.value.trim(),
+      category: selectedCategory,
+      location: partnerLocation.value.trim(),
+    };
+    localStorage.setItem('partnerSignupDraft', JSON.stringify(draft));
+    window.location.href = 'partner-shop-details.html';
+  });
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
+</body>
+</html>

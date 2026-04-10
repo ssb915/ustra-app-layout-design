@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Shop Name</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .app-container { padding-bottom: 0; }
+
+  .auth-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    justify-content: center;
+    position: relative;
+  }
+
+  .register-top {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+
+  .back-link {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--accent-gold);
+    text-decoration: none;
+  }
+
+  .back-link svg { width: 24px; height: 24px; }
+
+  .auth-header { text-align: center; margin-bottom: 30px; }
+  .auth-header h1 { font-size: 32px; margin-bottom: 10px; }
+  .auth-form { display: flex; flex-direction: column; gap: 15px; }
+  .text-muted { color: var(--text-secondary); }
+
+  .step-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto 14px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    color: var(--accent-gold);
+    background: rgba(226, 194, 117, 0.08);
+    border: 1px solid rgba(226, 194, 117, 0.18);
+    font-size: 12px;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+<div class="app-container">
+  <div class="auth-container">
+    <div class="register-top">
+      <a class="back-link" href="partner-login.html" aria-label="Back to login">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div class="auth-header">
+      <div class="step-pill">Step 1 of 2</div>
+      <div class="logo">
+        <img src="image/bg-eress-logo.png" alt="Ustra Logo">
+      </div>
+      <h1>Shop Name</h1>
+      <p class="text-muted">Tell us the name of your salon or business</p>
+    </div>
+
+    <form class="auth-form" id="shopNameForm">
+      <div>
+        <input type="text" class="glass-input" placeholder="Enter shop name" autocomplete="organization" id="partnerShopName" required>
+      </div>
+      <button class="btn-primary mt-20" type="submit">Continue</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const shopNameForm = document.getElementById('shopNameForm');
+  const partnerShopName = document.getElementById('partnerShopName');
+  const savedPartnerDraft = JSON.parse(localStorage.getItem('partnerSignupDraft') || '{}');
+
+  if (savedPartnerDraft.shopName) {
+    partnerShopName.value = savedPartnerDraft.shopName;
+  }
+
+  shopNameForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const draft = {
+      ...savedPartnerDraft,
+      shopName: partnerShopName.value.trim(),
+    };
+    localStorage.setItem('partnerSignupDraft', JSON.stringify(draft));
+    window.location.href = 'partner-register.html';
+  });
+</script>
+</body>
+</html>

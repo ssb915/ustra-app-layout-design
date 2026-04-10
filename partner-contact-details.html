@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Contact Details</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .app-container {
+    padding-bottom: 0;
+  }
+
+  .auth-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    justify-content: center;
+    position: relative;
+  }
+
+  .register-top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+
+  .back-link {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--accent-gold);
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .back-link:active {
+    transform: scale(0.96);
+  }
+
+  .back-link svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .logo {
+    width: 110px;
+    height: 110px;
+    border-radius: 22px;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+    margin: 20px auto 14px;
+  }
+
+  .logo img {
+    width: 75%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .auth-header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .auth-note {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: -4px;
+    line-height: 1.4;
+  }
+
+  .auth-footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .auth-footer a {
+    color: var(--accent-gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  @media (max-height: 720px) {
+    .auth-container {
+      padding: 16px;
+    }
+
+    .register-top {
+      top: 16px;
+      left: 16px;
+    }
+
+    .logo {
+      width: 92px;
+      height: 92px;
+      border-radius: 18px;
+      margin: 12px auto 10px;
+    }
+
+    .auth-header {
+      margin-bottom: 18px;
+    }
+
+    .auth-header h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .text-muted {
+      font-size: 13px;
+    }
+
+    .auth-form {
+      gap: 12px;
+    }
+
+    .btn-primary {
+      padding: 14px;
+    }
+
+    .mt-20 {
+      margin-top: 14px;
+    }
+
+    .auth-footer {
+      margin-top: 18px;
+      font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app-container">
+  <div class="auth-container">
+    <div class="register-top">
+      <a class="back-link" href="partner-shop-details.html" aria-label="Back to schedule">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div class="auth-header">
+      <div class="logo">
+        <img src="image/bg-eress-logo.png" alt="Ustra Logo">
+      </div>
+      <h1>Contact Details</h1>
+      <p class="text-muted">Enter your shop contact information</p>
+    </div>
+
+    <form class="auth-form" id="contactDetailsForm">
+      <div>
+        <input type="text" class="glass-input" placeholder="Owner Name" id="ownerName" autocomplete="name">
+      </div>
+
+      <div>
+        <input type="tel" class="glass-input" placeholder="Shop Number" id="shopNumber" autocomplete="tel">
+      </div>
+
+      <div>
+        <input type="email" class="glass-input" placeholder="Gmail" id="shopEmail" autocomplete="email">
+      </div>
+
+      <div>
+        <input type="password" class="glass-input" placeholder="Password" id="shopPassword" autocomplete="new-password">
+      </div>
+
+      <div class="auth-note">After continue, OTP verification will appear.</div>
+
+      <button class="btn-primary mt-20" type="submit">Continue</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const contactDetailsForm = document.getElementById('contactDetailsForm');
+  const ownerName = document.getElementById('ownerName');
+  const shopNumber = document.getElementById('shopNumber');
+  const shopEmail = document.getElementById('shopEmail');
+  const shopPassword = document.getElementById('shopPassword');
+  const savedPartnerDraft = JSON.parse(localStorage.getItem('partnerSignupDraft') || '{}');
+
+  if (savedPartnerDraft.ownerName) ownerName.value = savedPartnerDraft.ownerName;
+  if (savedPartnerDraft.shopNumber) shopNumber.value = savedPartnerDraft.shopNumber;
+  if (savedPartnerDraft.shopEmail) shopEmail.value = savedPartnerDraft.shopEmail;
+  if (savedPartnerDraft.shopPassword) shopPassword.value = savedPartnerDraft.shopPassword;
+
+  contactDetailsForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const draft = JSON.parse(localStorage.getItem('partnerSignupDraft') || '{}');
+    const combined = {
+      ...draft,
+      ownerName: ownerName.value.trim(),
+      shopNumber: shopNumber.value.trim(),
+      shopEmail: shopEmail.value.trim(),
+      shopPassword: shopPassword.value,
+    };
+
+    localStorage.setItem('partnerSignupDraft', JSON.stringify(combined));
+    window.location.href = 'partner-otp.html?flow=register&next=partner-dashboard.html';
+  });
+</script>
+</body>
+</html>

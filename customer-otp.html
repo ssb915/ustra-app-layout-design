@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - OTP</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  body {
+    background: var(--bg-darker);
+    color: var(--text-primary);
+    margin: 0;
+    min-height: 100dvh;
+    padding: 20px 16px 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .wrap {
+    width: min(520px, 100%);
+    padding: 26px 16px 32px;
+    display: grid;
+    align-content: start;
+    gap: 18px;
+  }
+
+  .logo {
+    width: 110px;
+    height: 110px;
+    border-radius: 22px;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+    margin: 20px auto 14px;
+  }
+
+  .logo img {
+    width: 75%;
+    height: 100%;
+    object-fit: contain;
+    filter: none;
+  }
+
+  h1 {
+    font-size: 35px;
+    text-align: center;
+    margin-top: 4px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #e2c275;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-top: -6px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+  }
+
+  .auth-card {
+    padding: 18px 16px 16px;
+    border-radius: 16px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+  }
+
+  .auth-form {
+    display: grid;
+    gap: 14px;
+  }
+
+  .otp-row {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .otp-input {
+    width: 100%;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+    padding: 0;
+    height: 54px;
+    line-height: 54px;
+    caret-color: var(--accent-gold);
+  }
+
+  .hint {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-top: -6px;
+    text-align: center;
+  }
+
+  @media (max-width: 520px) {
+    body {
+      padding: 0 10px;
+    }
+
+    .wrap {
+      padding: 28px 16px 32px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.35);
+    }
+  }
+
+  @media (max-width: 360px) {
+    body {
+      padding: 0 8px;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+
+    .otp-row {
+      gap: 8px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="logo">
+      <img src="image/bg-eress-logo.png" alt="Ustra Logo">
+    </div>
+
+    <h1>Enter OTP</h1>
+    <p class="subtitle">OTP sent to your Gmail</p>
+
+    <div class="glass-panel auth-card">
+      <form class="auth-form" id="otpForm">
+        <div class="otp-row" aria-label="OTP Input">
+          <input class="glass-input otp-input" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" required>
+          <input class="glass-input otp-input" inputmode="numeric" pattern="[0-9]*" maxlength="1" required>
+          <input class="glass-input otp-input" inputmode="numeric" pattern="[0-9]*" maxlength="1" required>
+          <input class="glass-input otp-input" inputmode="numeric" pattern="[0-9]*" maxlength="1" required>
+          <input class="glass-input otp-input" inputmode="numeric" pattern="[0-9]*" maxlength="1" required>
+          <input class="glass-input otp-input" inputmode="numeric" pattern="[0-9]*" maxlength="1" required>
+        </div>
+
+        <div class="hint" id="otpHint">Enter the 6-digit OTP sent to your Gmail.</div>
+
+        <button class="btn-primary" type="submit">Verify OTP</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const inputs = Array.from(document.querySelectorAll(".otp-input"));
+      const form = document.getElementById("otpForm");
+      const hint = document.getElementById("otpHint");
+      const params = new URLSearchParams(window.location.search);
+      const flow = String(params.get("flow") || "").toLowerCase();
+      const nextParam = params.get("next");
+      const email = params.get("email");
+
+      if (email) {
+        hint.textContent = "Enter the 6-digit OTP sent to your Gmail.";
+      }
+
+      function getSafeNext(value, fallback) {
+        const v = String(value || "").trim();
+        if (!v) return fallback;
+        if (/^\s*javascript:/i.test(v)) return fallback;
+        if (/^[a-z][a-z0-9+.-]*:\/\//i.test(v)) return fallback;
+        if (v.startsWith("//") || v.startsWith("/") || v.startsWith("\\")) return fallback;
+        return v;
+      }
+
+      const defaultNext = flow === "register" ? "home.html" : "customer-reset-password.html";
+      const next = getSafeNext(nextParam, defaultNext);
+
+      function setValue(input, value) {
+        const digit = String(value || "").replace(/\D/g, "").slice(0, 1);
+        input.value = digit;
+      }
+
+      function focusIndex(index) {
+        const node = inputs[index];
+        if (node) {
+          node.focus();
+          node.select();
+        }
+      }
+
+      inputs.forEach((input, index) => {
+        input.addEventListener("input", () => {
+          setValue(input, input.value);
+          if (input.value && index < inputs.length - 1) {
+            focusIndex(index + 1);
+          }
+        });
+
+        input.addEventListener("keydown", (event) => {
+          if (event.key === "Backspace" && !input.value && index > 0) {
+            focusIndex(index - 1);
+            return;
+          }
+
+          if (event.key === "ArrowLeft" && index > 0) {
+            focusIndex(index - 1);
+            return;
+          }
+
+          if (event.key === "ArrowRight" && index < inputs.length - 1) {
+            focusIndex(index + 1);
+          }
+        });
+
+        input.addEventListener("paste", (event) => {
+          event.preventDefault();
+          const text = (event.clipboardData || window.clipboardData).getData("text") || "";
+          const digits = text.replace(/\D/g, "").slice(0, inputs.length).split("");
+          digits.forEach((digit, i) => {
+            setValue(inputs[i], digit);
+          });
+          focusIndex(Math.min(digits.length, inputs.length - 1));
+        });
+      });
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const code = inputs.map((i) => i.value).join("");
+        if (code.length !== inputs.length) {
+          alert("Please enter the full OTP.");
+          return;
+        }
+        window.location.href = next;
+      });
+
+      focusIndex(0);
+    })();
+  </script>
+</body>
+</html>
