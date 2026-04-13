@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ustra</title>
+  <link rel="stylesheet" href="customer-style.css">
+  <style>
+    body {
+      position: relative;
+      background:
+        radial-gradient(circle at top left, rgba(226, 194, 117, 0.14), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.06), transparent 24%),
+        linear-gradient(180deg, #06070a 0%, #0b0c10 100%);
+      color: var(--text-primary);
+      margin: 0;
+      min-height: 100dvh;
+      padding: 24px 16px 32px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: min(560px, 100%);
+      padding: 30px 22px 28px;
+      display: grid;
+      align-content: start;
+      gap: 16px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(18, 19, 24, 0.94), rgba(11, 12, 16, 0.98));
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .logo {
+      width: 104px;
+      height: 104px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.96);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.28);
+      margin: 4px auto 10px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .logo img {
+      width: 74%;
+      height: auto;
+      object-fit: contain;
+      filter: none;
+    }
+
+    h1 {
+      font-size: 26px;
+      text-align: center;
+      margin: 0;
+      line-height: 1.1;
+      letter-spacing: -0.4px;
+    }
+
+    .subtitle {
+      width: min(100%, 44ch);
+      margin: 0 auto;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.55;
+      font-weight: 500;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .subtitle strong {
+      display: block;
+      color: #fff;
+      font-size: clamp(13px, 2.8vw, 15px);
+      line-height: 1.4;
+      font-weight: 800;
+      letter-spacing: 0.1px;
+    }
+
+    .label {
+      font-size: 11px;
+      color: var(--accent-gold);
+      margin-top: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-weight: 800;
+    }
+
+    .role-group {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .role {
+      position: relative;
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.04);
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .role::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(226, 194, 117, 0.09), transparent 38%);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .role svg {
+      width: 24px;
+      height: 24px;
+      color: var(--accent-gold);
+      position: relative;
+      z-index: 1;
+    }
+
+    .role::after {
+      content: "";
+      position: absolute;
+      inset: 14px auto 14px 14px;
+      width: 44px;
+      border-radius: 14px;
+      background: rgba(226, 194, 117, 0.12);
+      border: 1px solid rgba(226, 194, 117, 0.16);
+      opacity: 1;
+    }
+
+    .role svg {
+      position: relative;
+      z-index: 1;
+      margin-left: 8px;
+    }
+
+    .role-text {
+      text-align: left;
+      position: relative;
+      z-index: 1;
+    }
+
+    .role-text strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: 0.1px;
+    }
+
+    .role-text small {
+      display: block;
+      font-size: 12px;
+      color: #9aa0aa;
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+
+    .role.active {
+      border-color: rgba(226, 194, 117, 0.9);
+      background: rgba(226, 194, 117, 0.08);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    .role.active::before,
+    .role:hover::before {
+      opacity: 1;
+    }
+
+    .role:hover {
+      transform: translateY(-2px);
+      border-color: rgba(226, 194, 117, 0.45);
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.26);
+    }
+
+    .cta {
+      margin-top: 8px;
+      background: linear-gradient(135deg, #e2c275, #c99f3a);
+      color: #120f07;
+      border: none;
+      border-radius: 14px;
+      padding: 15px 16px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 14px 28px rgba(226, 194, 117, 0.18);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 32px rgba(226, 194, 117, 0.24);
+      filter: brightness(1.02);
+    }
+
+    .partner-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+      opacity: 0.92;
+    }
+
+    .partner-logos img {
+      height: 72px;
+      object-fit: contain;
+      transition: transform 0.2s ease;
+      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.18));
+    }
+
+    .partner-logos img:hover {
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 16px 10px 20px;
+        align-items: flex-start;
+      }
+
+      .wrap {
+        padding: 24px 16px 24px;
+        border-radius: 24px;
+      }
+
+      h1 {
+        font-size: 23px;
+      }
+
+      .subtitle strong {
+        font-size: 16px;
+      }
+
+      .role-group {
+        grid-template-columns: 1fr;
+      }
+
+      .role {
+        padding: 16px 15px;
+        gap: 16px;
+      }
+
+      .partner-logos img {
+        height: 58px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      body {
+        padding: 12px 8px 18px;
+      }
+
+      .wrap {
+        padding: 22px 14px 22px;
+      }
+
+      h1 {
+        font-size: 21px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="label" style="text-align:center; margin-top: 0;">Premium booking access</div>
+    <div class="logo">
+      <img src="image/bg-eress-logo.png" alt="Ustra Logo">
+    </div>
+
+    <h1>Welcome to Ustra</h1>
+    <p class="subtitle">
+      <strong>Nayi Ki Dukan, Ab Aapki Pocket Mein</strong>
+    </p>
+
+    <div class="label">How will you use the app?</div>
+    <div class="role-group" id="roleGroup">
+      <div class="role active" data-role="customer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/>
+          <path d="M4 20c0-2.67 5.33-4 8-4s8 1.33 8 4"/>
+        </svg>
+        <div class="role-text">
+          <strong>Customer Login</strong>
+          <small>Book your haircut easily</small>
+        </div>
+      </div>
+      <div class="role" data-role="partner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M3 9h18"/>
+          <path d="M6 9V5h12v4"/>
+          <path d="M4 9v10h16V9"/>
+        </svg>
+        <div class="role-text">
+          <strong>Business Login</strong>
+          <small>Manage your salon smartly</small>
+        </div>
+      </div>
+    </div>
+
+    <button class="cta" id="continueBtn">Continue to Login</button>
+    <div class="partner-logos">
+      <img src="image/Make-in-India.png" alt="Make in India">
+      <img src="image/Digital-india.png" alt="Digital India">
+    </div>
+  </div>
+
+  <script>
+    const roles = document.querySelectorAll('.role');
+    const continueBtn = document.getElementById('continueBtn');
+    let selectedRole = 'customer';
+
+    function syncContinueButton() {
+      continueBtn.textContent = selectedRole === 'partner'
+        ? 'Continue to Business Login'
+        : 'Continue to Customer Login';
+    }
+
+    roles.forEach((role) => {
+      role.addEventListener('click', () => {
+        roles.forEach((r) => r.classList.remove('active'));
+        role.classList.add('active');
+        selectedRole = role.dataset.role;
+        syncContinueButton();
+      });
+    });
+
+    syncContinueButton();
+
+    continueBtn.addEventListener('click', () => {
+      if (selectedRole === 'partner') {
+        window.location.href = 'partner-login.html';
+      } else {
+        window.location.href = 'customer-login.html';
+      }
+    });
+  </script>
+</body>
+</html>

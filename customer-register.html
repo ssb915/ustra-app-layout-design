@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Sign Up</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  /* Register screen is a standalone step (no bottom navbar), so avoid extra padding & scrolling. */
+  .app-container {
+    padding-bottom: 0;
+  }
+
+  .auth-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    justify-content: center;
+    position: relative;
+  }
+  .register-top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+  .back-link {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--accent-gold);
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+  .back-link:hover {
+    border-color: rgba(226, 194, 117, 0.6);
+    background: rgba(226, 194, 117, 0.08);
+  }
+  .back-link:active {
+    transform: scale(0.96);
+  }
+  .back-link svg {
+    width: 24px;
+    height: 24px;
+  }
+  .auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-top: 0;
+  }
+  .logo {
+    width: 110px;
+    height: 110px;
+    border-radius: 22px;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+    margin: 20px auto 14px;
+  }
+  .logo img {
+    width: 75%;
+    height: 100%;
+    object-fit: contain;
+    filter: none;
+  }
+  .auth-header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .password-field {
+    position: relative;
+  }
+  .password-field .glass-input {
+    padding-right: 54px;
+  }
+  .password-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: var(--accent-gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 999px;
+  }
+  .password-toggle svg {
+    width: 18px;
+    height: 18px;
+  }
+  .gender-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    margin-bottom: 6px;
+  }
+  .gender-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    position: relative;
+  }
+  .gender-radio {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+  }
+  .gender-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--text-secondary);
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .gender-pill:hover {
+    border-color: rgba(226, 194, 117, 0.5);
+    background: rgba(226, 194, 117, 0.06);
+  }
+  .gender-radio:checked + .gender-pill {
+    border-color: var(--accent-gold);
+    background: rgba(226, 194, 117, 0.14);
+    color: var(--text-primary);
+  }
+  .gender-radio:focus-visible + .gender-pill {
+    outline: 2px solid rgba(226, 194, 117, 0.55);
+    outline-offset: 2px;
+  }
+  @media (max-width: 360px) {
+    .gender-row {
+      gap: 8px;
+    }
+    .gender-pill {
+      padding: 12px 8px;
+      font-size: 13px;
+    }
+  }
+  .auth-footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .auth-footer a {
+    color: var(--accent-gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  @media (max-height: 720px) {
+    .auth-container {
+      padding: 16px;
+    }
+
+    .register-top {
+      top: 16px;
+      left: 16px;
+    }
+
+    .logo {
+      width: 92px;
+      height: 92px;
+      border-radius: 18px;
+      margin: 12px auto 10px;
+    }
+
+    .auth-header {
+      margin-bottom: 18px;
+    }
+
+    .auth-header h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .text-muted {
+      font-size: 13px;
+    }
+
+    .auth-form {
+      gap: 12px;
+    }
+
+    .btn-primary {
+      padding: 14px;
+    }
+
+    .mt-20 {
+      margin-top: 14px;
+    }
+
+    .gender-pill {
+      padding: 12px 8px;
+      font-size: 13px;
+    }
+
+    .auth-footer {
+      margin-top: 18px;
+      font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <div class="auth-container">
+    <div class="register-top">
+      <a class="back-link" href="customer-login.html" aria-label="Back to login">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div class="auth-header">
+      <div class="logo">
+        <img src="image/bg-eress-logo.png" alt="Ustra Logo">
+      </div>
+      <h1>Create Account</h1>
+      <p class="text-muted">Join Ustra for a premium experience</p>
+    </div>
+
+    <form class="auth-form" onsubmit="event.preventDefault(); window.location.href='customer-location.html';">
+      <div>
+        <input type="text" class="glass-input" placeholder="Full Name" autocomplete="name">
+      </div>
+      <div>
+        <input type="email" class="glass-input" placeholder="Gmail" autocomplete="email">
+      </div>
+      <div>
+        <input type="tel" class="glass-input" placeholder="Phone Number" autocomplete="tel">
+      </div>
+      <div class="password-field">
+        <input type="password" class="glass-input" placeholder="Create Password" autocomplete="new-password" id="registerPassword">
+        <button type="button" class="password-toggle" id="toggleRegisterPassword" aria-label="Show password" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </button>
+      </div>
+      <div>
+        <div class="gender-label">Gender</div>
+        <div class="gender-row" role="radiogroup" aria-label="Gender">
+          <input class="gender-radio" type="radio" id="genderMale" name="gender" value="male" required>
+          <label class="gender-pill" for="genderMale">Male</label>
+
+          <input class="gender-radio" type="radio" id="genderFemale" name="gender" value="female">
+          <label class="gender-pill" for="genderFemale">Female</label>
+
+          <input class="gender-radio" type="radio" id="genderOther" name="gender" value="other">
+          <label class="gender-pill" for="genderOther">Other</label>
+        </div>
+      </div>
+      
+      <button class="btn-primary mt-20">Continue</button>
+    </form>
+
+    <div class="auth-footer">
+      Already have an account? <a href="customer-login.html">Log In</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const registerPassword = document.getElementById('registerPassword');
+  const toggleRegisterPassword = document.getElementById('toggleRegisterPassword');
+
+  toggleRegisterPassword.addEventListener('click', () => {
+    const isHidden = registerPassword.type === 'password';
+    registerPassword.type = isHidden ? 'text' : 'password';
+    toggleRegisterPassword.setAttribute('aria-pressed', String(isHidden));
+    toggleRegisterPassword.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+  });
+</script>
+</body>
+</html>

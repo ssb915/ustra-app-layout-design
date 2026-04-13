@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Select Category</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body {
+  margin: 0;
+  height: 100dvh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #2a2a2a, #0f0f0f);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+/* MAIN */
+.container {
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+}
+
+/* LOGO */
+.logo-box {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 20px;
+  background: #fff;
+  border-radius: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+}
+
+.logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: scale(1.5) translateY(6px);
+}
+
+/* TEXT */
+h2 {
+  margin: 10px 0 5px;
+  font-size: 22px;
+}
+
+.sub {
+  color: #aaa;
+  margin-bottom: 30px;
+  font-size: 13px;
+}
+
+/* OPTIONS */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* CARD */
+.card {
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.card:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+/* LEFT */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ACTIVE */
+.card.active {
+  background: #fff;
+  color: #000;
+}
+
+/* TICK */
+.tick {
+  opacity: 0;
+}
+
+.card.active .tick {
+  opacity: 1;
+}
+
+/* BUTTON */
+.btn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 25px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  background: #555;
+  color: #aaa;
+  cursor: pointer;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ACTIVE BUTTON */
+.btn.active {
+  background: #fff;
+  color: #000;
+  opacity: 1;
+  pointer-events: auto;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- Logo -->
+  <div class="logo-box">
+    <img src="image/bg-eress-logo.png" class="logo">
+  </div>
+
+  <h2>Select Category</h2>
+  <div class="sub">Choose your service type</div>
+
+  <!-- OPTIONS -->
+  <div class="options">
+
+    <div class="card" onclick="select(this,'Female')">
+      <div class="left">
+        <div class="icon-box"><i class="fa-solid fa-user"></i></div>
+        <span>Female (Ladies Parlor)</span>
+      </div>
+      <i class="fa-solid fa-check tick"></i>
+    </div>
+
+    <div class="card" onclick="select(this,'Male')">
+      <div class="left">
+        <div class="icon-box"><i class="fa-solid fa-user-tie"></i></div>
+        <span>Male (Gents Salon)</span>
+      </div>
+      <i class="fa-solid fa-check tick"></i>
+    </div>
+
+    <div class="card" onclick="select(this,'Both')">
+      <div class="left">
+        <div class="icon-box"><i class="fa-solid fa-users"></i></div>
+        <span>Both (Unisex)</span>
+      </div>
+      <i class="fa-solid fa-check tick"></i>
+    </div>
+
+  </div>
+
+  <!-- BUTTON -->
+  <button id="btn" class="btn" onclick="submit()">Continue</button>
+
+</div>
+
+<script>
+let selected = "";
+
+function select(el, value){
+  document.querySelectorAll(".card").forEach(c => c.classList.remove("active"));
+  el.classList.add("active");
+  selected = value;
+
+  document.getElementById("btn").classList.add("active");
+}
+
+function submit(){
+  if(!selected) return;
+  window.location.href = "partner-register.html?category=" + selected;
+}
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  window.ustraHeaderConfig = { mountSelector: "body", addTopOffset: false };
+</script>
+<script src="shared-home-header.js"></script>
+
+</body>
+</html>

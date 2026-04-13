@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra Partner - Bookings</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+
+  .bookings-container {
+    padding: 10px 18px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .tab {
+    position: relative;
+    text-align: center;
+    padding: 11px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border: 1px solid var(--glass-border);
+    font-weight: 700;
+    transition: 0.2s ease;
+  }
+
+  .tab-dot {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #ff4d4d;
+    border: 1px solid rgba(255, 77, 77, 0.7);
+    color: #ffffff;
+    box-shadow: 0 6px 14px rgba(255, 77, 77, 0.28);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .tab.active {
+    background: linear-gradient(135deg, var(--accent-gold), #b58c16);
+    color: #000;
+    border-color: transparent;
+    box-shadow: 0 10px 22px rgba(212, 175, 55, 0.2);
+  }
+
+  .booking-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 16px;
+    display: grid;
+    gap: 14px;
+    margin-bottom: 0;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+  }
+
+  .booking-list {
+    display: grid;
+    gap: 14px;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding-bottom: 108px;
+  }
+
+  .booking-card[hidden] {
+    display: none !important;
+  }
+
+  .booking-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--glass-border);
+  }
+
+  .booking-card-header h4 {
+    font-size: 16px;
+    color: var(--text-primary);
+    line-height: 1.1;
+  }
+
+  .booking-card-header .time {
+    font-size: 12px;
+    color: var(--accent-gold);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+
+  .booking-card-title {
+    display: grid;
+    gap: 8px;
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .status-badge.request {
+    background: rgba(226, 194, 117, 0.1);
+    color: var(--accent-gold);
+    border: 1px solid rgba(226, 194, 117, 0.22);
+  }
+
+  .status-badge.accept {
+    background: rgba(0, 204, 102, 0.1);
+    color: var(--success-color);
+    border: 1px solid rgba(0, 204, 102, 0.22);
+  }
+
+  .status-badge.done {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+  }
+
+  .status-badge.reject {
+    background: rgba(255, 77, 77, 0.1);
+    color: var(--error-color);
+    border: 1px solid rgba(255, 77, 77, 0.22);
+  }
+
+  .customer-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .customer-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(226, 194, 117, 0.12);
+    border: 1px solid rgba(226, 194, 117, 0.18);
+  }
+
+  .customer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .customer-name { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .customer-phone { font-size: 12px; color: var(--text-secondary); }
+
+  .services-list {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .booking-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .assignment-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .assignment-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .assignment-chip i {
+    width: 14px;
+    height: 14px;
+  }
+
+  .btn-accept,
+  .btn-reject,
+  .btn-done,
+  .btn-restore {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s ease;
+  }
+
+  .btn-accept {
+    background: linear-gradient(135deg, var(--accent-gold), #b58c16);
+    color: #000;
+  }
+
+  .btn-reject {
+    background: transparent;
+    color: var(--error-color);
+    border: 1px solid rgba(255, 77, 77, 0.5);
+  }
+
+  .btn-done {
+    background: rgba(0, 204, 102, 0.1);
+    color: var(--success-color);
+    border: 1px solid rgba(0, 204, 102, 0.22);
+  }
+
+  .btn-restore {
+    background: rgba(226, 194, 117, 0.1);
+    color: var(--accent-gold);
+    border: 1px solid rgba(226, 194, 117, 0.22);
+  }
+
+  .btn-accept:hover,
+  .btn-reject:hover,
+  .btn-done:hover,
+  .btn-restore:hover {
+    transform: translateY(-1px);
+  }
+
+  /* Premium pulse animation */
+  @keyframes premium-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(226, 194, 117, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(226, 194, 117, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(226, 194, 117, 0); }
+  }
+
+  .call-btn-small {
+    width: 42px; height: 42px; background: var(--accent-gold); color: #000 !important;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 15px rgba(212,175,55,0.3); transition: all 0.3s ease; text-decoration: none !important;
+    flex-shrink: 0; animation: premium-pulse 2.5s infinite;
+  }
+  .call-btn-small i { width: 18px; height: 18px; stroke-width: 2.5; }
+  .call-btn-small:hover { background: #fff; transform: scale(1.1); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+
+  .accept-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(7, 8, 10, 0.78);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .accept-modal-backdrop.open {
+    display: flex;
+  }
+
+  .accept-modal {
+    width: min(100%, 420px);
+    background: linear-gradient(180deg, rgba(18, 19, 24, 0.98), rgba(11, 12, 16, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+    padding: 18px;
+    display: grid;
+    gap: 14px;
+  }
+
+  .accept-modal h3 {
+    font-size: 22px;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .accept-modal p {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .accept-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
+  }
+
+  .accept-summary-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(226, 194, 117, 0.18);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .accept-summary-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .accept-summary-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .accept-summary-subtitle {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  .accept-field {
+    display: grid;
+    gap: 8px;
+  }
+
+  .accept-field label {
+    font-size: 12px;
+    font-weight: 800;
+    color: #e2c275;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .accept-time-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .accept-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(226, 194, 117, 0.22);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+    transition: all 0.2s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23e2c275' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    min-width: 0;
+    cursor: pointer;
+    padding-right: 42px;
+  }
+
+  .accept-select:hover {
+    border-color: rgba(226, 194, 117, 0.35);
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .accept-select:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 3px rgba(226, 194, 117, 0.12);
+    background-color: rgba(255, 255, 255, 0.07);
+  }
+
+  .accept-time-grid .accept-select {
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-position: right 10px center;
+  }
+
+  #acceptStaff.accept-select {
+    text-align: left;
+  }
+
+  .staff-picker,
+  .time-picker {
+    position: relative;
+  }
+
+  .staff-picker-trigger,
+  .time-picker-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    text-align: left;
+    padding-right: 16px;
+    background-image: none;
+  }
+
+  .staff-picker-trigger i,
+  .time-picker-trigger i {
+    width: 16px;
+    height: 16px;
+    color: #e2c275;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .staff-picker.open .staff-picker-trigger i,
+  .time-picker.open .time-picker-trigger i {
+    transform: rotate(180deg);
+  }
+
+  .staff-picker-label,
+  .time-picker-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .staff-picker-menu,
+  .time-picker-menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 8px);
+    z-index: 10;
+    display: none;
+    gap: 6px;
+    padding: 8px;
+    border-radius: 16px;
+    background: rgba(12, 13, 17, 0.98);
+    border: 1px solid rgba(226, 194, 117, 0.22);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.38);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    max-height: 220px;
+    overflow: auto;
+  }
+
+  .staff-picker-menu.open,
+  .time-picker-menu.open {
+    display: grid;
+  }
+
+  .staff-picker-option,
+  .time-picker-option {
+    width: 100%;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .staff-picker-option:hover,
+  .time-picker-option:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(226, 194, 117, 0.2);
+  }
+
+  .staff-picker-option.active,
+  .time-picker-option.active {
+    background: linear-gradient(135deg, var(--accent-gold), #b58c16);
+    color: #000;
+    border-color: transparent;
+  }
+
+  .accept-note {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+  }
+
+  .accept-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 2px;
+  }
+
+  .modal-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s ease;
+  }
+
+  .modal-btn.secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+  }
+
+  .modal-btn.primary {
+    background: linear-gradient(135deg, var(--accent-gold), #b58c16);
+    color: #000;
+  }
+
+  .modal-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 420px) {
+    .bookings-container {
+      padding: 8px 14px 0;
+      gap: 14px;
+    }
+
+    .tabs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .tab {
+      padding: 10px 8px;
+      font-size: 12px;
+      border-radius: 12px;
+    }
+
+    .booking-card {
+      padding: 14px;
+      gap: 12px;
+    }
+
+    .booking-card-header h4 {
+      font-size: 15px;
+    }
+
+    .booking-actions {
+      gap: 8px;
+    }
+
+    .btn-accept,
+    .btn-reject,
+    .btn-done,
+    .btn-restore {
+      padding: 9px 10px;
+      font-size: 12px;
+    }
+
+    .accept-modal {
+      padding: 16px;
+      border-radius: 20px;
+    }
+
+    .accept-time-grid {
+      gap: 8px;
+    }
+
+    .accept-actions {
+      gap: 8px;
+    }
+
+    .modal-btn {
+      padding: 10px 12px;
+      font-size: 12px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <div class="bookings-container">
+    <div class="tabs">
+      <button class="tab active" type="button" data-filter="request">Request<span class="tab-dot" data-tab-dot="request" aria-hidden="true" hidden></span></button>
+      <button class="tab" type="button" data-filter="accept">Accept<span class="tab-dot" data-tab-dot="accept" aria-hidden="true" hidden></span></button>
+      <button class="tab" type="button" data-filter="reject">Reject</button>
+      <button class="tab" type="button" data-filter="done">Done</button>
+    </div>
+
+    <div class="booking-list" id="bookingList"></div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="partner-dashboard.html" class="nav-item">
+      <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
+    </a>
+    <a href="partner-services.html" class="nav-item">
+      <i data-lucide="scissors"></i><span>Services</span>
+    </a>
+    <a href="partner-bookings.html" class="nav-item bookings-badge active"> 
+      <i data-lucide="calendar"></i><span>Bookings</span>
+      <span class="bookings-dot" aria-hidden="true"></span>
+    </a>
+    <a href="partner-staff.html" class="nav-item">
+      <i data-lucide="users-round"></i><span>Staff</span>
+    </a>
+    <a href="partner-profile.html" class="nav-item">
+      <i data-lucide="store"></i><span>Profile</span>
+    </a>
+  </nav>
+
+  <div class="accept-modal-backdrop" id="acceptModal" aria-hidden="true">
+    <div class="accept-modal" role="dialog" aria-modal="true" aria-labelledby="acceptModalTitle">
+      <h3 id="acceptModalTitle">Accept Booking</h3>
+      <p id="acceptModalDescription">Select the time and assign a staff member before confirming.</p>
+
+      <div class="accept-summary">
+        <div class="accept-summary-avatar" id="acceptSummaryAvatar"></div>
+        <div>
+          <div class="accept-summary-title" id="acceptSummaryName"></div>
+          <div class="accept-summary-subtitle" id="acceptSummaryService"></div>
+        </div>
+      </div>
+
+      <div class="accept-field">
+        <label for="acceptHourTrigger">Time</label>
+        <div class="accept-time-grid">
+          <div class="time-picker" id="acceptHourPicker">
+            <button type="button" class="glass-input accept-select time-picker-trigger" id="acceptHourTrigger" aria-haspopup="listbox" aria-expanded="false">
+              <span class="time-picker-label" id="acceptHourLabel">09</span>
+              <i data-lucide="chevron-down"></i>
+            </button>
+            <div class="time-picker-menu" id="acceptHourMenu" role="listbox" aria-label="Hour"></div>
+          </div>
+          <div class="time-picker" id="acceptMinutePicker">
+            <button type="button" class="glass-input accept-select time-picker-trigger" id="acceptMinuteTrigger" aria-haspopup="listbox" aria-expanded="false">
+              <span class="time-picker-label" id="acceptMinuteLabel">00</span>
+              <i data-lucide="chevron-down"></i>
+            </button>
+            <div class="time-picker-menu" id="acceptMinuteMenu" role="listbox" aria-label="Minute"></div>
+          </div>
+          <div class="time-picker" id="acceptMeridiemPicker">
+            <button type="button" class="glass-input accept-select time-picker-trigger" id="acceptMeridiemTrigger" aria-haspopup="listbox" aria-expanded="false">
+              <span class="time-picker-label" id="acceptMeridiemLabel">AM</span>
+              <i data-lucide="chevron-down"></i>
+            </button>
+            <div class="time-picker-menu" id="acceptMeridiemMenu" role="listbox" aria-label="AM or PM"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accept-field">
+        <label for="acceptStaffTrigger">Staff</label>
+        <div class="staff-picker" id="acceptStaffPicker">
+          <button type="button" class="glass-input accept-select staff-picker-trigger" id="acceptStaffTrigger" aria-haspopup="listbox" aria-expanded="false">
+            <span class="staff-picker-label" id="acceptStaffLabel">Select staff</span>
+            <i data-lucide="chevron-down"></i>
+          </button>
+          <div class="staff-picker-menu" id="acceptStaffMenu" role="listbox" aria-label="Staff members"></div>
+        </div>
+      </div>
+
+      <div class="accept-note">The booking will move to Accept after confirmation.</div>
+
+      <div class="accept-actions">
+        <button type="button" class="modal-btn secondary" id="cancelAcceptBtn">Cancel</button>
+        <button type="button" class="modal-btn primary" id="confirmAcceptBtn">Accept Booking</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  const bookingList = document.getElementById("bookingList");
+  const tabs = document.querySelectorAll(".tab[data-filter]");
+  const statusOrder = ["request", "accept", "reject", "done"];
+  let activeFilter = "request";
+
+  const customerNames = [
+    "Aman Sharma",
+    "Rahul Verma",
+    "Sanjay Kumar",
+    "Mohit Gupta",
+    "Arjun Singh",
+    "Nikhil Yadav",
+    "Piyush Mishra",
+    "Karan Patel",
+    "Ritesh Saini",
+    "Imran Khan",
+    "Deepak Joshi",
+    "Rohit Tiwari",
+    "Sameer Ali",
+    "Vivek Pandey",
+    "Ankit Srivastava",
+    "Saurabh Jain",
+    "Faiz Ahmed",
+    "Harsh Vardhan",
+    "Aman Rathi",
+    "Rohan Choudhary"
+  ];
+
+  const phoneNumbers = [
+    "9876543210",
+    "8765432109",
+    "9123456780",
+    "9988776655",
+    "9090909090",
+    "7001234567",
+    "8123456701",
+    "9234567810",
+    "9898989898",
+    "7654321098",
+    "9012345678",
+    "7345678901",
+    "8456789012",
+    "9567890123",
+    "6677889900",
+    "7788990011",
+    "8899001122",
+    "9900112233",
+    "9812345670",
+    "9922334455"
+  ];
+
+  const servicePool = [
+    "Haircut & Styling",
+    "Beard Trim",
+    "Premium Haircut",
+    "Skin Fade",
+    "Classic Shave",
+    "Hair Color",
+    "Head Massage",
+    "Hair Spa",
+    "Beard Shape Up",
+    "Hot Towel Shave",
+    "Kids Haircut",
+    "Clean Up",
+    "Mustache Trim",
+    "Scalp Treatment",
+    "Luxury Beard Trim",
+    "Styling Package",
+    "Taper Cut",
+    "Threading",
+    "Hair Wash",
+    "Signature Cut"
+  ];
+
+  const customerAvatarImages = [
+    "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1544723795-3ca315cadc88?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80"
+  ];
+
+  const statusSettings = {
+    request: {
+      badge: "Request",
+      badgeClass: "request",
+      palette: ["#e2c275", "#8d6720"],
+      timeColor: "var(--accent-gold)",
+      startHour: 9,
+      startMinute: 0,
+      step: 12,
+      basePrice: 35
+    },
+    accept: {
+      badge: "Accept",
+      badgeClass: "accept",
+      palette: ["#7ad67f", "#2d8b53"],
+      timeColor: "var(--text-secondary)",
+      startHour: 10,
+      startMinute: 15,
+      step: 12,
+      basePrice: 20
+    },
+    reject: {
+      badge: "Rejected",
+      badgeClass: "reject",
+      palette: ["#f16d6d", "#8c3131"],
+      timeColor: "var(--text-secondary)",
+      startHour: 11,
+      startMinute: 45,
+      step: 12,
+      basePrice: 15
+    },
+    done: {
+      badge: "Done",
+      badgeClass: "done",
+      palette: ["#9b9b9b", "#5a5a5a"],
+      timeColor: "var(--text-secondary)",
+      startHour: 13,
+      startMinute: 0,
+      step: 12,
+      basePrice: 18
+    }
+  };
+
+  function escapeHtml(value) {
+    return value
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function formatPhone(raw) {
+    return `+91 ${raw.slice(0, 5)} ${raw.slice(5)}`;
+  }
+
+  function formatTel(raw) {
+    return `+91${raw}`;
+  }
+
+  function formatTime(hour24, minute) {
+    const period = hour24 >= 12 ? "PM" : "AM";
+    const hour12 = hour24 % 12 || 12;
+    return `${String(hour12).padStart(2, "0")}:${String(minute).padStart(2, "0")} ${period}`;
+  }
+
+  function generateTimes(startHour, startMinute, stepMinutes, count) {
+    const times = [];
+    let hour = startHour;
+    let minute = startMinute;
+
+    for (let index = 0; index < count; index += 1) {
+      times.push(formatTime(hour, minute));
+      minute += stepMinutes;
+      while (minute >= 60) {
+        minute -= 60;
+        hour = (hour + 1) % 24;
+      }
+    }
+
+    return times;
+  }
+
+  function createAvatarData(index) {
+    return customerAvatarImages[index % customerAvatarImages.length];
+  }
+
+  function buildRecords(status) {
+    const settings = statusSettings[status];
+    const times = generateTimes(settings.startHour, settings.startMinute, settings.step, customerNames.length);
+
+    return customerNames.map((name, index) => {
+      const service = servicePool[(index + statusOrder.indexOf(status) * 3) % servicePool.length];
+      const price = settings.basePrice + ((index % 6) * 5);
+      const phone = phoneNumbers[index];
+
+      return {
+        id: `${status}-${index + 1}`,
+        status,
+        name,
+        phoneLabel: formatPhone(phone),
+        phoneHref: formatTel(phone),
+        service,
+        time: times[index],
+        price,
+        avatar: createAvatarData(index)
+      };
+    });
+  }
+
+  function actionMarkup(status) {
+    if (status === "request") {
+      return `
+        <button class="btn-reject" type="button" data-action="move" data-to="reject">Reject</button>
+        <button class="btn-accept" type="button" data-action="open-accept">Accept</button>
+      `;
+    }
+
+    if (status === "accept") {
+      return `<button class="btn-done" type="button" data-action="move" data-to="done">Mark Done</button>`;
+    }
+
+    if (status === "reject") {
+      return `<button class="btn-restore" type="button" data-action="move" data-to="request">Restore</button>`;
+    }
+
+    return `<div class="status-badge done" style="width: 100%;">Completed</div>`;
+  }
+
+  function renderCard(record, status) {
+    const settings = statusSettings[status];
+    const badgeColor = status === "request" ? settings.timeColor : "var(--text-secondary)";
+    const assignedTime = record.assignedTime || record.time;
+    const assignedStaff = record.assignedStaff || "Unassigned";
+    const assignmentMarkup = status === "accept"
+      ? `
+        <div class="assignment-meta">
+          <span class="assignment-chip"><i data-lucide="user-round"></i> ${escapeHtml(assignedStaff)}</span>
+          <span class="assignment-chip"><i data-lucide="clock-3"></i> ${escapeHtml(assignedTime)}</span>
+        </div>
+      `
+      : "";
+
+    return `
+      <div class="booking-card" data-status="${status}" data-id="${record.id}">
+        <div class="booking-card-header">
+          <div class="booking-card-title">
+            <h4>Today</h4>
+            <span class="status-badge ${settings.badgeClass}">${settings.badge}</span>
+          </div>
+          <div class="time" style="color: ${badgeColor};"><i data-lucide="clock" style="width:14px;"></i> ${record.time}</div>
+        </div>
+        <div class="customer-row">
+          <div class="customer-avatar">
+            <img src="${record.avatar}" alt="${escapeHtml(record.name)}">
+          </div>
+          <div style="flex: 1;">
+            <div class="customer-name">${escapeHtml(record.name)}</div>
+            <div class="customer-phone">${escapeHtml(record.phoneLabel)}</div>
+          </div>
+          <a href="tel:${record.phoneHref}" class="call-btn-small"><i data-lucide="phone"></i></a>
+        </div>
+        <div class="services-list">
+          Services: ${escapeHtml(record.service)} &#8226; &#8377;${record.price}
+        </div>
+        ${assignmentMarkup}
+        <div class="booking-actions">
+          ${actionMarkup(status)}
+        </div>
+      </div>
+    `;
+  }
+
+  const bookingsState = Object.fromEntries(
+    statusOrder.map((status) => [status, buildRecords(status)])
+  );
+
+  const bookingsDotKey = "partner-bookings-pending-count";
+  const acceptModal = document.getElementById("acceptModal");
+  const acceptSummaryAvatar = document.getElementById("acceptSummaryAvatar");
+  const acceptSummaryName = document.getElementById("acceptSummaryName");
+  const acceptSummaryService = document.getElementById("acceptSummaryService");
+  const acceptHourPicker = document.getElementById("acceptHourPicker");
+  const acceptHourTrigger = document.getElementById("acceptHourTrigger");
+  const acceptHourLabel = document.getElementById("acceptHourLabel");
+  const acceptHourMenu = document.getElementById("acceptHourMenu");
+  const acceptMinutePicker = document.getElementById("acceptMinutePicker");
+  const acceptMinuteTrigger = document.getElementById("acceptMinuteTrigger");
+  const acceptMinuteLabel = document.getElementById("acceptMinuteLabel");
+  const acceptMinuteMenu = document.getElementById("acceptMinuteMenu");
+  const acceptMeridiemPicker = document.getElementById("acceptMeridiemPicker");
+  const acceptMeridiemTrigger = document.getElementById("acceptMeridiemTrigger");
+  const acceptMeridiemLabel = document.getElementById("acceptMeridiemLabel");
+  const acceptMeridiemMenu = document.getElementById("acceptMeridiemMenu");
+  const acceptStaffPicker = document.getElementById("acceptStaffPicker");
+  const acceptStaffTrigger = document.getElementById("acceptStaffTrigger");
+  const acceptStaffLabel = document.getElementById("acceptStaffLabel");
+  const acceptStaffMenu = document.getElementById("acceptStaffMenu");
+  const cancelAcceptBtn = document.getElementById("cancelAcceptBtn");
+  const confirmAcceptBtn = document.getElementById("confirmAcceptBtn");
+  const acceptModalDescription = document.getElementById("acceptModalDescription");
+  let pendingAcceptRecordId = null;
+  let selectedHour = "09";
+  let selectedMinute = "00";
+  let selectedMeridiem = "AM";
+  let selectedStaffValue = "";
+
+  const staffStorageKey = "partner-staff-list";
+  const defaultStaffOptions = [
+    "Samir Patel",
+    "Marcus Johnson",
+    "John Doe",
+    "Rajesh Kumar",
+    "Amit Sharma",
+    "Karan Singh",
+    "Vikram Desai",
+    "Arjun Verma",
+    "Deepak Yadav",
+    "Nikhil Joshi",
+    "Saurabh Jain",
+    "Ankit Sharma",
+    "Rohit Tiwari",
+    "Faiz Ahmed",
+    "Manoj Saini"
+  ];
+
+  function getStoredStaffOptions() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(staffStorageKey) || "[]");
+      const names = Array.isArray(parsed)
+        ? parsed
+            .map((item) => typeof item === "string" ? item : item && item.name)
+            .map((name) => String(name || "").trim())
+            .filter(Boolean)
+        : [];
+      return names.length >= defaultStaffOptions.length ? names : defaultStaffOptions;
+    } catch (error) {
+      return defaultStaffOptions;
+    }
+  }
+
+  let staffOptions = getStoredStaffOptions();
+
+  function populateTimePickers() {
+    const hours = Array.from({ length: 12 }, (_, index) => String(index + 1).padStart(2, "0"));
+    const minutes = ["00", "15", "30", "45"];
+    const meridiems = ["AM", "PM"];
+
+    acceptHourMenu.innerHTML = hours
+      .map((hour) => `
+        <button type="button" class="time-picker-option" role="option" aria-selected="false" data-value="${hour}">
+          ${hour}
+        </button>
+      `)
+      .join("");
+
+    acceptMinuteMenu.innerHTML = minutes
+      .map((minute) => `
+        <button type="button" class="time-picker-option" role="option" aria-selected="false" data-value="${minute}">
+          ${minute}
+        </button>
+      `)
+      .join("");
+
+    acceptMeridiemMenu.innerHTML = meridiems
+      .map((meridiem) => `
+        <button type="button" class="time-picker-option" role="option" aria-selected="false" data-value="${meridiem}">
+          ${meridiem}
+        </button>
+      `)
+      .join("");
+  }
+
+  function syncTimePickerActiveState() {
+    acceptHourLabel.textContent = selectedHour;
+    acceptMinuteLabel.textContent = selectedMinute;
+    acceptMeridiemLabel.textContent = selectedMeridiem;
+
+    acceptHourMenu.querySelectorAll(".time-picker-option").forEach((option) => {
+      const isActive = option.dataset.value === selectedHour;
+      option.classList.toggle("active", isActive);
+      option.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+
+    acceptMinuteMenu.querySelectorAll(".time-picker-option").forEach((option) => {
+      const isActive = option.dataset.value === selectedMinute;
+      option.classList.toggle("active", isActive);
+      option.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+
+    acceptMeridiemMenu.querySelectorAll(".time-picker-option").forEach((option) => {
+      const isActive = option.dataset.value === selectedMeridiem;
+      option.classList.toggle("active", isActive);
+      option.setAttribute("aria-selected", isActive ? "true" : "false");
+    });
+  }
+
+  function openTimePicker(picker, menu, trigger) {
+    picker.classList.add("open");
+    menu.classList.add("open");
+    trigger.setAttribute("aria-expanded", "true");
+  }
+
+  function closeTimePicker(picker, menu, trigger) {
+    picker.classList.remove("open");
+    menu.classList.remove("open");
+    trigger.setAttribute("aria-expanded", "false");
+  }
+
+  function closeAllTimePickers() {
+    closeTimePicker(acceptHourPicker, acceptHourMenu, acceptHourTrigger);
+    closeTimePicker(acceptMinutePicker, acceptMinuteMenu, acceptMinuteTrigger);
+    closeTimePicker(acceptMeridiemPicker, acceptMeridiemMenu, acceptMeridiemTrigger);
+  }
+
+  function setSelectedTime(hour, minute, meridiem) {
+    selectedHour = hour;
+    selectedMinute = minute;
+    selectedMeridiem = meridiem;
+    syncTimePickerActiveState();
+  }
+
+  function populateStaffPicker() {
+    staffOptions = getStoredStaffOptions();
+    acceptStaffMenu.innerHTML = staffOptions
+      .map((staff) => `
+        <button
+          type="button"
+          class="staff-picker-option"
+          role="option"
+          aria-selected="false"
+          data-staff="${escapeHtml(staff)}"
+        >${escapeHtml(staff)}</button>
+      `)
+      .join("");
+  }
+
+  function syncStaffPickerActiveState() {
+    acceptStaffLabel.textContent = selectedStaffValue || "Select staff";
+    acceptStaffTrigger.dataset.value = selectedStaffValue || "";
+
+    acceptStaffMenu.querySelectorAll(".staff-picker-option").forEach((option) => {
+      option.classList.toggle("active", option.dataset.staff === selectedStaffValue);
+      option.setAttribute("aria-selected", option.dataset.staff === selectedStaffValue ? "true" : "false");
+    });
+  }
+
+  function openStaffPicker() {
+    acceptStaffPicker.classList.add("open");
+    acceptStaffMenu.classList.add("open");
+    acceptStaffTrigger.setAttribute("aria-expanded", "true");
+  }
+
+  function closeStaffPicker() {
+    acceptStaffPicker.classList.remove("open");
+    acceptStaffMenu.classList.remove("open");
+    acceptStaffTrigger.setAttribute("aria-expanded", "false");
+  }
+
+  function toggleStaffPicker() {
+    if (acceptStaffMenu.classList.contains("open")) {
+      closeStaffPicker();
+    } else {
+      openStaffPicker();
+    }
+  }
+
+  function setSelectedStaff(staffName) {
+    selectedStaffValue = staffName || staffOptions[0] || "";
+    syncStaffPickerActiveState();
+  }
+
+  function parseBookingTime(timeLabel) {
+    const match = timeLabel.match(/(\d{2}):(\d{2})\s*(AM|PM)/i);
+
+    if (!match) {
+      return { hour: "10", minute: "00", meridiem: "AM" };
+    }
+
+    return {
+      hour: match[1],
+      minute: match[2],
+      meridiem: match[3].toUpperCase()
+    };
+  }
+
+  function applyBookingTime(timeLabel) {
+    const parsed = parseBookingTime(timeLabel);
+    setSelectedTime(parsed.hour, parsed.minute, parsed.meridiem);
+  }
+
+  function getSelectedBookingTime() {
+    return `${selectedHour}:${selectedMinute} ${selectedMeridiem}`;
+  }
+
+  function openAcceptModal(record) {
+    if (!acceptModal || !record) {
+      return;
+    }
+
+    pendingAcceptRecordId = record.id;
+    acceptSummaryAvatar.style.backgroundImage = `url("${record.avatar}")`;
+    acceptSummaryAvatar.innerHTML = "";
+    acceptSummaryName.textContent = record.name;
+    acceptSummaryService.innerHTML = `${escapeHtml(record.service)} &#8226; &#8377;${record.price}`;
+    acceptModalDescription.textContent = "Select a staff member and time, then confirm this booking.";
+    applyBookingTime(record.assignedTime || record.time);
+    setSelectedStaff(record.assignedStaff || staffOptions[0]);
+    closeStaffPicker();
+    closeAllTimePickers();
+
+    acceptModal.classList.add("open");
+    acceptModal.setAttribute("aria-hidden", "false");
+    window.setTimeout(() => acceptHourTrigger.focus(), 0);
+  }
+
+  function closeAcceptModal() {
+    if (!acceptModal) {
+      return;
+    }
+
+    acceptModal.classList.remove("open");
+    acceptModal.setAttribute("aria-hidden", "true");
+    closeAllTimePickers();
+    closeStaffPicker();
+    pendingAcceptRecordId = null;
+  }
+
+  function confirmAcceptBooking() {
+    if (!pendingAcceptRecordId) {
+      return;
+    }
+
+    const selectedTime = getSelectedBookingTime();
+    const selectedStaff = selectedStaffValue || staffOptions[0];
+    const record = bookingsState.request.find((item) => item.id === pendingAcceptRecordId);
+
+    if (!record) {
+      closeAcceptModal();
+      return;
+    }
+
+    moveRecord(record.id, "request", "accept", {
+      time: selectedTime,
+      assignedTime: selectedTime,
+      assignedStaff: selectedStaff
+    });
+
+    closeAcceptModal();
+    renderBookings();
+  }
+
+  function updateBookingsDot() {
+    const pendingCount = bookingsState.request.length;
+    try {
+      localStorage.setItem(bookingsDotKey, String(pendingCount));
+    } catch (error) {
+      // Ignore storage issues and keep the UI working.
+    }
+  }
+
+  function updateTabDots() {
+    const counts = {
+      request: bookingsState.request.length,
+      accept: bookingsState.accept.length
+    };
+
+    document.querySelectorAll("[data-tab-dot]").forEach((dot) => {
+      const key = dot.getAttribute("data-tab-dot");
+      const count = counts[key] || 0;
+      dot.hidden = !count;
+      dot.textContent = count > 9 ? "9+" : String(count);
+    });
+  }
+
+  function renderBookings() {
+    bookingList.innerHTML = bookingsState[activeFilter]
+      .map((record) => renderCard(record, activeFilter))
+      .join("");
+    lucide.createIcons();
+    updateBookingsDot();
+    updateTabDots();
+  }
+
+  function setActiveFilter(filter) {
+    activeFilter = filter;
+    tabs.forEach((tab) => {
+      tab.classList.toggle("active", tab.dataset.filter === filter);
+    });
+    renderBookings();
+  }
+
+  function moveRecord(recordId, fromStatus, toStatus, updates = null) {
+    if (fromStatus === toStatus) {
+      return;
+    }
+
+    const source = bookingsState[fromStatus];
+    const target = bookingsState[toStatus];
+    const index = source.findIndex((record) => record.id === recordId);
+
+    if (index === -1) {
+      return;
+    }
+
+    const [record] = source.splice(index, 1);
+    if (updates && typeof updates === "object") {
+      Object.assign(record, updates);
+    }
+    record.status = toStatus;
+    target.unshift(record);
+  }
+
+  populateTimePickers();
+  populateStaffPicker();
+  syncTimePickerActiveState();
+  setSelectedStaff(staffOptions[0]);
+  updateBookingsDot();
+  updateTabDots();
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      setActiveFilter(tab.dataset.filter);
+    });
+  });
+
+  bookingList.addEventListener("click", (event) => {
+    const openAcceptButton = event.target.closest("button[data-action='open-accept']");
+    const button = event.target.closest("button[data-action='move']");
+
+    if (openAcceptButton) {
+      const card = openAcceptButton.closest(".booking-card[data-id]");
+
+      if (!card) {
+        return;
+      }
+
+      const record = bookingsState.request.find((item) => item.id === card.dataset.id);
+
+      if (record) {
+        openAcceptModal(record);
+      }
+
+      return;
+    }
+
+    if (!button) {
+      return;
+    }
+
+    const card = button.closest(".booking-card[data-id]");
+
+    if (!card) {
+      return;
+    }
+
+    moveRecord(card.dataset.id, card.dataset.status, button.dataset.to);
+    renderBookings();
+  });
+
+  acceptHourTrigger.addEventListener("click", (event) => {
+    event.preventDefault();
+    const isOpen = acceptHourMenu.classList.contains("open");
+    closeAllTimePickers();
+    closeStaffPicker();
+    if (!isOpen) {
+      openTimePicker(acceptHourPicker, acceptHourMenu, acceptHourTrigger);
+    }
+  });
+
+  acceptMinuteTrigger.addEventListener("click", (event) => {
+    event.preventDefault();
+    const isOpen = acceptMinuteMenu.classList.contains("open");
+    closeAllTimePickers();
+    closeStaffPicker();
+    if (!isOpen) {
+      openTimePicker(acceptMinutePicker, acceptMinuteMenu, acceptMinuteTrigger);
+    }
+  });
+
+  acceptMeridiemTrigger.addEventListener("click", (event) => {
+    event.preventDefault();
+    const isOpen = acceptMeridiemMenu.classList.contains("open");
+    closeAllTimePickers();
+    closeStaffPicker();
+    if (!isOpen) {
+      openTimePicker(acceptMeridiemPicker, acceptMeridiemMenu, acceptMeridiemTrigger);
+    }
+  });
+
+  acceptHourMenu.addEventListener("click", (event) => {
+    const option = event.target.closest(".time-picker-option");
+
+    if (!option) {
+      return;
+    }
+
+    setSelectedTime(option.dataset.value || selectedHour, selectedMinute, selectedMeridiem);
+    closeTimePicker(acceptHourPicker, acceptHourMenu, acceptHourTrigger);
+    acceptHourTrigger.focus();
+  });
+
+  acceptMinuteMenu.addEventListener("click", (event) => {
+    const option = event.target.closest(".time-picker-option");
+
+    if (!option) {
+      return;
+    }
+
+    setSelectedTime(selectedHour, option.dataset.value || selectedMinute, selectedMeridiem);
+    closeTimePicker(acceptMinutePicker, acceptMinuteMenu, acceptMinuteTrigger);
+    acceptMinuteTrigger.focus();
+  });
+
+  acceptMeridiemMenu.addEventListener("click", (event) => {
+    const option = event.target.closest(".time-picker-option");
+
+    if (!option) {
+      return;
+    }
+
+    setSelectedTime(selectedHour, selectedMinute, option.dataset.value || selectedMeridiem);
+    closeTimePicker(acceptMeridiemPicker, acceptMeridiemMenu, acceptMeridiemTrigger);
+    acceptMeridiemTrigger.focus();
+  });
+
+  acceptStaffTrigger.addEventListener("click", (event) => {
+    event.preventDefault();
+    const isOpen = acceptStaffMenu.classList.contains("open");
+    closeAllTimePickers();
+    closeStaffPicker();
+    if (!isOpen) {
+      openStaffPicker();
+    }
+  });
+
+  acceptStaffMenu.addEventListener("click", (event) => {
+    const option = event.target.closest(".staff-picker-option");
+
+    if (!option) {
+      return;
+    }
+
+    setSelectedStaff(option.dataset.staff || staffOptions[0]);
+    closeStaffPicker();
+    acceptStaffTrigger.focus();
+  });
+
+  cancelAcceptBtn.addEventListener("click", closeAcceptModal);
+  confirmAcceptBtn.addEventListener("click", confirmAcceptBooking);
+
+  acceptModal.addEventListener("click", (event) => {
+    if (event.target === acceptModal) {
+      closeAcceptModal();
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!acceptModal.classList.contains("open")) {
+      return;
+    }
+
+    if (!acceptHourPicker.contains(event.target)) {
+      closeTimePicker(acceptHourPicker, acceptHourMenu, acceptHourTrigger);
+    }
+
+    if (!acceptMinutePicker.contains(event.target)) {
+      closeTimePicker(acceptMinutePicker, acceptMinuteMenu, acceptMinuteTrigger);
+    }
+
+    if (!acceptMeridiemPicker.contains(event.target)) {
+      closeTimePicker(acceptMeridiemPicker, acceptMeridiemMenu, acceptMeridiemTrigger);
+    }
+
+    if (!acceptStaffPicker.contains(event.target)) {
+      closeStaffPicker();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      if (
+        acceptHourMenu.classList.contains("open") ||
+        acceptMinuteMenu.classList.contains("open") ||
+        acceptMeridiemMenu.classList.contains("open")
+      ) {
+        closeAllTimePickers();
+        return;
+      }
+
+      if (acceptStaffMenu.classList.contains("open")) {
+        closeStaffPicker();
+        return;
+      }
+
+      if (acceptModal.classList.contains("open")) {
+        closeAcceptModal();
+      }
+    }
+  });
+
+  setActiveFilter(activeFilter);
+</script>
+</body>
+</html>

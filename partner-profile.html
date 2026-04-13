@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ustra Partner - Profile</title>
+  <link rel="stylesheet" href="customer-style.css">
+  <style>
+    .pp-wrap {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+      background: var(--bg-dark);
+      position: relative;
+      padding-bottom: 88px;
+    }
+
+    .pp-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px 12px;
+      background: rgba(15, 16, 20, 0.94);
+      border-bottom: 1px solid var(--glass-border);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .pp-header-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .pp-header-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(226, 194, 117, 0.2);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--accent-gold);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .pp-header-btn i,
+    .pp-header-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .pp-qr-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 220;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(2, 4, 8, 0.78);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .pp-qr-modal.is-open {
+      display: flex;
+    }
+
+    .pp-qr-dialog {
+      width: min(100%, 360px);
+      border-radius: 28px;
+      padding: 20px;
+      background: linear-gradient(180deg, #1b1d24 0%, #0c0d11 100%);
+      border: 1px solid rgba(226, 194, 117, 0.2);
+      box-shadow: 0 26px 60px rgba(0, 0, 0, 0.42);
+      color: var(--text-primary);
+    }
+
+    .pp-qr-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .pp-qr-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .pp-qr-subtitle {
+      margin: 6px 0 0;
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.66);
+    }
+
+    .pp-qr-close {
+      flex-shrink: 0;
+    }
+
+    .pp-qr-card {
+      border-radius: 24px;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+    }
+
+    .pp-qr-image-wrap {
+      width: 220px;
+      height: 220px;
+      margin: 0 auto 14px;
+      border-radius: 24px;
+      background: #fff;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .pp-qr-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pp-qr-shop {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      margin: 0;
+    }
+
+    .pp-qr-copy {
+      margin: 6px 0 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.68);
+      word-break: break-word;
+    }
+
+    .pp-qr-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .pp-qr-action {
+      flex: 1;
+      min-height: 46px;
+      border-radius: 16px;
+      border: 1px solid rgba(226, 194, 117, 0.24);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .pp-qr-action.primary {
+      background: linear-gradient(135deg, #e2c275 0%, #b9902d 100%);
+      border-color: transparent;
+      color: #18130a;
+    }
+
+    .pp-qr-action i,
+    .pp-qr-action svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .pp-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 18px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+
+    .pp-hero {
+      display: grid;
+      gap: 14px;
+    }
+
+    .pp-banner-wrap {
+      width: 100%;
+      height: 186px;
+      border-radius: 26px;
+      overflow: hidden;
+      border: 1px solid rgba(226, 194, 117, 0.42);
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.3);
+      background: #111;
+    }
+
+    .pp-banner {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .pp-hero-copy {
+      min-width: 0;
+      text-align: center;
+    }
+
+    .pp-title {
+      text-align: center;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: var(--text-primary);
+      line-height: 1.15;
+      text-shadow: none;
+      margin: 0;
+    }
+
+    .pp-hero-meta {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: nowrap;
+      gap: 12px;
+    }
+
+    .pp-meta-chip {
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0f1014;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .pp-meta-chip i,
+    .pp-meta-chip svg {
+      width: 14px;
+      height: 14px;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .pp-meta-chip.status {
+      color: var(--accent-gold);
+      border-color: rgba(226, 194, 117, 0.32);
+      background: rgba(226, 194, 117, 0.06);
+    }
+
+    .pp-meta-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #44d26f;
+      box-shadow: 0 0 0 4px rgba(68, 210, 111, 0.12);
+      flex-shrink: 0;
+    }
+
+    .pp-card {
+      border-radius: 22px;
+      padding: 20px 18px 18px;
+      background: linear-gradient(165deg, rgba(28, 29, 34, 0.98) 0%, rgba(14, 15, 18, 0.99) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
+    }
+
+    .pp-accordion {
+      border-radius: 22px;
+      background: linear-gradient(165deg, rgba(28, 29, 34, 0.98) 0%, rgba(14, 15, 18, 0.99) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
+      overflow: hidden;
+    }
+
+    .pp-accordion-toggle {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: inherit;
+      padding: 18px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .pp-accordion-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(226, 194, 117, 0.08);
+      border: 1px solid rgba(226, 194, 117, 0.14);
+      color: var(--text-primary);
+      flex-shrink: 0;
+    }
+
+    .pp-accordion-icon i,
+    .pp-accordion-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .pp-accordion-title {
+      flex: 1;
+      min-width: 0;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .pp-accordion-chevron {
+      width: 18px;
+      height: 18px;
+      color: rgba(255, 255, 255, 0.5);
+      transition: transform 0.2s ease, color 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .pp-accordion.open .pp-accordion-chevron {
+      transform: rotate(90deg);
+      color: var(--accent-gold);
+    }
+
+    .pp-accordion-body {
+      display: none;
+      padding: 0 18px 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .pp-accordion.open .pp-accordion-body {
+      display: block;
+    }
+
+    .pp-card-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-gold);
+      margin-bottom: 14px;
+    }
+
+    .pp-form {
+      padding-top: 16px;
+    }
+
+    .pp-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .pp-field:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .pp-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .pp-photo-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 50px;
+      padding: 0 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(226, 194, 117, 0.22);
+      background: linear-gradient(180deg, rgba(226, 194, 117, 0.12) 0%, rgba(226, 194, 117, 0.05) 100%);
+      color: var(--accent-gold);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .pp-photo-btn:hover {
+      transform: translateY(-1px);
+      border-color: rgba(226, 194, 117, 0.4);
+    }
+
+    .pp-photo-btn i,
+    .pp-photo-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .pp-preview-row {
+      display: none;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .pp-preview-row.is-on {
+      display: flex;
+    }
+
+    .pp-preview-img {
+      width: 100%;
+      height: 160px;
+      border-radius: 22px;
+      object-fit: cover;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
+    }
+
+    .pp-remove-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 16, 20, 0.88);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+      z-index: 1;
+    }
+
+    .pp-remove-btn i,
+    .pp-remove-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .pp-preview-txt {
+      display: none;
+    }
+
+    .pp-mini-grid {
+      display: none;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .pp-mini-grid.is-on {
+      display: grid;
+    }
+
+    .pp-mini-card {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.04);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+    }
+
+    .pp-mini-card .pp-remove-btn {
+      top: 6px;
+      right: 6px;
+      width: 26px;
+      height: 26px;
+    }
+
+    .pp-mini-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pp-input {
+      width: 100%;
+      min-height: 52px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(226, 194, 117, 0.16);
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--text-primary);
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .pp-input:focus {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 1px rgba(226, 194, 117, 0.25);
+    }
+
+    /* Same as customer profile.html — Gender / choice pills */
+    .profile-contact-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.46);
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .category-option {
+      position: relative;
+    }
+
+    .category-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .category-card {
+      min-height: 92px;
+      padding: 14px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.04);
+      display: grid;
+      place-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .category-option input:checked + .category-card {
+      border-color: var(--accent-gold);
+      background: rgba(226, 194, 117, 0.12);
+      box-shadow: 0 10px 22px rgba(226, 194, 117, 0.12);
+    }
+
+    .category-icon-img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      display: block;
+      filter: brightness(0) saturate(100%) invert(76%) sepia(31%) saturate(706%) hue-rotate(355deg) brightness(97%) contrast(90%);
+    }
+
+    .category-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text-primary);
+      text-align: center;
+    }
+
+    .pp-time-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .pp-working-days {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .pp-day-chip {
+      position: relative;
+    }
+
+    .pp-day-chip input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .pp-day-chip span {
+      min-height: 44px;
+      padding: 0 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .pp-day-chip input:checked + span {
+      border-color: var(--accent-gold);
+      background: rgba(226, 194, 117, 0.12);
+      color: var(--accent-gold);
+    }
+
+    .pp-input[readonly] {
+      opacity: 0.65;
+      cursor: default;
+    }
+
+    .pp-input-wrap {
+      position: relative;
+    }
+
+    .pp-input-wrap .pp-input {
+      width: 100%;
+      min-height: 52px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--glass-border);
+      padding: 15px 20px;
+      padding-right: 56px;
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 16px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .pp-input-wrap .pp-input:focus {
+      border-color: var(--accent-gold);
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    }
+
+    .pp-loc-gps {
+      position: absolute;
+      top: 50%;
+      right: 8px;
+      transform: translateY(-50%);
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 12px;
+      background: rgba(226, 194, 117, 0.12);
+      color: var(--accent-gold);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .pp-loc-gps:hover {
+      background: rgba(226, 194, 117, 0.18);
+    }
+
+    .pp-loc-gps:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .pp-loc-gps i,
+    .pp-loc-gps svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .pp-save {
+      margin-top: 12px;
+      width: 100%;
+    }
+
+    .pp-status {
+      min-height: 18px;
+      margin-top: 10px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .pp-logout {
+      margin-top: 8px;
+    }
+
+    .pp-contact {
+      padding-top: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .pp-contact-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .pp-contact-row i,
+    .pp-contact-row svg {
+      width: 18px;
+      height: 18px;
+      color: var(--accent-gold);
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .pp-contact-copy {
+      display: grid;
+      gap: 4px;
+    }
+
+    .pp-contact-copy .pp-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .pp-contact-copy .pp-value {
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 380px) {
+      .pp-banner-wrap {
+        height: 168px;
+      }
+
+      .pp-title { font-size: 23px; }
+
+      .pp-hero-meta {
+        gap: 8px;
+      }
+
+      .pp-meta-chip {
+        min-height: 38px;
+        padding: 0 12px;
+        font-size: 12px;
+      }
+
+      .pp-mini-grid {
+        gap: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="pp-wrap">
+    <header class="pp-header">
+      <div class="pp-header-title">Business Profile</div>
+      <button class="pp-header-btn" type="button" id="ppQrOpenBtn" aria-label="Open QR code">
+        <i data-lucide="qr-code"></i>
+      </button>
+    </header>
+
+    <div class="pp-qr-modal" id="ppQrModal" aria-hidden="true">
+      <div class="pp-qr-dialog" role="dialog" aria-modal="true" aria-labelledby="ppQrTitle">
+        <div class="pp-qr-top">
+          <div>
+            <h2 class="pp-qr-title" id="ppQrTitle">Ustra Qr code</h2>
+          </div>
+          <button class="pp-header-btn pp-qr-close" type="button" id="ppQrCloseBtn" aria-label="Close QR popup">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+        <div class="pp-qr-card">
+          <div class="pp-qr-image-wrap">
+            <img class="pp-qr-image" id="ppQrImage" alt="Shop QR code">
+          </div>
+          <p class="pp-qr-shop" id="ppQrShopName">Urban Trim Salon</p>
+          <p class="pp-qr-copy" id="ppQrMeta">Loading QR details...</p>
+        </div>
+        <div class="pp-qr-actions">
+          <button class="pp-qr-action" type="button" id="ppQrCancelBtn">Close</button>
+          <button class="pp-qr-action primary" type="button" id="ppQrDownloadBtn">
+            <i data-lucide="download"></i>
+            <span>Download QR</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <main class="pp-scroll">
+      <section class="pp-hero" aria-label="Business summary">
+        <div class="pp-banner-wrap">
+          <img class="pp-banner" id="ppBanner" src="image/salon-bg.png" alt="Salon cover">
+        </div>
+        <div class="pp-hero-copy">
+          <h1 class="pp-title" id="ppSalonName">Urban Trim Salon</h1>
+          <div class="pp-hero-meta">
+            <div class="pp-meta-chip">
+              <i data-lucide="clock-3"></i>
+              <span id="ppHeroTime">09:00 AM - 06:00 PM</span>
+            </div>
+            <div class="pp-meta-chip status">
+              <span class="pp-meta-dot" aria-hidden="true"></span>
+              <span id="ppHeroStatus">Working</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pp-accordion" id="ppPersonalSection" aria-label="Business profile">
+        <button class="pp-accordion-toggle" type="button" onclick="togglePartnerProfileSection('ppPersonalSection')" aria-expanded="false">
+          <span class="pp-accordion-icon">
+            <i data-lucide="store"></i>
+          </span>
+          <span class="pp-accordion-title">Shop Details</span>
+          <i data-lucide="chevron-right" class="pp-accordion-chevron"></i>
+        </button>
+        <div class="pp-accordion-body">
+        <form id="ppForm" class="pp-form" novalidate>
+          <div class="pp-field">
+            <span class="pp-label">Store Main Image</span>
+            <button type="button" class="pp-photo-btn" id="ppPickPhoto">
+              <i data-lucide="image-plus"></i>
+              <span>Add storefront photo</span>
+            </button>
+            <input type="file" id="ppFile" accept="image/*" hidden>
+            <span class="pp-label" style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);">Upload shop front image visible from road.</span>
+            <div class="pp-preview-row" id="ppPreviewRow" aria-live="polite">
+              <button type="button" class="pp-remove-btn" id="ppRemoveMainImage" aria-label="Remove store image">
+                <i data-lucide="x"></i>
+              </button>
+              <img class="pp-preview-img" id="ppPreviewImg" alt="">
+              <span class="pp-preview-txt">New storefront image selected - save to apply</span>
+            </div>
+          </div>
+
+          <div class="pp-field">
+            <span class="pp-label">Inner Store Image</span>
+            <button type="button" class="pp-photo-btn" id="ppPickInnerPhotos">
+              <i data-lucide="images"></i>
+              <span>Add inner store image</span>
+            </button>
+            <input type="file" id="ppInnerFiles" accept="image/*" multiple hidden>
+            <span class="pp-label" style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);">Customers see images to understand your shop.</span>
+            <div class="pp-mini-grid" id="ppInnerPreviewGrid" aria-live="polite"></div>
+          </div>
+
+          <div class="pp-field">
+            <label class="pp-label" for="ppName">Business name</label>
+            <input class="pp-input" id="ppName" name="name" type="text" required autocomplete="organization" value="Urban Trim Salon">
+          </div>
+
+          <div class="pp-field">
+            <label class="pp-label" for="ppEmail">Email</label>
+            <input class="pp-input" id="ppEmail" name="email" type="email" readonly disabled value="urbantrim@example.com">
+          </div>
+
+          <div class="pp-field">
+            <label class="pp-label" for="ppPhone">Phone</label>
+            <input class="pp-input" id="ppPhone" name="phone" type="tel" required autocomplete="tel" value="+91 98765 43210">
+          </div>
+
+          <div class="pp-field">
+            <span class="pp-label">Location</span>
+            <div class="pp-input-wrap">
+              <input class="pp-input" id="ppLocation" name="location" type="text" required value="Hazratganj, Lucknow" aria-label="Location">
+              <button type="button" class="pp-loc-gps" id="ppGps" aria-label="Detect location">
+                <i data-lucide="locate-fixed"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="pp-field">
+            <span class="profile-contact-label">Category</span>
+            <input type="hidden" id="ppCategoryInput" name="category" value="male">
+            <div class="category-grid" id="ppCategoryChoices" role="radiogroup" aria-label="Select category">
+              <label class="category-option">
+                <input type="radio" name="ppCategory" value="male" checked>
+                <div class="category-card">
+                  <img class="category-icon-img" src="Svg/male-icon.svg" alt="" aria-hidden="true">
+                  <span class="category-name">Male</span>
+                </div>
+              </label>
+              <label class="category-option">
+                <input type="radio" name="ppCategory" value="female">
+                <div class="category-card">
+                  <img class="category-icon-img" src="Svg/woman-female-icon.svg" alt="" aria-hidden="true">
+                  <span class="category-name">Female</span>
+                </div>
+              </label>
+              <label class="category-option">
+                <input type="radio" name="ppCategory" value="both">
+                <div class="category-card">
+                  <img class="category-icon-img" src="Svg/silhouette-users-icon.svg" alt="" aria-hidden="true">
+                  <span class="category-name">Both</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="pp-field">
+            <span class="pp-label">Shop Time</span>
+            <div class="pp-time-grid">
+              <div class="pp-field" style="margin-bottom:0;">
+                <label class="pp-label" for="ppStartTime">Open Time</label>
+                <input class="pp-input" id="ppStartTime" name="startTime" type="text" value="09:00 AM" aria-label="Start time">
+              </div>
+              <div class="pp-field" style="margin-bottom:0;">
+                <label class="pp-label" for="ppCloseTime">Close Time</label>
+                <input class="pp-input" id="ppCloseTime" name="closeTime" type="text" value="06:00 PM" aria-label="Close time">
+              </div>
+            </div>
+          </div>
+
+          <div class="pp-field">
+            <span class="pp-label">Working Days</span>
+            <div class="pp-working-days" id="ppWorkingDays" role="group" aria-label="Select working days">
+              <label class="pp-day-chip">
+                <input type="checkbox" name="workingDays" value="Sunday">
+                <span>Sunday</span>
+              </label>
+              <label class="pp-day-chip">
+                <input type="checkbox" name="workingDays" value="Monday">
+                <span>Monday</span>
+              </label>
+              <label class="pp-day-chip">
+                <input type="checkbox" name="workingDays" value="Tuesday">
+                <span>Tuesday</span>
+              </label>
+              <label class="pp-day-chip">
+                <input type="checkbox" name="workingDays" value="Wednesday">
+                <span>Wednesday</span>
+              </label>
+              <label class="pp-day-chip">
+                <input type="checkbox" name="workingDays" value="Thursday">
+                <span>Thursday</span>
+              </label>
+              <label class="pp-day-chip">
+                <input type="checkbox" name="workingDays" value="Friday">
+                <span>Friday</span>
+              </label>
+              <label class="pp-day-chip">
+                <input type="checkbox" name="workingDays" value="Saturday">
+                <span>Saturday</span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary pp-save" id="ppSaveBtn">Save details</button>
+          <p class="pp-status" id="ppStatus"></p>
+        </form>
+        </div>
+      </section>
+
+      <section class="pp-accordion" id="ppContactSection" aria-label="Contact us">
+        <button class="pp-accordion-toggle" type="button" onclick="togglePartnerProfileSection('ppContactSection')" aria-expanded="false">
+          <span class="pp-accordion-icon">
+            <i data-lucide="headphones"></i>
+          </span>
+          <span class="pp-accordion-title">Contact Us</span>
+          <i data-lucide="chevron-right" class="pp-accordion-chevron"></i>
+        </button>
+        <div class="pp-accordion-body">
+          <div class="pp-contact">
+            <div class="pp-contact-row">
+              <i data-lucide="phone"></i>
+              <div class="pp-contact-copy">
+                <span class="pp-label">Support Number</span>
+                <span class="pp-value">65942158945 (9AM - 6PM)</span>
+              </div>
+            </div>
+            <div class="pp-contact-row">
+              <i data-lucide="message-circle"></i>
+              <div class="pp-contact-copy">
+                <span class="pp-label">Support Email</span>
+                <span class="pp-value">help@ustra.app</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <a href="partner-login.html" class="btn-secondary pp-logout">
+        <i data-lucide="log-out" style="width:18px;height:18px;margin-right:8px;"></i>
+        Log out
+      </a>
+    </main>
+
+    <nav class="bottom-nav">
+      <a href="partner-dashboard.html" class="nav-item">
+        <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
+      </a>
+      <a href="partner-services.html" class="nav-item">
+        <i data-lucide="scissors"></i><span>Services</span>
+      </a>
+      <a href="partner-bookings.html" class="nav-item bookings-badge">
+        <i data-lucide="calendar"></i><span>Bookings</span>
+        <span class="bookings-dot" aria-hidden="true"></span>
+      </a>
+      <a href="partner-staff.html" class="nav-item">
+        <i data-lucide="users-round"></i><span>Staff</span>
+      </a>
+      <a href="partner-profile.html" class="nav-item active">
+        <i data-lucide="store"></i><span>Profile</span>
+      </a>
+    </nav>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    function togglePartnerProfileSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+      const isOpen = section.classList.contains('open');
+      section.classList.toggle('open', !isOpen);
+      const trigger = section.querySelector('.pp-accordion-toggle');
+      if (trigger) {
+        trigger.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      }
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    (function () {
+      const STORAGE_KEY = 'ustra_partner_profile_data';
+      const defaults = {
+        name: 'Urban Trim Salon',
+        email: 'urbantrim@example.com',
+        phone: '+91 98765 43210',
+        location: 'Hazratganj, Lucknow',
+        category: 'male',
+        banner: 'image/salon-bg.png',
+        innerImages: [
+          'image/salon-bg.png',
+          'image/salon-bg.png',
+          'image/salon-bg.png',
+          'image/salon-bg.png'
+        ],
+        shopOpenTime: '09:00 AM',
+        shopCloseTime: '06:00 PM',
+        workingDays: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+      };
+
+      const form = document.getElementById('ppForm');
+      const banner = document.getElementById('ppBanner');
+      const titleEl = document.getElementById('ppSalonName');
+      const fileInput = document.getElementById('ppFile');
+      const pickBtn = document.getElementById('ppPickPhoto');
+      const innerFilesInput = document.getElementById('ppInnerFiles');
+      const pickInnerPhotosBtn = document.getElementById('ppPickInnerPhotos');
+      const previewRow = document.getElementById('ppPreviewRow');
+      const previewImg = document.getElementById('ppPreviewImg');
+      const innerPreviewGrid = document.getElementById('ppInnerPreviewGrid');
+      const statusEl = document.getElementById('ppStatus');
+      const saveBtn = document.getElementById('ppSaveBtn');
+      const gpsBtn = document.getElementById('ppGps');
+      const heroTimeEl = document.getElementById('ppHeroTime');
+      const heroStatusEl = document.getElementById('ppHeroStatus');
+      const qrOpenBtn = document.getElementById('ppQrOpenBtn');
+      const qrModal = document.getElementById('ppQrModal');
+      const qrCloseBtn = document.getElementById('ppQrCloseBtn');
+      const qrCancelBtn = document.getElementById('ppQrCancelBtn');
+      const qrDownloadBtn = document.getElementById('ppQrDownloadBtn');
+      const qrImage = document.getElementById('ppQrImage');
+      const qrShopName = document.getElementById('ppQrShopName');
+      const qrMeta = document.getElementById('ppQrMeta');
+      const categoryInput = document.getElementById('ppCategoryInput');
+      const categoryChoices = document.getElementById('ppCategoryChoices');
+      const removeMainImageBtn = document.getElementById('ppRemoveMainImage');
+      const startTimeInput = document.getElementById('ppStartTime');
+      const closeTimeInput = document.getElementById('ppCloseTime');
+      const workingDayInputs = Array.from(document.querySelectorAll('input[name="workingDays"]'));
+
+      let pendingBannerDataUrl = null;
+      let pendingInnerImages = [];
+
+      function normalizePartnerCategory(value) {
+        const v = String(value || '').trim().toLowerCase();
+        if (v === 'female') return 'female';
+        if (v === 'both') return 'both';
+        if (v === 'salon') return 'female';
+        if (v === 'men grooming' || v === 'barber shop' || v === 'male') return 'male';
+        return defaults.category;
+      }
+
+      function selectPartnerCategory(value) {
+        const v = normalizePartnerCategory(value);
+        if (categoryInput) {
+          categoryInput.value = v;
+        }
+        document.querySelectorAll('input[name="ppCategory"]').forEach(function (radio) {
+          radio.checked = radio.value === v;
+        });
+      }
+
+      function load() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          const parsed = raw ? JSON.parse(raw) : {};
+          return {
+            ...defaults,
+            ...parsed,
+            innerImages: Array.isArray(parsed.innerImages) && parsed.innerImages.length
+              ? parsed.innerImages.slice(0, 4)
+              : defaults.innerImages.slice(),
+            banner: String(parsed.banner || defaults.banner).trim() || defaults.banner
+          };
+        } catch (e) {
+          return { ...defaults };
+        }
+      }
+
+      function loadSignupDraft() {
+        try {
+          const raw = localStorage.getItem('partnerSignupDraft');
+          const parsed = raw ? JSON.parse(raw) : {};
+          return {
+            ...parsed,
+            shopOpenTime: String(parsed.shopOpenTime || defaults.shopOpenTime).trim() || defaults.shopOpenTime,
+            shopCloseTime: String(parsed.shopCloseTime || defaults.shopCloseTime).trim() || defaults.shopCloseTime,
+            workingDays: Array.isArray(parsed.workingDays) && parsed.workingDays.length
+              ? parsed.workingDays
+              : defaults.workingDays.slice()
+          };
+        } catch (e) {
+          return {
+            shopOpenTime: defaults.shopOpenTime,
+            shopCloseTime: defaults.shopCloseTime,
+            workingDays: defaults.workingDays.slice()
+          };
+        }
+      }
+
+      function renderInnerImages(images) {
+        const items = Array.isArray(images) ? images.filter(Boolean).slice(0, 4) : [];
+        innerPreviewGrid.innerHTML = items
+          .map(function (src, index) {
+            return '<div class="pp-mini-card"><button type="button" class="pp-remove-btn" data-remove-inner-image="' + index + '" aria-label="Remove inner store image"><i data-lucide="x"></i></button><img src="' + String(src).replace(/"/g, '&quot;') + '" alt="Store inside image ' + (index + 1) + '"></div>';
+          })
+          .join('');
+        innerPreviewGrid.classList.toggle('is-on', items.length > 0);
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      }
+
+      function apply(data) {
+        const signupDraft = loadSignupDraft();
+        const openTime = String(signupDraft.shopOpenTime || '').trim();
+        const closeTime = String(signupDraft.shopCloseTime || '').trim();
+        const workingDays = Array.isArray(signupDraft.workingDays)
+          ? signupDraft.workingDays
+          : String(signupDraft.workingDays || '').split(',').map(function (day) { return day.trim(); }).filter(Boolean);
+
+        titleEl.textContent = data.name || defaults.name;
+        form.name.value = data.name || '';
+        form.email.value = data.email || defaults.email;
+        form.phone.value = data.phone || '';
+        form.location.value = data.location || '';
+        selectPartnerCategory(data.category || defaults.category);
+        if (startTimeInput) {
+          startTimeInput.value = openTime || '09:00 AM';
+        }
+        if (closeTimeInput) {
+          closeTimeInput.value = closeTime || '06:00 PM';
+        }
+        workingDayInputs.forEach(function (input) {
+          input.checked = workingDays.includes(input.value);
+        });
+        banner.src = pendingBannerDataUrl || data.banner || defaults.banner;
+        renderInnerImages(pendingInnerImages.length ? pendingInnerImages : data.innerImages);
+        previewImg.src = pendingBannerDataUrl || data.banner || defaults.banner;
+        previewRow.classList.add('is-on');
+        if (heroTimeEl) {
+          const startValue = startTimeInput ? String(startTimeInput.value || '').trim() : '';
+          const closeValue = closeTimeInput ? String(closeTimeInput.value || '').trim() : '';
+          heroTimeEl.textContent = startValue && closeValue ? `${startValue} - ${closeValue}` : '09:00 AM - 06:00 PM';
+        }
+        if (heroStatusEl) {
+          heroStatusEl.textContent = 'Working';
+        }
+        updateQrCode(data);
+      }
+
+      function buildQrPayload(data) {
+        const safe = Object.assign({}, defaults, data || {});
+        return [
+          'Ustra Partner Shop',
+          'Shop: ' + (safe.name || defaults.name),
+          'Phone: ' + (safe.phone || defaults.phone),
+          'Location: ' + (safe.location || defaults.location),
+          'Hours: ' + ((startTimeInput && startTimeInput.value.trim()) || defaults.shopOpenTime) + ' - ' + ((closeTimeInput && closeTimeInput.value.trim()) || defaults.shopCloseTime)
+        ].join('\n');
+      }
+
+      function updateQrCode(data) {
+        if (!qrImage) return;
+        const safe = Object.assign({}, defaults, data || {});
+        const payload = buildQrPayload(safe);
+        const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=420x420&margin=12&data=' + encodeURIComponent(payload);
+        qrImage.src = qrUrl;
+        qrImage.setAttribute('crossorigin', 'anonymous');
+        qrImage.dataset.downloadUrl = qrUrl;
+        if (qrShopName) {
+          qrShopName.textContent = safe.name || defaults.name;
+        }
+        if (qrMeta) {
+          qrMeta.textContent = [safe.phone || defaults.phone, safe.location || defaults.location].filter(Boolean).join(' • ');
+        }
+      }
+
+      function getQrLiveData() {
+        const stored = load();
+        return Object.assign({}, stored, {
+          name: form && form.name ? form.name.value.trim() || stored.name : stored.name,
+          phone: form && form.phone ? form.phone.value.trim() || stored.phone : stored.phone,
+          location: form && form.location ? form.location.value.trim() || stored.location : stored.location
+        });
+      }
+
+      function openQrModal() {
+        updateQrCode(getQrLiveData());
+        if (!qrModal) return;
+        qrModal.classList.add('is-open');
+        qrModal.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeQrModal() {
+        if (!qrModal) return;
+        qrModal.classList.remove('is-open');
+        qrModal.setAttribute('aria-hidden', 'true');
+      }
+
+      async function downloadQrCode() {
+        const url = (qrImage && (qrImage.dataset.downloadUrl || qrImage.src)) || '';
+        if (!url) return;
+        try {
+          const response = await fetch(url);
+          const blob = await response.blob();
+          const objectUrl = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = objectUrl;
+          link.download = ((qrShopName && qrShopName.textContent) || 'shop-qr').trim().replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase() + '.png';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          URL.revokeObjectURL(objectUrl);
+        } catch (err) {
+          window.open(url, '_blank', 'noopener');
+        }
+      }
+
+      function setStatus(msg) {
+        statusEl.textContent = msg || '';
+      }
+
+      if (categoryChoices) {
+        categoryChoices.addEventListener('change', function (e) {
+          const radio = e.target.closest('input[name="ppCategory"]');
+          if (!radio) return;
+          selectPartnerCategory(radio.value);
+        });
+      }
+
+      pickBtn.addEventListener('click', function () {
+        fileInput.click();
+      });
+
+      pickInnerPhotosBtn.addEventListener('click', function () {
+        innerFilesInput.click();
+      });
+
+      if (removeMainImageBtn) {
+        removeMainImageBtn.addEventListener('click', function () {
+          pendingBannerDataUrl = defaults.banner;
+          previewImg.src = defaults.banner;
+          banner.src = defaults.banner;
+          setStatus('');
+        });
+      }
+
+      fileInput.addEventListener('change', function () {
+        const f = this.files && this.files[0];
+        if (!f) return;
+        const reader = new FileReader();
+        reader.onload = function () {
+          pendingBannerDataUrl = reader.result;
+          previewImg.src = reader.result;
+          previewRow.classList.add('is-on');
+          setStatus('');
+        };
+        reader.readAsDataURL(f);
+        this.value = '';
+      });
+
+      innerFilesInput.addEventListener('change', function () {
+        const files = Array.from(this.files || []).slice(0, 4);
+        if (!files.length) return;
+
+        Promise.all(files.map(function (file) {
+          return new Promise(function (resolve) {
+            const reader = new FileReader();
+            reader.onload = function () {
+              resolve(typeof reader.result === 'string' ? reader.result : '');
+            };
+            reader.onerror = function () {
+              resolve('');
+            };
+            reader.readAsDataURL(file);
+          });
+        })).then(function (results) {
+          pendingInnerImages = results.filter(Boolean).slice(0, 4);
+          renderInnerImages(pendingInnerImages);
+          setStatus('');
+        });
+
+        this.value = '';
+      });
+
+      innerPreviewGrid.addEventListener('click', function (e) {
+        const btn = e.target.closest('[data-remove-inner-image]');
+        if (!btn) return;
+        const index = Number(btn.getAttribute('data-remove-inner-image'));
+        const current = pendingInnerImages.length ? pendingInnerImages.slice() : load().innerImages.slice();
+        if (!Number.isInteger(index) || index < 0 || index >= current.length) return;
+        current.splice(index, 1);
+        pendingInnerImages = current;
+        renderInnerImages(pendingInnerImages);
+        setStatus('');
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const current = load();
+        const nextDraft = loadSignupDraft();
+        const next = {
+          name: form.name.value.trim() || defaults.name,
+          email: defaults.email,
+          phone: form.phone.value.trim() || defaults.phone,
+          location: form.location.value.trim() || defaults.location,
+          category: (categoryInput && categoryInput.value) || defaults.category,
+          banner: pendingBannerDataUrl || current.banner || defaults.banner,
+          innerImages: pendingInnerImages.length ? pendingInnerImages : (Array.isArray(current.innerImages) ? current.innerImages.slice(0, 4) : [])
+        };
+        nextDraft.shopOpenTime = startTimeInput ? startTimeInput.value.trim() || '09:00 AM' : '09:00 AM';
+        nextDraft.shopCloseTime = closeTimeInput ? closeTimeInput.value.trim() || '06:00 PM' : '06:00 PM';
+        nextDraft.workingDays = workingDayInputs.filter(function (input) { return input.checked; }).map(function (input) { return input.value; });
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+          localStorage.setItem('partnerSignupDraft', JSON.stringify(nextDraft));
+        } catch (err) {}
+        pendingBannerDataUrl = null;
+        pendingInnerImages = [];
+        apply(next);
+        setStatus('Saved successfully');
+        saveBtn.textContent = 'Saved';
+        clearTimeout(window._ppSaveT);
+        window._ppSaveT = setTimeout(function () {
+          setStatus('');
+          saveBtn.textContent = 'Save details';
+        }, 2000);
+        lucide.createIcons();
+      });
+
+      function dedupeParts(parts) {
+        const out = [];
+        parts.forEach(function (p) {
+          const v = String(p || '').trim();
+          if (!v || out.includes(v)) return;
+          out.push(v);
+        });
+        return out;
+      }
+
+      function formatNominatimAddress(address) {
+        const a = address || {};
+        const area = a.suburb || a.neighbourhood || a.quarter || a.city_district || a.hamlet || a.village || a.town || a.city || '';
+        const taluka = a.county || '';
+        const city = a.city || a.town || a.village || a.state_district || a.district || '';
+        const state = a.state || a.region || '';
+        return dedupeParts([area, taluka, city, state]).join(', ');
+      }
+
+      function nominatimJsonp(lat, lng) {
+        return new Promise(function (resolve, reject) {
+          const cb = '__pp_nom_' + Math.random().toString(36).slice(2);
+          const s = document.createElement('script');
+          const t = setTimeout(function () {
+            try { delete window[cb]; } catch (e) {}
+            s.remove();
+            reject(new Error('timeout'));
+          }, 12000);
+          window[cb] = function (payload) {
+            clearTimeout(t);
+            try { delete window[cb]; } catch (e) {}
+            s.remove();
+            try {
+              resolve(formatNominatimAddress(payload && payload.address));
+            } catch (e) {
+              reject(e);
+            }
+          };
+          s.onerror = function () {
+            clearTimeout(t);
+            try { delete window[cb]; } catch (e) {}
+            s.remove();
+            reject(new Error('load'));
+          };
+          s.src = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + encodeURIComponent(lat) + '&lon=' + encodeURIComponent(lng) + '&zoom=18&addressdetails=1&json_callback=' + encodeURIComponent(cb);
+          document.head.appendChild(s);
+        });
+      }
+
+      async function reverseGeocode(lat, lng) {
+        try {
+          return await nominatimJsonp(lat, lng);
+        } catch (e) {}
+        const url = 'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=' + encodeURIComponent(lat) + '&longitude=' + encodeURIComponent(lng) + '&localityLanguage=en';
+        const res = await fetch(url, { headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error('geo');
+        const d = await res.json();
+        return dedupeParts([d.locality || d.city, d.city, d.principalSubdivision]).join(', ');
+      }
+
+      gpsBtn.addEventListener('click', async function () {
+        if (!navigator.geolocation) {
+          setStatus('Location not supported');
+          return;
+        }
+        gpsBtn.disabled = true;
+        setStatus('Detecting location…');
+        try {
+          const pos = await new Promise(function (res, rej) {
+            navigator.geolocation.getCurrentPosition(res, rej, { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 });
+          });
+          const text = await reverseGeocode(pos.coords.latitude, pos.coords.longitude);
+          const v = String(text || '').trim();
+          if (v) {
+            form.location.value = v;
+            setStatus('Location updated');
+          } else {
+            setStatus('Could not resolve address');
+          }
+        } catch (e) {
+          setStatus(e && e.code === 1 ? 'Permission denied' : 'Could not detect location');
+        } finally {
+          gpsBtn.disabled = false;
+          setTimeout(function () { setStatus(''); }, 1800);
+        }
+      });
+
+      if (qrOpenBtn) {
+        qrOpenBtn.addEventListener('click', openQrModal);
+      }
+
+      if (qrCloseBtn) {
+        qrCloseBtn.addEventListener('click', closeQrModal);
+      }
+
+      if (qrCancelBtn) {
+        qrCancelBtn.addEventListener('click', closeQrModal);
+      }
+
+      if (qrDownloadBtn) {
+        qrDownloadBtn.addEventListener('click', downloadQrCode);
+      }
+
+      if (qrModal) {
+        qrModal.addEventListener('click', function (e) {
+          if (e.target === qrModal) {
+            closeQrModal();
+          }
+        });
+      }
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && qrModal && qrModal.classList.contains('is-open')) {
+          closeQrModal();
+        }
+      });
+
+      apply(load());
+      lucide.createIcons();
+    })();
+
+    (function () {
+      const dotKey = 'partner-bookings-pending-count';
+      let dotVisible = false;
+      try {
+        dotVisible = Number(localStorage.getItem(dotKey) || '0') > 0;
+      } catch (e) {}
+      document.querySelectorAll('.bookings-dot').forEach(function (dot) {
+        dot.hidden = !dotVisible;
+      });
+    })();
+  </script>
+</body>
+</html>

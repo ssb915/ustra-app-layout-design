@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra - Shop Schedule</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .app-container {
+    padding-bottom: 0;
+  }
+
+  .auth-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    justify-content: center;
+    position: relative;
+  }
+
+  .register-top {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+
+  .back-link {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--accent-gold);
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .back-link:hover {
+    border-color: rgba(226, 194, 117, 0.6);
+    background: rgba(226, 194, 117, 0.08);
+  }
+
+  .back-link:active {
+    transform: scale(0.96);
+  }
+
+  .back-link svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-top: 0;
+  }
+
+  .logo {
+    width: 110px;
+    height: 110px;
+    border-radius: 22px;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
+    margin: 20px auto 14px;
+  }
+
+  .logo img {
+    width: 75%;
+    height: 100%;
+    object-fit: contain;
+    filter: none;
+  }
+
+  .auth-header h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .time-field {
+    display: grid;
+    gap: 10px;
+  }
+
+  .time-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .time-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    min-width: 0;
+    text-align: center;
+    cursor: pointer;
+    height: 48px;
+    border-radius: 14px;
+  }
+
+  .working-days-field {
+    display: grid;
+    gap: 10px;
+  }
+
+  .working-days-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .day-chip {
+    position: relative;
+    min-height: 42px;
+    border-radius: 14px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    user-select: none;
+  }
+
+  .day-chip:hover {
+    border-color: rgba(226, 194, 117, 0.42);
+    background: rgba(226, 194, 117, 0.06);
+  }
+
+  .day-chip:active {
+    transform: scale(0.99);
+  }
+
+  .day-chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .day-chip span {
+    position: relative;
+    z-index: 1;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+
+  .day-chip.selected {
+    border-color: rgba(226, 194, 117, 0.7);
+    background: rgba(226, 194, 117, 0.12);
+  }
+
+  .day-chip.selected span {
+    color: var(--accent-gold);
+  }
+
+  .upload-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  .image-field {
+    display: grid;
+    gap: 12px;
+  }
+
+  .image-upload-btn {
+    width: 100%;
+    min-height: 54px;
+    border-radius: 16px;
+    border: 1px dashed rgba(226, 194, 117, 0.38);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--accent-gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  }
+
+  .image-upload-btn:hover {
+    border-color: rgba(226, 194, 117, 0.65);
+    background: rgba(226, 194, 117, 0.08);
+  }
+
+  .image-upload-btn:active {
+    transform: scale(0.99);
+  }
+
+  .image-upload-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .image-preview {
+    display: none;
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.03);
+    min-height: 180px;
+  }
+
+  .image-preview.active {
+    display: block;
+  }
+
+  .image-preview img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .image-preview-tag {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(8, 8, 10, 0.78);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .hint {
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-top: -6px;
+  }
+
+  .hint:empty {
+    display: none;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  .auth-footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .auth-footer a {
+    color: var(--accent-gold);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  @media (max-height: 720px) {
+    .auth-container {
+      padding: 16px;
+    }
+
+    .register-top {
+      top: 16px;
+      left: 16px;
+    }
+
+    .logo {
+      width: 92px;
+      height: 92px;
+      border-radius: 18px;
+      margin: 12px auto 10px;
+    }
+
+    .auth-header {
+      margin-bottom: 18px;
+    }
+
+    .auth-header h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .text-muted {
+      font-size: 13px;
+    }
+
+    .auth-form {
+      gap: 12px;
+    }
+
+    .time-grid {
+      gap: 8px;
+    }
+
+    .working-days-grid {
+      gap: 8px;
+    }
+
+    .btn-primary {
+      padding: 14px;
+    }
+
+    .mt-20 {
+      margin-top: 14px;
+    }
+
+    .auth-footer {
+      margin-top: 18px;
+      font-size: 13px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <div class="auth-container">
+    <div class="register-top">
+      <a class="back-link" href="partner-register.html" aria-label="Back to previous step">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div class="auth-header">
+      <div class="logo">
+        <img src="image/bg-eress-logo.png" alt="Ustra Logo">
+      </div>
+      <h1>Shop Schedule</h1>
+      <p class="text-muted">Set your opening hours and working days</p>
+    </div>
+
+    <form class="auth-form" id="shopDetailsForm">
+      <div class="image-field">
+        <div class="upload-label">Shop Image</div>
+        <button class="image-upload-btn" id="shopImagePickBtn" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <path d="M17 8l-5-5-5 5"></path>
+            <path d="M12 3v12"></path>
+          </svg>
+          <span>Add Shop Image</span>
+        </button>
+        <input class="sr-only" type="file" id="shopImageInput" accept="image/*">
+        <div class="image-preview" id="shopImagePreview">
+          <img id="shopImagePreviewImg" alt="Shop preview">
+          <div class="image-preview-tag">Preview selected image</div>
+        </div>
+        <div class="hint">Upload your shop front or interior photo for profile preview.</div>
+      </div>
+
+      <div>
+        <div class="upload-label">Time</div>
+        <div class="time-field">
+          <div class="upload-label" style="margin-top:2px;">Open Time</div>
+          <div class="time-grid">
+            <select class="glass-input time-select" id="shopOpenHour" aria-label="Open hour"></select>
+            <select class="glass-input time-select" id="shopOpenMinute" aria-label="Open minute"></select>
+            <select class="glass-input time-select" id="shopOpenMeridiem" aria-label="Open AM or PM">
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
+          </div>
+          <div class="upload-label" style="margin-top:4px;">Close Time</div>
+          <div class="time-grid">
+            <select class="glass-input time-select" id="shopCloseHour" aria-label="Close hour"></select>
+            <select class="glass-input time-select" id="shopCloseMinute" aria-label="Close minute"></select>
+            <select class="glass-input time-select" id="shopCloseMeridiem" aria-label="Close AM or PM">
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="working-days-field">
+        <div class="upload-label">Working Days</div>
+        <div class="working-days-grid" id="workingDaysGrid" role="group" aria-label="Select working days">
+          <label class="day-chip">
+            <input type="checkbox" name="workingDays" value="Sunday">
+            <span>Sunday</span>
+          </label>
+          <label class="day-chip">
+            <input type="checkbox" name="workingDays" value="Monday">
+            <span>Monday</span>
+          </label>
+          <label class="day-chip">
+            <input type="checkbox" name="workingDays" value="Tuesday">
+            <span>Tuesday</span>
+          </label>
+          <label class="day-chip">
+            <input type="checkbox" name="workingDays" value="Wednesday">
+            <span>Wednesday</span>
+          </label>
+          <label class="day-chip">
+            <input type="checkbox" name="workingDays" value="Thursday">
+            <span>Thursday</span>
+          </label>
+          <label class="day-chip">
+            <input type="checkbox" name="workingDays" value="Friday">
+            <span>Friday</span>
+          </label>
+          <label class="day-chip">
+            <input type="checkbox" name="workingDays" value="Saturday">
+            <span>Saturday</span>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-primary mt-20" type="submit">Continue</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const shopDetailsForm = document.getElementById('shopDetailsForm');
+  const shopOpenHour = document.getElementById('shopOpenHour');
+  const shopOpenMinute = document.getElementById('shopOpenMinute');
+  const shopOpenMeridiem = document.getElementById('shopOpenMeridiem');
+  const shopCloseHour = document.getElementById('shopCloseHour');
+  const shopCloseMinute = document.getElementById('shopCloseMinute');
+  const shopCloseMeridiem = document.getElementById('shopCloseMeridiem');
+  const workingDayInputs = Array.from(document.querySelectorAll('input[name="workingDays"]'));
+  const shopImagePickBtn = document.getElementById('shopImagePickBtn');
+  const shopImageInput = document.getElementById('shopImageInput');
+  const shopImagePreview = document.getElementById('shopImagePreview');
+  const shopImagePreviewImg = document.getElementById('shopImagePreviewImg');
+  const savedPartnerDraft = JSON.parse(localStorage.getItem('partnerSignupDraft') || '{}');
+
+  function renderShopImagePreview(src) {
+    const value = String(src || '').trim();
+    if (!value) {
+      shopImagePreview.classList.remove('active');
+      shopImagePreviewImg.removeAttribute('src');
+      return;
+    }
+    shopImagePreviewImg.src = value;
+    shopImagePreview.classList.add('active');
+  }
+
+  function pad2(value) {
+    return String(value).padStart(2, '0');
+  }
+
+  function buildOptions(select, values, formatter) {
+    select.innerHTML = values
+      .map((value) => `<option value="${value}">${formatter ? formatter(value) : value}</option>`)
+      .join('');
+  }
+
+  function parseTimeValue(value, fallback) {
+    const raw = String(value || '').trim();
+    if (!raw) return fallback;
+
+    const match = raw.match(/^(\d{1,2})(?::(\d{2}))?\s*(AM|PM)?$/i);
+    if (match) {
+      let hour = Number(match[1]);
+      const minute = match[2] ? match[2] : '00';
+      let meridiem = (match[3] || '').toUpperCase();
+      if (!meridiem) meridiem = hour >= 12 ? 'PM' : 'AM';
+      if (hour === 0) hour = 12;
+      if (hour > 12) hour -= 12;
+      return { hour: String(hour), minute, meridiem };
+    }
+
+    return fallback;
+  }
+
+  function formatTimeValue(hour, minute, meridiem) {
+    if (!hour || !minute || !meridiem) return '';
+    return `${pad2(hour)}:${pad2(minute)} ${meridiem}`;
+  }
+
+  buildOptions(shopOpenHour, Array.from({ length: 12 }, (_, index) => String(index + 1)));
+  buildOptions(shopCloseHour, Array.from({ length: 12 }, (_, index) => String(index + 1)));
+  buildOptions(shopOpenMinute, ['00', '15', '30', '45']);
+  buildOptions(shopCloseMinute, ['00', '15', '30', '45']);
+
+  const parsedOpenTime = parseTimeValue(savedPartnerDraft.shopOpenTime, { hour: '9', minute: '00', meridiem: 'AM' });
+  const parsedCloseTime = parseTimeValue(savedPartnerDraft.shopCloseTime, { hour: '6', minute: '00', meridiem: 'PM' });
+  shopOpenHour.value = parsedOpenTime.hour;
+  shopOpenMinute.value = parsedOpenTime.minute;
+  shopOpenMeridiem.value = parsedOpenTime.meridiem;
+  shopCloseHour.value = parsedCloseTime.hour;
+  shopCloseMinute.value = parsedCloseTime.minute;
+  shopCloseMeridiem.value = parsedCloseTime.meridiem;
+
+  const savedWorkingDays = Array.isArray(savedPartnerDraft.workingDays)
+    ? savedPartnerDraft.workingDays
+    : String(savedPartnerDraft.workingDays || '')
+        .split(',')
+        .map((day) => day.trim())
+        .filter(Boolean);
+
+  renderShopImagePreview(savedPartnerDraft.shopImage);
+
+  workingDayInputs.forEach((input) => {
+    if (savedWorkingDays.includes(input.value)) {
+      input.checked = true;
+      input.parentElement.classList.add('selected');
+    }
+
+    input.addEventListener('change', () => {
+      input.parentElement.classList.toggle('selected', input.checked);
+    });
+  });
+
+  shopImagePickBtn.addEventListener('click', () => {
+    shopImageInput.click();
+  });
+
+  shopImageInput.addEventListener('change', () => {
+    const file = shopImageInput.files && shopImageInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = typeof reader.result === 'string' ? reader.result : '';
+      if (!result) return;
+      renderShopImagePreview(result);
+
+      const draft = JSON.parse(localStorage.getItem('partnerSignupDraft') || '{}');
+      localStorage.setItem('partnerSignupDraft', JSON.stringify({
+        ...draft,
+        shopImage: result,
+      }));
+    };
+    reader.readAsDataURL(file);
+    shopImageInput.value = '';
+  });
+
+  shopDetailsForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const draft = JSON.parse(localStorage.getItem('partnerSignupDraft') || '{}');
+    const selectedWorkingDays = workingDayInputs.filter((input) => input.checked).map((input) => input.value);
+    const combined = {
+      ...draft,
+      shopImage: shopImagePreviewImg.getAttribute('src') || draft.shopImage || '',
+      shopOpenTime: formatTimeValue(shopOpenHour.value, shopOpenMinute.value, shopOpenMeridiem.value),
+      shopCloseTime: formatTimeValue(shopCloseHour.value, shopCloseMinute.value, shopCloseMeridiem.value),
+      workingDays: selectedWorkingDays,
+    };
+    delete combined.ownerName;
+    delete combined.shopNumber;
+    delete combined.shopEmail;
+    delete combined.shopPhone;
+
+    localStorage.setItem('partnerSignupDraft', JSON.stringify(combined));
+    window.location.href = 'partner-contact-details.html';
+  });
+</script>
+</body>
+</html>

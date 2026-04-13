@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ustra Partner - Staff</title>
+<link rel="stylesheet" href="customer-style.css">
+<style>
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .staff-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px 10px;
+    border-radius: 20px;
+    margin: 12px 20px 0;
+  }
+
+  .staff-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+    flex: 1;
+  }
+
+  .header-add-btn {
+    height: 42px;
+    padding: 0 14px;
+    border-radius: 999px;
+    background: rgba(212,175,55,0.1);
+    border: 1px dashed var(--accent-gold);
+    color: var(--accent-gold);
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .header-add-btn i {
+    width: 17px;
+    height: 17px;
+  }
+
+  .header-add-btn:hover {
+    background: rgba(226, 194, 117, 0.14);
+    border-color: rgba(226, 194, 117, 0.55);
+    transform: translateY(-1px);
+  }
+
+  .header-add-btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .staff-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 10px 20px 120px;
+  }
+
+  .staff-card {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    position: relative;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+  }
+  .staff-avatar {
+    width: 54px;
+    height: 54px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    border: 2px solid var(--accent-gold);
+    flex-shrink: 0;
+  }
+  .staff-main {
+    flex: 1;
+    min-width: 0;
+  }
+  .staff-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .staff-info h4 {
+    font-size: 16px;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.2;
+  }
+  .staff-info p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .staff-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+  }
+
+  .icon-btn:hover {
+    color: var(--accent-gold);
+    border-color: rgba(226, 194, 117, 0.4);
+    background: rgba(226, 194, 117, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .icon-btn.delete:hover {
+    color: var(--error-color);
+    border-color: rgba(255, 77, 77, 0.35);
+    background: rgba(255, 77, 77, 0.08);
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.62);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 3000;
+  }
+
+  .modal-backdrop.open {
+    display: flex;
+  }
+
+  .staff-modal {
+    width: min(100%, 420px);
+    background: linear-gradient(180deg, rgba(18, 19, 24, 0.98), rgba(11, 12, 16, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+    padding: 20px;
+  }
+
+  .staff-modal h3 {
+    font-size: 22px;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+
+  .staff-modal p {
+    color: var(--text-secondary);
+    font-size: 13px;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  .modal-fields {
+    display: grid;
+    gap: 14px;
+  }
+
+  .modal-field label {
+    display: block;
+    font-size: 12px;
+    color: var(--accent-gold);
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .modal-field input {
+    width: 100%;
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    background: rgba(0, 0, 0, 0.28);
+    color: var(--text-primary);
+    outline: none;
+    font-size: 15px;
+  }
+
+  .modal-field input:focus {
+    border-color: rgba(226, 194, 117, 0.55);
+    box-shadow: 0 0 0 3px rgba(226, 194, 117, 0.08);
+  }
+
+  .modal-file {
+    width: 100%;
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 13px 14px;
+    background: rgba(0, 0, 0, 0.28);
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .modal-btn {
+    flex: 1;
+    border: none;
+    border-radius: 14px;
+    padding: 13px 14px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .modal-btn.secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border: 1px solid var(--glass-border);
+  }
+
+  .modal-btn.primary {
+    background: linear-gradient(135deg, var(--accent-gold), #b58c16);
+    color: #000;
+  }
+
+  .staff-list {
+    display: grid;
+    gap: 12px;
+  }
+
+  .confirm-title {
+    font-size: 22px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .confirm-text {
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+
+  .edit-mode .staff-modal p {
+    margin-bottom: 14px;
+  }
+
+  @media (max-width: 420px) {
+    .staff-header {
+      margin: 8px 14px 0;
+      padding: 14px 0 8px;
+      border-radius: 18px;
+    }
+
+    .staff-container {
+      padding: 8px 14px 120px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+  <div class="staff-header">
+    <div class="staff-title">Our Team</div>
+    <button type="button" class="header-add-btn" id="openStaffModal">
+      <i data-lucide="plus"></i>
+      Add
+    </button>
+  </div>
+
+  <div class="staff-container">
+    <div class="staff-list" id="staffList">
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1544723795-3ca315cadc88?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Samir Patel</h4>
+            <p>32 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Marcus Johnson</h4>
+            <p>28 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>John Doe</h4>
+            <p>25 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Rajesh Kumar</h4>
+            <p>35 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Amit Sharma</h4>
+            <p>29 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Karan Singh</h4>
+            <p>31 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Vikram Desai</h4>
+            <p>34 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1593702275687-f8b402bf1fb5?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Arjun Verma</h4>
+            <p>27 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Deepak Yadav</h4>
+            <p>30 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Nikhil Joshi</h4>
+            <p>26 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1521119989659-a83eee488004?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Saurabh Jain</h4>
+            <p>33 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Ankit Sharma</h4>
+            <p>24 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Rohit Tiwari</h4>
+            <p>36 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Faiz Ahmed</h4>
+            <p>27 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="staff-card">
+        <div class="staff-avatar" style="background-image: url('https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=150&q=80');"></div>
+        <div class="staff-main">
+          <div class="staff-info">
+            <h4>Manoj Saini</h4>
+            <p>29 years</p>
+          </div>
+        </div>
+        <div class="staff-actions">
+          <button type="button" class="icon-btn" aria-label="Edit staff">
+            <i data-lucide="pencil"></i>
+          </button>
+          <button type="button" class="icon-btn delete" aria-label="Delete staff">
+            <i data-lucide="trash-2"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="partner-dashboard.html" class="nav-item">
+      <i data-lucide="layout-dashboard"></i><span>Dashboard</span>
+    </a>
+    <a href="partner-services.html" class="nav-item">
+      <i data-lucide="scissors"></i><span>Services</span>
+    </a>
+    <a href="partner-bookings.html" class="nav-item bookings-badge"> 
+      <i data-lucide="calendar"></i><span>Bookings</span>
+      <span class="bookings-dot" aria-hidden="true"></span>
+    </a>
+    <a href="partner-staff.html" class="nav-item active">
+      <i data-lucide="users-round"></i><span>Staff</span>
+    </a>
+    <a href="partner-profile.html" class="nav-item">
+      <i data-lucide="store"></i><span>Profile</span>
+    </a>
+  </nav>
+
+</div>
+
+  <div class="modal-backdrop" id="staffModal" aria-hidden="true">
+  <div class="staff-modal" role="dialog" aria-modal="true" aria-labelledby="staffModalTitle">
+    <h3 id="staffModalTitle">Add Staff Member</h3>
+    <p>Fill in the basic staff details. You can keep it simple and update later.</p>
+    <form id="staffForm" class="modal-fields">
+      <div class="modal-field">
+        <label for="staffName">Name</label>
+        <input id="staffName" name="staffName" type="text" placeholder="Enter staff name" autocomplete="name" required>
+      </div>
+      <div class="modal-field">
+        <label for="staffAge">Age</label>
+        <input id="staffAge" name="staffAge" type="number" placeholder="Enter age" min="1" max="99" required>
+      </div>
+      <div class="modal-field">
+        <label for="staffImage">Image</label>
+        <input id="staffImage" name="staffImage" class="modal-file" type="file" accept="image/*">
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modal-btn secondary" id="closeStaffModal">Cancel</button>
+        <button type="submit" class="modal-btn primary" id="saveStaffBtn">Save Staff</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="deleteModal" aria-hidden="true">
+  <div class="staff-modal" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+    <h3 class="confirm-title" id="deleteModalTitle">Delete Staff?</h3>
+    <p class="confirm-text" id="deleteModalText">Are you sure you want to delete this staff member?</p>
+    <div class="modal-actions">
+      <button type="button" class="modal-btn secondary" id="cancelDeleteBtn">Cancel</button>
+      <button type="button" class="modal-btn primary" id="confirmDeleteBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
+</script>
+<script>
+  (function () {
+    const dotKey = "partner-bookings-pending-count";
+    const dotVisible = (() => {
+      try {
+        return Number(localStorage.getItem(dotKey) || "0") > 0;
+      } catch (error) {
+        return false;
+      }
+    })();
+
+    document.querySelectorAll(".bookings-dot").forEach((dot) => {
+      dot.hidden = !dotVisible;
+    });
+  })();
+</script>
+<script>
+  (function () {
+    const staffStorageKey = "partner-staff-list";
+    const modal = document.getElementById("staffModal");
+    const deleteModal = document.getElementById("deleteModal");
+    const openBtn = document.getElementById("openStaffModal");
+    const closeBtn = document.getElementById("closeStaffModal");
+    const modalTitle = document.getElementById("staffModalTitle");
+    const modalDescription = modal ? modal.querySelector(".staff-modal p") : null;
+    const saveBtn = document.getElementById("saveStaffBtn");
+    const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+    const deleteModalText = document.getElementById("deleteModalText");
+    const form = document.getElementById("staffForm");
+    const nameInput = document.getElementById("staffName");
+    const ageInput = document.getElementById("staffAge");
+    const imageInput = document.getElementById("staffImage");
+    const staffList = document.getElementById("staffList");
+    let pendingDeleteCard = null;
+    let editingCard = null;
+
+    if (!modal || !deleteModal || !openBtn || !closeBtn || !modalTitle || !modalDescription || !saveBtn || !cancelDeleteBtn || !confirmDeleteBtn || !deleteModalText || !form || !nameInput || !ageInput || !imageInput || !staffList) {
+      return;
+    }
+
+    function initials(name) {
+      return name
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((part) => part[0])
+        .join("")
+        .toUpperCase();
+    }
+
+    function createAvatarMarkup(name, imageSrc) {
+      if (imageSrc) {
+        return `<div class="staff-avatar" style="background-image: url('${imageSrc}');"></div>`;
+      }
+
+      return `
+        <div class="staff-avatar" style="display:grid;place-items:center;background:rgba(226,194,117,0.12);color:var(--accent-gold);font-weight:800;font-size:18px;">
+          ${initials(name)}
+        </div>
+      `;
+    }
+
+    function createStaffCard(name, age, imageSrc) {
+      const avatarMarkup = createAvatarMarkup(name, imageSrc);
+      return `
+        <div class="staff-card">
+          ${avatarMarkup}
+          <div class="staff-main">
+            <div class="staff-info">
+              <h4>${name}</h4>
+              <p>${age} years</p>
+            </div>
+          </div>
+          <div class="staff-actions">
+            <button type="button" class="icon-btn" aria-label="Edit staff">
+              <i data-lucide="pencil"></i>
+            </button>
+            <button type="button" class="icon-btn delete" aria-label="Delete staff">
+              <i data-lucide="trash-2"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function collectStaffData() {
+      return Array.from(staffList.querySelectorAll(".staff-card")).map((card) => {
+        const nameEl = card.querySelector(".staff-info h4");
+        const ageEl = card.querySelector(".staff-info p");
+        const avatarEl = card.querySelector(".staff-avatar");
+        const bgImage = avatarEl ? avatarEl.style.backgroundImage || "" : "";
+        const imageSrc = bgImage.replace(/^url\(["']?/, "").replace(/["']?\)$/, "");
+        return {
+          name: nameEl ? nameEl.textContent.trim() : "",
+          age: ageEl ? ageEl.textContent.replace(/\s*years?$/i, "").trim() : "",
+          image: imageSrc || ""
+        };
+      }).filter((item) => item.name);
+    }
+
+    function saveStaffData() {
+      try {
+        localStorage.setItem(staffStorageKey, JSON.stringify(collectStaffData()));
+      } catch (error) {
+        // Ignore storage issues and keep staff management usable.
+      }
+    }
+
+    function openModal() {
+      editingCard = null;
+      modalTitle.textContent = "Add Staff Member";
+      modalDescription.textContent = "Fill in the basic staff details. You can keep it simple and update later.";
+      saveBtn.textContent = "Save Staff";
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      window.setTimeout(() => nameInput.focus(), 0);
+    }
+
+    function openEditModal(card) {
+      editingCard = card;
+      const nameEl = card.querySelector(".staff-info h4");
+      const ageEl = card.querySelector(".staff-info p");
+      const avatarEl = card.querySelector(".staff-avatar");
+
+      modalTitle.textContent = "Edit Staff Member";
+      modalDescription.textContent = "Update staff name, age, or image and save the changes.";
+      saveBtn.textContent = "Update Staff";
+      nameInput.value = nameEl ? nameEl.textContent.trim() : "";
+      ageInput.value = ageEl ? ageEl.textContent.replace(/\s*years?$/i, "").trim() : "";
+      imageInput.value = "";
+
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      window.setTimeout(() => nameInput.focus(), 0);
+    }
+
+    function closeModal() {
+      editingCard = null;
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      form.reset();
+      modalTitle.textContent = "Add Staff Member";
+      modalDescription.textContent = "Fill in the basic staff details. You can keep it simple and update later.";
+      saveBtn.textContent = "Save Staff";
+      openBtn.focus();
+    }
+
+    function openDeleteModal(card) {
+      pendingDeleteCard = card;
+      const staffName = card.querySelector(".staff-info h4");
+      deleteModalText.textContent = staffName
+        ? `Are you sure you want to delete ${staffName.textContent}?`
+        : "Are you sure you want to delete this staff member?";
+      deleteModal.classList.add("open");
+      deleteModal.setAttribute("aria-hidden", "false");
+      window.setTimeout(() => cancelDeleteBtn.focus(), 0);
+    }
+
+    function closeDeleteModal() {
+      pendingDeleteCard = null;
+      deleteModal.classList.remove("open");
+      deleteModal.setAttribute("aria-hidden", "true");
+    }
+
+    openBtn.addEventListener("click", openModal);
+    closeBtn.addEventListener("click", closeModal);
+    cancelDeleteBtn.addEventListener("click", closeDeleteModal);
+    confirmDeleteBtn.addEventListener("click", () => {
+      if (pendingDeleteCard) {
+        pendingDeleteCard.remove();
+        saveStaffData();
+      }
+      closeDeleteModal();
+    });
+
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    deleteModal.addEventListener("click", (event) => {
+      if (event.target === deleteModal) {
+        closeDeleteModal();
+      }
+    });
+
+    staffList.addEventListener("click", (event) => {
+      const editButton = event.target.closest(".icon-btn:not(.delete)");
+      if (editButton) {
+        const card = editButton.closest(".staff-card");
+        if (card) {
+          openEditModal(card);
+        }
+        return;
+      }
+
+      const deleteButton = event.target.closest(".icon-btn.delete");
+      if (!deleteButton) {
+        return;
+      }
+
+      const card = deleteButton.closest(".staff-card");
+      if (!card) {
+        return;
+      }
+
+      openDeleteModal(card);
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = nameInput.value.trim();
+      const age = ageInput.value.trim();
+      const file = imageInput.files && imageInput.files[0];
+
+      if (!name || !age) {
+        return;
+      }
+
+      const imageSrc = file ? URL.createObjectURL(file) : "";
+
+      if (editingCard) {
+        const avatar = editingCard.querySelector(".staff-avatar");
+        const title = editingCard.querySelector(".staff-info h4");
+        const subtitle = editingCard.querySelector(".staff-info p");
+
+        if (title) {
+          title.textContent = name;
+        }
+        if (subtitle) {
+          subtitle.textContent = `${age} years`;
+        }
+        if (avatar && imageSrc) {
+          avatar.style.backgroundImage = `url('${imageSrc}')`;
+          avatar.textContent = "";
+        }
+      } else {
+        staffList.insertAdjacentHTML("afterbegin", createStaffCard(name, age, imageSrc));
+      }
+
+      saveStaffData();
+      lucide.createIcons();
+      closeModal();
+    });
+
+    saveStaffData();
+  })();
+</script>
+</body>
+</html>
