@@ -602,7 +602,7 @@
     ${showPartnerMenu ? `
     <div class="partner-dropdown" id="partnerDropdown">
       <div class="pd-label">Join Ustra</div>
-      <a href="gender-select.html" class="pd-item">
+      <a href="partner-register.html" class="pd-item">
         <i data-lucide="scissors"></i>
         <span>Register Salon</span>
       </a>

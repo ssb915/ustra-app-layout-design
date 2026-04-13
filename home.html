@@ -697,6 +697,34 @@
     .booking-card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.08);
+
+    /* History Card */
+    .history-card {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      transition: 0.2s;
+    }
+    .history-card:hover { border-color: rgba(226,194,117,0.3); background: rgba(255,255,255,0.06); }
+    .history-thumb {
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .history-info { flex: 1; min-width: 0; }
+    .history-info h4 { font-size: 15px; font-weight: 700; color: #fff; margin: 0 0 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .history-info .h-meta { font-size: 11px; color: var(--text-secondary); margin-bottom: 6px; }
+    .history-info .h-service { font-size: 11px; font-weight: 700; color: var(--accent-gold); background: rgba(226,194,117,0.1); border: 1px solid rgba(226,194,117,0.2); padding: 3px 9px; border-radius: 20px; display: inline-block; }
+    .history-price { font-size: 16px; font-weight: 900; color: #fff; flex-shrink: 0; text-align: right; }
+    .history-price span { display: block; font-size: 9px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
       border-radius: 18px;
       padding: 15px;
       display: flex;
@@ -1272,11 +1300,11 @@
         <!-- Partner/Barber Dropdown -->
         <div class="partner-dropdown" id="partnerDropdown">
           <div class="pd-label">JOIN USTRA</div>
-          <a href="#" class="pd-item">
+          <a href="partner-register.html" class="pd-item">
             <i data-lucide="scissors"></i>
             <span>Register Salon</span>
           </a>
-          <a href="#" class="pd-item">
+          <a href="partner-login.html" class="pd-item">
             <i data-lucide="log-in"></i>
             <span>Salon Login</span>
           </a>
@@ -1374,6 +1402,10 @@
         <i data-lucide="home"></i>
         <span>Home</span>
       </a>
+      <a href="#" class="nav-item" id="nav-history" onclick="showHistoryView(this); return false;">
+        <i data-lucide="history"></i>
+        <span>History</span>
+      </a>
       <a href="bookings.html" class="nav-item">
         <i data-lucide="calendar"></i>
         <span>Bookings</span>
@@ -1387,6 +1419,12 @@
         <span>Profile</span>
       </a>
     </nav>
+
+    <!-- History View -->
+    <div id="history-view" style="display:none; padding: 20px; padding-bottom: 110px;">
+      <h2 style="font-size:20px; font-weight:800; color:#fff; margin-bottom:18px;">Visit History</h2>
+      <div id="history-list"></div>
+    </div>
 
   </div>
 
@@ -1796,6 +1834,9 @@
       document.querySelector('.dist-scroll-wrap').style.display = 'flex';
       document.querySelector('.hero-section').style.display = 'block';
       document.querySelector('.gender-filter').style.display = 'flex';
+      document.getElementById('history-view').style.display = 'none';
+      document.getElementById('near-you-list').style.display = 'grid';
+      document.querySelector('.section-head').style.display = 'flex';
       hideSearchSuggestions();
       
       if (syncUrl) syncHomeUrl('');
@@ -1812,10 +1853,59 @@
       document.querySelector('.dist-scroll-wrap').style.display = 'none';
       document.querySelector('.hero-section').style.display = 'none';
       document.querySelector('.gender-filter').style.display = 'none';
+      document.getElementById('history-view').style.display = 'none';
+      document.getElementById('near-you-list').style.display = 'grid';
+      document.querySelector('.section-head').style.display = 'flex';
       hideSearchSuggestions();
 
       if (syncUrl) syncHomeUrl('#saved');
       renderNearYouList();
+    }
+
+    const historyData = [
+      { name: 'Truefitt & Hill', service: 'Signature Cut', date: '10 Apr 2026', price: '₹1200', status: 'completed' },
+      { name: 'Barber Nation 1', service: 'Skin Fade', date: '5 Apr 2026', price: '₹800', status: 'cancelled' },
+      { name: 'Urban Cutters 1', service: 'Hot Towel Shave', date: '28 Mar 2026', price: '₹650', status: 'completed' },
+      { name: 'Elite Shave 1', service: 'Beard Sculpting', date: '20 Mar 2026', price: '₹450', status: 'cancelled' },
+      { name: 'Grooming Co. 1', service: 'Haircut + Shave', date: '14 Mar 2026', price: '₹1050', status: 'completed' },
+      { name: 'Classic Barber 1', service: 'Signature Cut', date: '5 Mar 2026', price: '₹1200', status: 'completed' },
+      { name: 'Modern Mane 1', service: 'Detan Facial', date: '22 Feb 2026', price: '₹900', status: 'cancelled' },
+      { name: 'Slik Cuts 1', service: 'Skin Fade', date: '15 Feb 2026', price: '₹800', status: 'completed' },
+      { name: 'The Groom Room 1', service: 'Beard Sculpting', date: '8 Feb 2026', price: '₹450', status: 'completed' },
+      { name: 'Apex Barber 1', service: 'Hot Towel Shave', date: '1 Feb 2026', price: '₹650', status: 'cancelled' },
+    ];
+
+    function showHistoryView(el) {
+      setBottomNavActive(el || document.getElementById('nav-history'));
+      document.getElementById('categories-list').style.display = 'none';
+      document.querySelector('.dist-scroll-wrap').style.display = 'none';
+      document.querySelector('.hero-section').style.display = 'none';
+      document.querySelector('.gender-filter').style.display = 'none';
+      document.getElementById('near-you-list').style.display = 'none';
+      document.querySelector('.section-head').style.display = 'none';
+      document.getElementById('load-spinner').classList.remove('active');
+      hideSearchSuggestions();
+
+      const view = document.getElementById('history-view');
+      view.style.display = 'block';
+
+      const list = document.getElementById('history-list');
+      list.innerHTML = historyData.map(h => {
+        const isCompleted = h.status === 'completed';
+        const badge = isCompleted
+          ? `<span style="font-size:10px; font-weight:800; text-transform:uppercase; padding:4px 10px; border-radius:12px; background:rgba(255,255,255,0.05); color:#9496a1;">Completed</span>`
+          : `<span style="font-size:10px; font-weight:800; text-transform:uppercase; padding:4px 10px; border-radius:12px; background:rgba(255,77,77,0.1); color:#ff4d4d;">Cancelled</span>`;
+        return `
+          <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 15px; margin-bottom: 12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+              <span style="font-size:15px; font-weight:700; color:#fff;">${h.name}</span>
+              ${badge}
+            </div>
+            <div style="font-size:12px; color:#9496a1; margin-bottom:4px;">${h.service}</div>
+            <div style="font-size:12px; color:#9496a1;">${h.date} &nbsp;•&nbsp; <span style="color:var(--accent-gold); font-weight:700;">${h.price}</span></div>
+          </div>
+        `;
+      }).join('');
     }
 
     function toggleSave(id, el) {

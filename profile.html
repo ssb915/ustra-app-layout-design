@@ -788,6 +788,10 @@
         <i data-lucide="home"></i>
         <span>Home</span>
       </a>
+      <a href="home.html" class="nav-item">
+        <i data-lucide="history"></i>
+        <span>History</span>
+      </a>
       <a href="bookings.html" class="nav-item">
         <i data-lucide="calendar"></i>
         <span>Bookings</span>
@@ -1263,6 +1267,20 @@
     window.ustraHeaderConfig = { addTopOffset: false };
   </script>
   <script src="shared-home-header.js"></script>
+  <script>
+    document.addEventListener('click', function(e) {
+      ['partnerDropdown','notifDropdown','locationDropdown'].forEach(function(id) {
+        const el = document.getElementById(id);
+        if (el && el.classList.contains('active') && !el.contains(e.target)) {
+          const triggers = ['more-trigger','notif-trigger','location-trigger'];
+          const clickedTrigger = triggers.some(t => {
+            const tEl = document.getElementById(t);
+            return tEl && tEl.contains(e.target);
+          });
+          if (!clickedTrigger) el.classList.remove('active');
+        }
+      });
+    });
 </body>
 
 </html>
