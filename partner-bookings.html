@@ -655,8 +655,8 @@
   <div class="accept-modal-backdrop" id="acceptModal" aria-hidden="true">
     <div class="accept-modal" role="dialog" aria-modal="true" aria-labelledby="acceptModalTitle">
       <h3 id="acceptModalTitle">Accept Booking</h3>
-      <p id="acceptModalDescription">Select the time and assign a staff member before confirming.</p>
 
+      <!-- Customer Summary -->
       <div class="accept-summary">
         <div class="accept-summary-avatar" id="acceptSummaryAvatar"></div>
         <div>
@@ -665,45 +665,76 @@
         </div>
       </div>
 
-      <div class="accept-field">
-        <label for="acceptHourTrigger">Time</label>
-        <div class="accept-time-grid">
-          <div class="time-picker" id="acceptHourPicker">
-            <button type="button" class="glass-input accept-select time-picker-trigger" id="acceptHourTrigger" aria-haspopup="listbox" aria-expanded="false">
-              <span class="time-picker-label" id="acceptHourLabel">09</span>
-              <i data-lucide="chevron-down"></i>
-            </button>
-            <div class="time-picker-menu" id="acceptHourMenu" role="listbox" aria-label="Hour"></div>
+      <!-- Customer Requested Info (read-only) -->
+      <div style="background: rgba(226,194,117,0.06); border: 1px solid rgba(226,194,117,0.18); border-radius: 14px; padding: 12px 14px; display: grid; gap: 8px;">
+        <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: rgba(226,194,117,0.7); margin-bottom: 2px;">Customer Request</div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 7px; font-size: 13px; color: #fff;">
+            <i data-lucide="clock" style="width:14px; color: var(--accent-gold);"></i>
+            <span id="customerRequestedTime">—</span>
           </div>
-          <div class="time-picker" id="acceptMinutePicker">
-            <button type="button" class="glass-input accept-select time-picker-trigger" id="acceptMinuteTrigger" aria-haspopup="listbox" aria-expanded="false">
-              <span class="time-picker-label" id="acceptMinuteLabel">00</span>
-              <i data-lucide="chevron-down"></i>
-            </button>
-            <div class="time-picker-menu" id="acceptMinuteMenu" role="listbox" aria-label="Minute"></div>
-          </div>
-          <div class="time-picker" id="acceptMeridiemPicker">
-            <button type="button" class="glass-input accept-select time-picker-trigger" id="acceptMeridiemTrigger" aria-haspopup="listbox" aria-expanded="false">
-              <span class="time-picker-label" id="acceptMeridiemLabel">AM</span>
-              <i data-lucide="chevron-down"></i>
-            </button>
-            <div class="time-picker-menu" id="acceptMeridiemMenu" role="listbox" aria-label="AM or PM"></div>
+          <div style="display: flex; align-items: center; gap: 7px; font-size: 13px; color: #fff;">
+            <i data-lucide="user-round" style="width:14px; color: var(--accent-gold);"></i>
+            <span id="customerRequestedBarber">—</span>
           </div>
         </div>
       </div>
 
-      <div class="accept-field">
-        <label for="acceptStaffTrigger">Staff</label>
-        <div class="staff-picker" id="acceptStaffPicker">
-          <button type="button" class="glass-input accept-select staff-picker-trigger" id="acceptStaffTrigger" aria-haspopup="listbox" aria-expanded="false">
-            <span class="staff-picker-label" id="acceptStaffLabel">Select staff</span>
-            <i data-lucide="chevron-down"></i>
-          </button>
-          <div class="staff-picker-menu" id="acceptStaffMenu" role="listbox" aria-label="Staff members"></div>
+      <!-- Reschedule Toggle -->
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 4px 0;">
+        <div>
+          <div style="font-size: 13px; font-weight: 700; color: #fff;">Reschedule</div>
+          <div style="font-size: 11px; color: var(--text-secondary);">Change time or barber if slot is busy</div>
+        </div>
+        <label style="position: relative; display: inline-block; width: 44px; height: 24px; cursor: pointer;">
+          <input type="checkbox" id="rescheduleToggle" style="opacity:0; width:0; height:0;" onchange="toggleReschedule(this.checked)">
+          <span id="toggleTrack" style="position:absolute; inset:0; background: rgba(255,255,255,0.1); border-radius: 999px; border: 1px solid rgba(255,255,255,0.15); transition: 0.3s;"></span>
+          <span id="toggleThumb" style="position:absolute; top:3px; left:3px; width:18px; height:18px; background:#fff; border-radius:50%; transition: 0.3s;"></span>
+        </label>
+      </div>
+
+      <!-- Reschedule Fields (hidden by default) -->
+      <div id="rescheduleFields" style="display:none; gap: 14px; flex-direction: column;">
+        <div class="accept-field">
+          <label for="acceptHourTrigger">New Time</label>
+          <div class="accept-time-grid">
+            <div class="time-picker" id="acceptHourPicker">
+              <button type="button" class="glass-input accept-select time-picker-trigger" id="acceptHourTrigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="time-picker-label" id="acceptHourLabel">09</span>
+                <i data-lucide="chevron-down"></i>
+              </button>
+              <div class="time-picker-menu" id="acceptHourMenu" role="listbox" aria-label="Hour"></div>
+            </div>
+            <div class="time-picker" id="acceptMinutePicker">
+              <button type="button" class="glass-input accept-select time-picker-trigger" id="acceptMinuteTrigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="time-picker-label" id="acceptMinuteLabel">00</span>
+                <i data-lucide="chevron-down"></i>
+              </button>
+              <div class="time-picker-menu" id="acceptMinuteMenu" role="listbox" aria-label="Minute"></div>
+            </div>
+            <div class="time-picker" id="acceptMeridiemPicker">
+              <button type="button" class="glass-input accept-select time-picker-trigger" id="acceptMeridiemTrigger" aria-haspopup="listbox" aria-expanded="false">
+                <span class="time-picker-label" id="acceptMeridiemLabel">AM</span>
+                <i data-lucide="chevron-down"></i>
+              </button>
+              <div class="time-picker-menu" id="acceptMeridiemMenu" role="listbox" aria-label="AM or PM"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accept-field">
+          <label for="acceptStaffTrigger">Assign Barber</label>
+          <div class="staff-picker" id="acceptStaffPicker">
+            <button type="button" class="glass-input accept-select staff-picker-trigger" id="acceptStaffTrigger" aria-haspopup="listbox" aria-expanded="false">
+              <span class="staff-picker-label" id="acceptStaffLabel">Select staff</span>
+              <i data-lucide="chevron-down"></i>
+            </button>
+            <div class="staff-picker-menu" id="acceptStaffMenu" role="listbox" aria-label="Staff members"></div>
+          </div>
         </div>
       </div>
 
-      <div class="accept-note">The booking will move to Accept after confirmation.</div>
+      <div class="accept-note" id="acceptNote">Using customer's time & barber.</div>
 
       <div class="accept-actions">
         <button type="button" class="modal-btn secondary" id="cancelAcceptBtn">Cancel</button>
@@ -892,6 +923,11 @@
     return customerAvatarImages[index % customerAvatarImages.length];
   }
 
+  const barberNames = [
+    "Samir Patel", "Marcus Johnson", "John Doe", "Rajesh Kumar", "Amit Sharma",
+    "Karan Singh", "Vikram Desai", "Arjun Verma", "Deepak Yadav", "Nikhil Joshi"
+  ];
+
   function buildRecords(status) {
     const settings = statusSettings[status];
     const times = generateTimes(settings.startHour, settings.startMinute, settings.step, customerNames.length);
@@ -910,7 +946,8 @@
         service,
         time: times[index],
         price,
-        avatar: createAvatarData(index)
+        avatar: createAvatarData(index),
+        requestedBarber: barberNames[index % barberNames.length]
       };
     });
   }
@@ -1210,15 +1247,41 @@
     acceptSummaryAvatar.innerHTML = "";
     acceptSummaryName.textContent = record.name;
     acceptSummaryService.innerHTML = `${escapeHtml(record.service)} &#8226; &#8377;${record.price}`;
-    acceptModalDescription.textContent = "Select a staff member and time, then confirm this booking.";
-    applyBookingTime(record.assignedTime || record.time);
-    setSelectedStaff(record.assignedStaff || staffOptions[0]);
+
+    // Show customer's requested time & barber
+    document.getElementById("customerRequestedTime").textContent = record.time || "—";
+    document.getElementById("customerRequestedBarber").textContent = record.requestedBarber || "Any Barber";
+
+    // Reset reschedule toggle
+    const toggle = document.getElementById("rescheduleToggle");
+    toggle.checked = false;
+    toggleReschedule(false);
+
+    // Pre-fill reschedule fields with customer's time
+    applyBookingTime(record.time);
+    setSelectedStaff(record.requestedBarber || staffOptions[0]);
     closeStaffPicker();
     closeAllTimePickers();
 
     acceptModal.classList.add("open");
     acceptModal.setAttribute("aria-hidden", "false");
     window.setTimeout(() => acceptHourTrigger.focus(), 0);
+    lucide.createIcons();
+  }
+
+  function toggleReschedule(isOn) {
+    const fields = document.getElementById("rescheduleFields");
+    const note = document.getElementById("acceptNote");
+    const track = document.getElementById("toggleTrack");
+    const thumb = document.getElementById("toggleThumb");
+    fields.style.display = isOn ? "flex" : "none";
+    note.textContent = isOn
+      ? "Customer will be notified of the new time & barber."
+      : "Using customer's time & barber.";
+    track.style.background = isOn ? "rgba(226,194,117,0.4)" : "rgba(255,255,255,0.1)";
+    track.style.borderColor = isOn ? "var(--accent-gold)" : "rgba(255,255,255,0.15)";
+    thumb.style.transform = isOn ? "translateX(20px)" : "translateX(0)";
+    thumb.style.background = isOn ? "var(--accent-gold)" : "#fff";
   }
 
   function closeAcceptModal() {
@@ -1238,8 +1301,7 @@
       return;
     }
 
-    const selectedTime = getSelectedBookingTime();
-    const selectedStaff = selectedStaffValue || staffOptions[0];
+    const isRescheduled = document.getElementById("rescheduleToggle").checked;
     const record = bookingsState.request.find((item) => item.id === pendingAcceptRecordId);
 
     if (!record) {
@@ -1247,10 +1309,14 @@
       return;
     }
 
+    const finalTime = isRescheduled ? getSelectedBookingTime() : record.time;
+    const finalStaff = isRescheduled ? (selectedStaffValue || staffOptions[0]) : (record.requestedBarber || staffOptions[0]);
+
     moveRecord(record.id, "request", "accept", {
-      time: selectedTime,
-      assignedTime: selectedTime,
-      assignedStaff: selectedStaff
+      time: finalTime,
+      assignedTime: finalTime,
+      assignedStaff: finalStaff,
+      rescheduled: isRescheduled
     });
 
     closeAcceptModal();
